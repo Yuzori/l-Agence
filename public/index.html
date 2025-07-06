@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Norican&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Digicode Sécurisé - Arsène Lupin</title>
     <style>
@@ -16,10 +16,8 @@
             box-sizing: border-box;
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
             background: #0d0d0d;
             min-height: 100vh;
             display: flex;
@@ -117,7 +115,7 @@
             border: 1px solid #333;
             background: #050505;
             color: #4ecdc4; /* Couleur pour le nom d'agent */
-            font-family: 'Fraunces', monospace;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
             font-size: 20px;
             text-align: center;
             border-radius: 6px;
@@ -151,7 +149,7 @@
         }
 
         .display {
-            font-family: 'Fraunces', monospace;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
             font-size: 26px;
             font-weight: 600;
             color: #00ff41;
@@ -174,7 +172,7 @@
             border-radius: 6px;
             padding: 10px 15px;
             margin-top: 15px;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
             font-size: 14px;
             font-weight: 500;
             color: #ccc;
@@ -275,7 +273,7 @@
 
         .key:hover {
             background: linear-gradient(145deg, #3a3a3a, #282828);
-            transform: translateY(-2px) scale(1.02);
+            transform: translateY(-1px) scale(1.02);
             box-shadow: 
                 0 8px 15px rgba(0, 0, 0, 0.5),
                 inset 0 1px 0 rgba(255, 255, 255, 0.12);
@@ -594,6 +592,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             transform: translateY(0);
             position: relative;
+            cursor: pointer; /* Makes entire card clickable */
         }
 
         .card.hidden {
@@ -635,9 +634,9 @@
         }
 
         .card-image-item { /* Individual media item inside container */
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            max-width: 100%; /* Important: prevent image from overflowing its container */
+            max-height: 100%; /* Important: prevent image from overflowing its container */
+            object-fit: cover; /* Crops the image to fit the container without stretching */
             filter: grayscale(80%) brightness(80%);
             transition: filter 0.5s ease-out;
         }
@@ -700,6 +699,7 @@
             font-size: 0.9em;
             margin-left: 10px;
             cursor: pointer;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
         }
         .add-contact-author-btn:hover {
             color: #fff;
@@ -812,7 +812,7 @@
             background-color: #0d0d0d;
             color: #eee;
             border-radius: 5px;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
         }
 
         /* Input file specific styling */
@@ -1001,6 +1001,7 @@
             padding: 0;
             font-size: inherit;
             transition: color 0.2s ease;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
         }
         .comment-actions button:hover {
             color: #fff;
@@ -1030,6 +1031,7 @@
             border-radius: 5px;
             resize: vertical;
             min-height: 60px;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
         }
 
         .comment-form button {
@@ -1038,9 +1040,11 @@
             border: none;
             border-radius: 5px;
             color: #fff;
+            font-size: 16px;
             cursor: pointer;
             transition: background 0.3s ease;
             width: auto;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
         }
 
         .comment-form button:hover {
@@ -1070,6 +1074,7 @@
             font-size: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
         }
 
         .admin-controls button:hover {
@@ -1103,6 +1108,7 @@
             align-items: center;
             gap: 5px;
             transition: color 0.2s ease, transform 0.2s ease;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
         }
         .dossier-actions button:hover {
             color: #fff;
@@ -1197,6 +1203,7 @@
             font-size: 0.8em;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
         }
         .notification-actions button:hover {
             background: linear-gradient(145deg, #3a3a3a, #282828);
@@ -1326,6 +1333,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-size: 0.9em;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
         }
         .navbar-vertical button:hover {
             background: linear-gradient(145deg, #3a3a3a, #282828);
@@ -1342,6 +1350,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.2s ease;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
         }
         .navbar-vertical .contact-item:hover,
         .navbar-vertical .contact-item.active {
@@ -1527,6 +1536,7 @@
             border-radius: 8px;
             resize: none;
             outline: none;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
         }
         .chat-input-area textarea:focus {
             border-color: #4ecdc4;
@@ -1565,6 +1575,7 @@
         }
         .add-contact-modal input[type="text"] {
             margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
         }
         /* Modale de transfert de message */
         .transfer-modal .modal-content {
@@ -1582,6 +1593,7 @@
             padding: 8px;
             cursor: pointer;
             border-bottom: 1px solid #1e1e1e;
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
         }
         .transfer-modal .contact-item-transfer:last-child {
             border-bottom: none;
@@ -1600,7 +1612,119 @@
             margin-left: 5px;
             vertical-align: middle;
         }
+        /* Dossier Detail Modal */
+        .dossier-detail-modal {
+            display: none;
+            position: fixed;
+            z-index: 2500; /* Higher than other modals */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .dossier-detail-modal.show { display: flex; }
+        .dossier-detail-content {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border: 1px solid #333;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            position: relative;
+        }
+        .dossier-detail-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .dossier-detail-close-btn:hover { color: #fff; }
 
+        .dossier-detail-media-gallery {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-height: 400px;
+            min-height: 200px; /* Ensure a minimum height for placeholder/buttons */
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+            background-color: #0d0d0d;
+            border: 2px dashed #444;
+        }
+        .dossier-detail-media-item {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Use contain to show whole image without cropping */
+            display: none; /* Hidden by default, shown by JS */
+            cursor: pointer; /* Click to open lightbox */
+        }
+        .dossier-detail-media-item.active { display: block; }
+        .dossier-detail-media-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.6);
+            border: none;
+            color: #fff;
+            padding: 8px 12px;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 1.8em;
+            border-radius: 5px;
+        }
+        .dossier-detail-media-nav-btn.left { left: 10px; }
+        .dossier-detail-media-nav-btn.right { right: 10px; }
+
+        .dossier-detail-title {
+            color: #eee;
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .dossier-detail-author {
+            font-size: 0.9em;
+            color: #999;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .dossier-detail-desc {
+            color: #ccc;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        /* Style for download button in lightbox */
+        .download-media-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            z-index: 1001;
+            display: none; /* Hidden by default, will be shown by JS when lightbox is active */
+            font-family: 'Poppins', sans-serif; /* Changement de police ici */
+        }
+        .download-media-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        /* Ensure lightbox elements are always hidden unless active */
+        .lightbox-prev, .lightbox-next { display: none; }
     </style>
 </head>
 <body>
@@ -1644,9 +1768,7 @@
     </div>
 
     <div class="vault-overlay" id="vaultOverlay">
-        <div class="vault-door" id="vaultDoor">
-            <div class="center-handle"></div>
-        </div>
+        <div class="vault-door" id="vaultDoor"></div>
     </div>
 
     <div class="content" id="content">
@@ -1698,6 +1820,7 @@
         <button id="lightboxNext" class="lightbox-next">&#10095;</button>
         <img id="lightboxImage" class="lightbox-content" style="display: none;">
         <video id="lightboxVideo" class="lightbox-content" controls style="display: none;"></video>
+        <button id="downloadMediaBtn" class="download-media-btn" title="Télécharger"><i class="fas fa-download"></i> Télécharger</button>
     </div>
 
 
@@ -1742,6 +1865,26 @@
             <div id="transferContactList" class="contact-list-transfer">
                 </div>
             <button id="confirmTransferBtn">Transférer</button>
+        </div>
+    </div>
+
+    <div id="dossierDetailModal" class="dossier-detail-modal">
+        <div class="dossier-detail-content">
+            <span class="dossier-detail-close-btn" id="closeDossierDetailModalBtn">&times;</span>
+            <div class="dossier-detail-media-gallery" id="dossierDetailMediaGallery">
+                </div>
+            <h3 class="dossier-detail-title" id="dossierDetailTitle"></h3>
+            <div class="dossier-detail-author" id="dossierDetailAuthor"></div>
+            <p class="dossier-detail-desc" id="dossierDetailDesc"></p>
+
+            <div class="comments-section">
+                <h4>Commentaires :</h4>
+                <div class="comments-list" id="dossierDetailCommentsList"></div>
+                <form class="comment-form" id="dossierDetailCommentForm">
+                    <textarea placeholder="Ajouter un commentaire..." required id="dossierDetailCommentInput"></textarea>
+                    <button type="submit">Poster</button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -1833,8 +1976,22 @@
         const lightboxVideo = document.getElementById('lightboxVideo');
         const lightboxPrev = document.getElementById('lightboxPrev');
         const lightboxNext = document.getElementById('lightboxNext');
+        const downloadMediaBtn = document.getElementById('downloadMediaBtn'); // Bouton Télécharger
         let currentLightboxMedia = [];
         let currentLightboxIndex = 0;
+
+        // Dossier Detail Modal Elements (New)
+        const dossierDetailModal = document.getElementById('dossierDetailModal');
+        const closeDossierDetailModalBtn = document.getElementById('closeDossierDetailModalBtn');
+        const dossierDetailMediaGallery = document.getElementById('dossierDetailMediaGallery');
+        const dossierDetailTitle = document.getElementById('dossierDetailTitle');
+        const dossierDetailAuthor = document.getElementById('dossierDetailAuthor');
+        const dossierDetailDesc = document.getElementById('dossierDetailDesc');
+        const dossierDetailCommentsList = document.getElementById('dossierDetailCommentsList');
+        const dossierDetailCommentForm = document.getElementById('dossierDetailCommentForm');
+        const dossierDetailCommentInput = document.getElementById('dossierDetailCommentInput');
+        let currentDossierDetailId = null; // ID of the dossier currently open in detail view
+
 
         // Audio Elements
         const keyClickSound = document.getElementById('keyClickSound');
@@ -2097,7 +2254,12 @@
                 return;
             }
 
-            agentNameTimeout = setTimeout(checkAgentNameAuto, AUTO_VALIDATE_DELAY);
+            // Trigger validation on mobile devices when input changes
+            if (window.innerWidth <= 768) { // Assuming mobile for screens <= 768px
+                checkAgentNameAuto();
+            } else {
+                agentNameTimeout = setTimeout(checkAgentNameAuto, AUTO_VALIDATE_DELAY);
+            }
         });
         
         document.getElementById('clearBtn').addEventListener('click', function() {
@@ -2114,8 +2276,8 @@
         document.getElementById('enterBtn').addEventListener('click', function() {
             if (isUnlocked) return;
             if (isAgentNamePhase) {
-                showMessage('Saisie du nom d\'agent automatique. Tapez votre nom.', 'info');
-                digicode.classList.add('shake'); setTimeout(() => digicode.classList.remove('shake'), 300);
+                // Now, explicit click on "Valider" will force validation on mobile too
+                checkAgentNameAuto(); 
             } else { validateCode(); }
         });
 
@@ -2130,6 +2292,7 @@
             if (event.target == addContactModal) { addContactModal.style.display = 'none'; }
             if (event.target == transferMessageModal) { transferMessageModal.style.display = 'none'; messageToTransfer = null; }
             if (event.target == lightbox) { closeLightbox(); } // Close lightbox if clicking outside content
+            if (event.target == dossierDetailModal) { closeDossierDetailModal(); } // Close detail modal if clicking outside content
         });
 
         // Multiple media upload preview logic for posts
@@ -2187,8 +2350,8 @@
 
             if (!title || !desc) { alert('Veuillez remplir le titre et la description.'); return; }
             
-            // Check if there's text OR media for a new post
-            if (!id && !uploadedMediaFiles.length && !title && !desc) {
+            // Allow post creation without media, but not empty post
+            if (!id && uploadedMediaFiles.length === 0 && !title && !desc) {
                 alert('Veuillez ajouter du texte ou sélectionner des médias pour le nouveau dossier.');
                 return;
             }
@@ -2199,7 +2362,7 @@
             formData.append('desc', desc);
             formData.append('author', currentAgentName); // Author is always currentAgentName
             
-            formData.append('isHidden', 'false');
+            formData.append('isHidden', 'false'); // New posts are always visible by default
             formData.append('imageHidden', 'false'); // Initial value for new posts
 
             // If editing, send existing media URLs that were NOT removed
@@ -2266,10 +2429,6 @@
             previewItem.className = 'media-preview-item' + (type === 'video' ? ' video-thumbnail' : '');
             if (type === 'video') {
                 previewItem.setAttribute('preload', 'metadata'); // Load metadata for video duration/thumbnail
-                previewItem.onloadedmetadata = function() {
-                    // This is a common way to get a frame from video as thumbnail, but might be too complex for now.
-                    // For now, just rely on CSS ::after for video icon.
-                };
             }
             
             const removeBtn = document.createElement('button');
@@ -2385,6 +2544,9 @@
 
             digicode.classList.add('hide');
             
+            // Ensure lightbox is hidden before vault opens
+            closeLightbox(); 
+
             setTimeout(() => {
                 vaultOverlay.style.display = 'flex';
                 vaultOverlay.classList.add('activating'); 
@@ -2397,7 +2559,7 @@
                         setTimeout(async () => {
                             content.style.display = 'flex';
                             await loadDossiers();
-                            addFolderBtn.style.display = 'flex';
+                            addFolderBtn.style.display = 'flex'; // All users can create dossiers
                             
                             notificationBellBtn.style.display = 'flex';
                             messagingToggleBtn.style.display = 'flex'; // Show messaging button
@@ -2412,6 +2574,11 @@
                                 console.log('Déconnecté de Socket.IO');
                                 showMessage('Déconnecté du serveur en temps réel.', 'error');
                             });
+                            socket.on('connect_error', (err) => {
+                                console.error('Socket.IO Connection Error:', err);
+                                showMessage('Erreur de connexion en temps réel.', 'error');
+                            });
+
 
                             // Real-time event listeners setup
                             setupSocketListeners();
@@ -2459,6 +2626,9 @@
                 socket.disconnect();
             }
 
+            // Ensure lightbox is closed on reset
+            closeLightbox();
+
             setTimeout(() => {
                 vaultDoor.classList.remove('open'); vaultOverlay.classList.remove('show'); vaultOverlay.classList.remove('activating');
                 setTimeout(() => {
@@ -2481,16 +2651,14 @@
         function setupSocketListeners() {
             if (!socket) return;
 
+            // Update dossier list
             socket.on('new_dossier', (dossier) => {
                 console.log('Real-time: Nouveau dossier reçu', dossier);
                 const existingCard = document.querySelector(`.card[data-id="${dossier.id}"]`);
                 if (existingCard) return; // Avoid duplicates
                 
-                // Add to cache
                 window.DossierCache.unshift(dossier);
-                // Sort the cache for consistent display order
                 window.DossierCache.sort((a, b) => b.id - a.id);
-                // Re-render all dossiers to insert new one in correct order
                 loadDossiers(); 
                 showMessage(`Nouveau dossier de ${dossier.author}: "${dossier.title}"`, 'info');
             });
@@ -2500,8 +2668,11 @@
                 const index = window.DossierCache.findIndex(d => d.id === updatedDossier.id);
                 if (index !== -1) {
                     window.DossierCache[index] = updatedDossier;
-                    // Re-render all dossiers to reflect changes and maintain order
                     loadDossiers(); 
+                }
+                // If the updated dossier is open in the detail modal, update its content
+                if (dossierDetailModal.classList.contains('show') && currentDossierDetailId === updatedDossier.id) {
+                    openDossierDetailModal(updatedDossier.id); // Re-render content
                 }
             });
 
@@ -2510,6 +2681,10 @@
                 window.DossierCache = window.DossierCache.filter(d => d.id !== data.id);
                 document.querySelector(`.card[data-id="${data.id}"]`)?.remove();
                 showMessage('Un dossier a été supprimé.', 'info');
+                // If deleted dossier was open in detail modal, close it
+                if (dossierDetailModal.classList.contains('show') && currentDossierDetailId === data.id) {
+                    closeDossierDetailModal();
+                }
             });
 
             socket.on('update_dossier_likes', (data) => {
@@ -2522,12 +2697,23 @@
                     if (cardElement) {
                         const likeBtn = cardElement.querySelector('.dossier-actions .like-btn');
                         const dislikeBtn = cardElement.querySelector('.dossier-actions .dislike-btn');
-                        likeBtn.querySelector('.like-count').textContent = data.likes.length;
-                        dislikeBtn.querySelector('.dislike-count').textContent = data.dislikes.length;
+                        if(likeBtn) likeBtn.querySelector('.like-count').textContent = data.likes.length;
+                        if(dislikeBtn) dislikeBtn.querySelector('.dislike-count').textContent = data.dislikes.length;
                         const likedByCurrentUser = data.likes.includes(currentAgentName);
                         const dislikedByCurrentUser = data.dislikes.includes(currentAgentName);
-                        likeBtn.classList.toggle('liked', likedByCurrentUser);
-                        dislikeBtn.classList.toggle('disliked', dislikedByCurrentUser);
+                        if(likeBtn) likeBtn.classList.toggle('liked', likedByCurrentUser);
+                        if(dislikeBtn) dislikeBtn.classList.toggle('disliked', dislikedByCurrentUser);
+                    }
+                    // Update in detail modal if open
+                    if (dossierDetailModal.classList.contains('show') && currentDossierDetailId === dossier.id) {
+                        const detailLikeBtn = dossierDetailModal.querySelector('.dossier-actions .like-btn');
+                        const detailDislikeBtn = dossierDetailModal.querySelector('.dossier-actions .dislike-btn');
+                        if(detailLikeBtn) detailLikeBtn.querySelector('.like-count').textContent = data.likes.length;
+                        if(detailDislikeBtn) detailDislikeBtn.querySelector('.dislike-count').textContent = data.dislikes.length;
+                        const likedByCurrentUser = data.likes.includes(currentAgentName);
+                        const dislikedByCurrentUser = data.dislikes.includes(currentAgentName);
+                        if(detailLikeBtn) detailLikeBtn.classList.toggle('liked', likedByCurrentUser);
+                        if(detailDislikeBtn) detailDislikeBtn.classList.toggle('disliked', dislikedByCurrentUser);
                     }
                 }
             });
@@ -2540,23 +2726,38 @@
                     const cardElement = document.querySelector(`.card[data-id="${data.dossierId}"]`);
                     if (cardElement) {
                         const repostBtn = cardElement.querySelector('.dossier-actions .repost-btn');
-                        repostBtn.querySelector('.repost-count').textContent = data.reposts.length;
-                        repostBtn.classList.toggle('reposted', data.reposts.includes(currentAgentName));
+                        if(repostBtn) repostBtn.querySelector('.repost-count').textContent = data.reposts.length;
+                        if(repostBtn) repostBtn.classList.toggle('reposted', data.reposts.includes(currentAgentName));
+                    }
+                    // Update in detail modal if open
+                    if (dossierDetailModal.classList.contains('show') && currentDossierDetailId === dossier.id) {
+                        const detailRepostBtn = dossierDetailModal.querySelector('.dossier-actions .repost-btn');
+                        if(detailRepostBtn) detailRepostBtn.querySelector('.repost-count').textContent = data.reposts.length;
+                        if(detailRepostBtn) detailRepostBtn.classList.toggle('reposted', data.reposts.includes(currentAgentName));
                     }
                 }
             });
 
+            // Comments updates
             socket.on('new_comment', (data) => {
                 console.log('Real-time: Nouveau commentaire', data);
                 const dossier = window.DossierCache.find(d => d.id === data.dossierId);
                 if (dossier) {
                     dossier.comments.push(data.comment);
+                    // Update comments in the main gallery card (if showing comments there)
                     const commentsListElement = document.querySelector(`.card[data-id="${data.dossierId}"] .comments-list`);
                     if (commentsListElement) {
                         commentsListElement.innerHTML = '';
                         const topLevelComments = (dossier.comments || []).filter(c => !c.parentId);
                         renderCommentsRecursive(commentsListElement, topLevelComments, (dossier.comments || []), dossier.id, currentAgentName === ASSANE_DIOP_NAME);
                         commentsListElement.scrollTop = commentsListElement.scrollHeight;
+                    }
+                    // Update comments in the detail modal if it's open
+                    if (dossierDetailModal.classList.contains('show') && currentDossierDetailId === dossier.id) {
+                        dossierDetailCommentsList.innerHTML = '';
+                        const topLevelDetailComments = (dossier.comments || []).filter(c => !c.parentId);
+                        renderCommentsRecursive(dossierDetailCommentsList, topLevelDetailComments, (dossier.comments || []), dossier.id, currentAgentName === ASSANE_DIOP_NAME);
+                        dossierDetailCommentsList.scrollTop = dossierDetailCommentsList.scrollHeight;
                     }
                 }
             });
@@ -2568,11 +2769,18 @@
                     const commentIndex = dossier.comments.findIndex(c => c.id === data.comment.id);
                     if (commentIndex !== -1) {
                         dossier.comments[commentIndex] = data.comment;
+                        // Update comments in the main gallery card
                         const commentsListElement = document.querySelector(`.card[data-id="${data.dossierId}"] .comments-list`);
                         if (commentsListElement) {
                             commentsListElement.innerHTML = '';
                             const topLevelComments = (dossier.comments || []).filter(c => !c.parentId);
                             renderCommentsRecursive(commentsListElement, topLevelComments, (dossier.comments || []), dossier.id, currentAgentName === ASSANE_DIOP_NAME);
+                        }
+                        // Update comments in the detail modal if it's open
+                        if (dossierDetailModal.classList.contains('show') && currentDossierDetailId === dossier.id) {
+                            dossierDetailCommentsList.innerHTML = '';
+                            const topLevelDetailComments = (dossier.comments || []).filter(c => !c.parentId);
+                            renderCommentsRecursive(dossierDetailCommentsList, topLevelDetailComments, (dossier.comments || []), dossier.id, currentAgentName === ASSANE_DIOP_NAME);
                         }
                     }
                 }
@@ -2592,11 +2800,18 @@
                     }
                     dossier.comments = dossier.comments.filter(c => !commentsToDelete.includes(c.id));
                     
+                    // Update comments in the main gallery card
                     const commentsListElement = document.querySelector(`.card[data-id="${data.dossierId}"] .comments-list`);
                     if (commentsListElement) {
                         commentsListElement.innerHTML = '';
                         const topLevelComments = (dossier.comments || []).filter(c => !c.parentId);
                         renderCommentsRecursive(commentsListElement, topLevelComments, (dossier.comments || []), dossier.id, currentAgentName === ASSANE_DIOP_NAME);
+                    }
+                    // Update comments in the detail modal if it's open
+                    if (dossierDetailModal.classList.contains('show') && currentDossierDetailId === dossier.id) {
+                        dossierDetailCommentsList.innerHTML = '';
+                        const topLevelDetailComments = (dossier.comments || []).filter(c => !c.parentId);
+                        renderCommentsRecursive(dossierDetailCommentsList, topLevelDetailComments, (dossier.comments || []), dossier.id, currentAgentName === ASSANE_DIOP_NAME);
                     }
                 }
             });
@@ -2608,28 +2823,48 @@
                     const comment = dossier.comments.find(c => c.id === data.commentId);
                     if (comment) {
                         comment.likes = data.likes;
-                        const commentElement = document.querySelector(`.comment[data-comment-id="${data.commentId}"]`);
+                        // Update the specific comment element in main gallery
+                        const commentElement = document.querySelector(`.card[data-id="${data.dossierId}"] .comment[data-comment-id="${data.commentId}"]`);
                         if(commentElement) {
                             const likeBtn = commentElement.querySelector('.like-btn');
-                            likeBtn.querySelector('.like-count').textContent = data.likes.length;
-                            likeBtn.classList.toggle('liked', data.likes.includes(currentAgentName));
+                            if(likeBtn) { // Check if button exists in this view
+                                likeBtn.querySelector('.like-count').textContent = data.likes.length;
+                                likeBtn.classList.toggle('liked', data.likes.includes(currentAgentName));
+                            }
+                        }
+                        // Update the specific comment element in detail modal
+                        const detailCommentElement = document.querySelector(`#dossierDetailModal .comment[data-comment-id="${data.commentId}"]`);
+                        if(detailCommentElement) {
+                            const likeBtn = detailCommentElement.querySelector('.like-btn');
+                            if(likeBtn) { // Check if button exists in this view
+                                likeBtn.querySelector('.like-count').textContent = data.likes.length;
+                                likeBtn.classList.toggle('liked', data.likes.includes(currentAgentName));
+                            }
                         }
                     }
                 }
             });
 
+            // Notification updates
+            socket.on('unread_notification_count', (count) => { // Sent on agent_identify
+                notificationCount.textContent = count;
+                notificationCount.classList.toggle('show', count > 0);
+            });
+
             socket.on('new_notification', (notification) => {
                 console.log('Real-time: Nouvelle notification', notification);
                 // Trigger a full reload of notifications to ensure correct state and count
-                loadNotifications();
+                loadNotifications(); // Reload to refresh list and count
                 showMessage('Nouvelle notification !', 'info');
             });
             
             socket.on('delete_notification_client', (data) => {
                 console.log('Real-time: Notification supprimée côté client', data.notificationId);
-                document.querySelector(`.notification-item[data-id="${data.notificationId}"]`)?.remove();
-                // Update count after removal
-                notificationCount.textContent = parseInt(notificationCount.textContent) - 1;
+                const removedItem = document.querySelector(`.notification-item[data-id="${data.notificationId}"]`);
+                if (removedItem && removedItem.classList.contains('unread')) { // Only decrement if it was unread
+                    notificationCount.textContent = parseInt(notificationCount.textContent) - 1;
+                }
+                removedItem?.remove();
                 if (parseInt(notificationCount.textContent) <= 0) {
                     notificationCount.classList.remove('show');
                     if (notificationList.children.length === 0) {
@@ -2647,11 +2882,13 @@
                 }
             });
 
+            // Contact/Messaging updates
             socket.on('contact_request_received', (newContactRequest) => {
                 console.log('Real-time: Demande de contact reçue', newContactRequest);
                 if (newContactRequest.recipient === currentAgentName) {
                     showMessage(`Nouvelle demande de contact de ${newContactRequest.sender}`, 'info');
                     loadContacts(); // Refresh contacts list to show pending request
+                    loadNotifications(); // Update bell for the new notification
                 }
             });
 
@@ -2660,6 +2897,7 @@
                 if (contact.agent1 === currentAgentName || contact.agent2 === currentAgentName) {
                     showMessage(`Contact ${contact.agent1 === currentAgentName ? contact.agent2 : contact.agent1} accepté !`, 'success');
                     loadContacts(); // Refresh contacts list to show accepted contact
+                    loadNotifications(); // Clear contact request notification
                 }
             });
             
@@ -2668,6 +2906,7 @@
                 if (contact.agent1 === currentAgentName || contact.agent2 === currentAgentName) {
                     showMessage(`Demande de contact déclinée par ${contact.agent1 === currentAgentName ? contact.agent2 : contact.agent1}.`, 'error');
                     loadContacts(); // Refresh contacts list to remove pending request
+                    loadNotifications(); // Clear contact request notification
                 }
             });
 
@@ -2679,15 +2918,15 @@
                 const isRelevantToCurrentUser = (sender === currentAgentName) || (recipient === currentAgentName);
                 
                 if (isRelevantToCurrentUser && (activeChatContact === sender || activeChatContact === recipient)) {
-                    // Only re-render chat if it's the currently active one
-                    loadMessages(activeChatContact); 
+                    loadMessages(activeChatContact); // Reload messages to ensure order and context
                 }
-                loadNotifications(); // Reload notifications to update bell count for new message
+                loadNotifications(); // Update bell count for new message notification
             });
 
             socket.on('message_reaction_update', (data) => {
                 console.log('Real-time: Réaction de message mise à jour', data);
-                if (activeChatContact && data.conversationParticipants.includes(currentAgentName) && 
+                // Only update if this reaction is for the currently active chat
+                if (activeChatContact && (data.conversationParticipants.includes(currentAgentName)) &&
                     (activeChatContact === data.conversationParticipants[0] || activeChatContact === data.conversationParticipants[1])) {
                     
                     const messageElement = document.querySelector(`.message-item[data-message-id="${data.messageId}"]`);
@@ -2748,48 +2987,39 @@
                 card.style.display = '';
             }
 
-            // Media display logic (multiple images/videos)
+            // Media display logic (multiple images/videos) for GALLERY PREVIEW
             let mediaHtml = '';
             if (dossier.media && dossier.media.length > 0) {
                 const isMediaHiddenForUser = dossier.imageHidden && !isAssaneDiop;
                 
-                // Use a generic placeholder if media is hidden for the user
                 if (isMediaHiddenForUser) {
                     mediaHtml = '<div class="card-image-container hidden-image"></div>';
                 } else {
-                    // Render the first media item as a preview
-                    const firstMedia = dossier.media[0];
+                    const firstMedia = dossier.media[0]; // Display only the first media in gallery preview
                     const mediaUrl = firstMedia.url ? `${window.location.origin}${firstMedia.url}` : '';
                     let mediaTag = '';
                     if (firstMedia.type === 'image') {
                         mediaTag = `<img src="${mediaUrl}" alt="${dossier.title}" class="card-image-item">`;
                     } else if (firstMedia.type === 'video') {
-                        mediaTag = `<video src="${mediaUrl}" class="card-image-item video" preload="metadata"></video>`; // preload for quicker thumbnail
+                        mediaTag = `<video src="${mediaUrl}" class="card-image-item video" preload="metadata"></video>`;
                     }
                     
                     mediaHtml = `
                         <div class="card-image-container" data-dossier-id="${dossier.id}">
                             ${mediaTag}
-                            ${dossier.media.length > 1 ? '<button class="media-nav-btn left" data-direction="prev">&#10094;</button><button class="media-nav-btn right" data-direction="next">&#10095;</button>' : ''}
-                        </div>`;
+                            ${dossier.media.length > 1 ? '<span class="media-count-badge">+' + (dossier.media.length - 1) + '</span>' : ''}
+                        </div>`; 
                 }
             } else {
-                // Fallback if no media or empty array
                 mediaHtml = '<div class="card-image-container"><i class="fas fa-file-alt" style="font-size: 3em; color: #666;"></i></div>';
             }
             
-            const liked = dossier.likes && dossier.likes.includes(currentAgentName);
-            const disliked = dossier.dislikes && dossier.dislikes.includes(currentAgentName);
-            const reposted = dossier.reposts && dossier.reposts.includes(currentAgentName);
-
-            // Certified label for Assane Diop's posts
             const displayAuthor = dossier.author === ASSANE_DIOP_NAME ? AGENCY_NAME : dossier.author;
             const certifiedIcon = dossier.author === ASSANE_DIOP_NAME ? `<i class="fas fa-check-circle certification-icon"></i>` : '';
             const certifiedLabel = dossier.author === ASSANE_DIOP_NAME ? `<span class="certified-label">L'Agence</span>` : '';
 
             const authorLabel = `<span class="card-author">${displayAuthor} ${certifiedIcon} ${certifiedLabel}</span>`;
             
-            // Add contact button if not current user, not Assane Diop, and not already friends/pending
             let addContactButtonHtml = '';
             if (currentAgentName && currentAgentName !== dossier.author && dossier.author !== ASSANE_DIOP_NAME) {
                 const isAlreadyContact = window.ContactCache.some(c => 
@@ -2817,118 +3047,128 @@
                     <div class="card-title">${dossier.title}</div>
                     ${authorLabel} ${addContactButtonHtml}
                     <div class="card-desc">${dossier.desc}</div>
-                    
-                    <div class="dossier-actions">
-                        <button class="like-btn ${liked ? 'liked' : ''}" data-action="like-dossier" data-is-like="true">
-                            👍 <span class="like-count">${(dossier.likes || []).length}</span>
-                        </button>
-                        <button class="dislike-btn ${disliked ? 'disliked' : ''}" data-action="like-dossier" data-is-like="false">
-                            👎 <span class="dislike-count">${(dossier.dislikes || []).length}</span>
-                        </button>
-                        <button class="repost-btn ${reposted ? 'reposted' : ''}" data-action="repost-dossier">
-                            🔁 <span class="repost-count">${(dossier.reposts || []).length}</span>
-                        </button>
-                    </div>
-
-                    <div class="comments-section" data-dossier-id="${dossier.id}">
-                        <h4>Commentaires :</h4>
-                        <div class="comments-list"></div>
-                        <form class="comment-form">
-                            <textarea placeholder="Ajouter un commentaire..." required></textarea>
-                            <button type="submit">Poster</button>
-                        </form>
-                    </div>
                 </div>
             `;
-            
-            let adminControlsHtml = '';
-            if (isAssaneDiop) {
-                adminControlsHtml += `
-                    <div class="admin-controls">
-                        <button class="toggle-hide" data-action="toggle-hide">${dossier.isHidden ? 'Afficher' : 'Masquer'}</button>
-                        <button class="toggle-media-hide" data-action="toggle-media-hide">${dossier.imageHidden ? 'Afficher Média' : 'Masquer Média'}</button>
-                        <button class="edit" data-action="edit">Modifier</button>
-                        <button class="delete" data-action="delete">Supprimer</button>
-                    </div>
-                `;
-            } else if (isAuthor) {
-                adminControlsHtml += `
-                    <div class="admin-controls creator-only">
-                        <button class="edit" data-action="edit">Modifier</button>
-                        <button class="delete" data-action="delete">Supprimer</button>
-                    </div>
-                `;
+            // Admin controls are only in detail view. Likes/dislikes/reposts/comments are only in detail view.
+
+            gallery.prepend(card);
+
+            // Make the entire card clickable to open detail view
+            card.addEventListener('click', () => {
+                openDossierDetailModal(dossier.id);
+            });
+
+            // Add contact button listener on author name if applicable
+            const addContactAuthorBtn = card.querySelector('.add-contact-author-btn');
+            if (addContactAuthorBtn) {
+                addContactAuthorBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent opening detail modal
+                    const targetAgent = e.target.closest('button').dataset.targetAgent;
+                    if (targetAgent) {
+                        openAddContactModal(targetAgent);
+                    }
+                });
             }
-            card.insertAdjacentHTML('beforeend', adminControlsHtml);
+        }
 
-            gallery.prepend(card); // Add to the beginning of the gallery
+        // --- Dossier Detail Modal Functions (New) ---
+        async function openDossierDetailModal(dossierId) {
+            const dossier = window.DossierCache.find(d => d.id === dossierId);
+            if (!dossier) {
+                showMessage('Dossier introuvable.', 'error');
+                return;
+            }
 
-            // Add listener for lightbox
-            const cardImageContainer = card.querySelector('.card-image-container');
-            if (cardImageContainer && dossier.media && dossier.media.length > 0) {
-                cardImageContainer.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('media-nav-btn')) return;
-                    if (dossier.imageHidden && !isAssaneDiop) return;
-                    openLightbox(dossier.media);
+            currentDossierDetailId = dossierId; // Store for comment updates
+
+            const isAssaneDiop = currentAgentName === ASSANE_DIOP_NAME;
+            const isAuthor = currentAgentName === dossier.author; // This is author of the post
+
+            // Clear previous content
+            dossierDetailMediaGallery.innerHTML = '';
+            dossierDetailTitle.textContent = '';
+            dossierDetailAuthor.innerHTML = ''; // Use innerHTML for certified tag
+            dossierDetailDesc.textContent = '';
+            dossierDetailCommentsList.innerHTML = '';
+            dossierDetailCommentInput.value = '';
+            dossierDetailCommentInput.removeAttribute('data-reply-to-id');
+
+
+            // Render all media in the detail gallery
+            if (dossier.media && dossier.media.length > 0) {
+                dossier.media.forEach((mediaItem, index) => {
+                    const mediaUrl = `${window.location.origin}${mediaItem.url}`;
+                    let mediaElement;
+                    if (mediaItem.type === 'image') {
+                        mediaElement = document.createElement('img');
+                        mediaElement.alt = dossier.title;
+                    } else if (mediaItem.type === 'video') {
+                        mediaElement = document.createElement('video');
+                        mediaElement.setAttribute('controls', '');
+                        mediaElement.setAttribute('preload', 'metadata');
+                    }
+                    mediaElement.src = mediaUrl;
+                    mediaElement.className = 'dossier-detail-media-item' + (index === 0 ? ' active' : '');
+                    mediaElement.dataset.mediaIndex = index; // Store index for lightbox
+                    mediaElement.dataset.mediaType = mediaItem.type; // Store type for lightbox
+
+                    // Open lightbox when media is clicked
+                    mediaElement.addEventListener('click', () => {
+                        openLightbox(dossier.media, index);
+                    });
+                    dossierDetailMediaGallery.appendChild(mediaElement);
                 });
 
-                // Media navigation buttons for multiple media
-                let currentMediaIndex = 0; // State for this specific card's media display
+                // Add navigation buttons for detail gallery if multiple medias
+                if (dossier.media.length > 1) {
+                    const prevBtn = document.createElement('button');
+                    prevBtn.className = 'dossier-detail-media-nav-btn left';
+                    prevBtn.innerHTML = '&#10094;';
+                    prevBtn.addEventListener('click', () => {
+                        let currentIndex = parseInt(dossierDetailMediaGallery.querySelector('.dossier-detail-media-item.active').dataset.mediaIndex);
+                        let newIndex = (currentIndex - 1 + dossier.media.length) % dossier.media.length;
+                        updateDossierDetailMediaDisplay(newIndex);
+                    });
+                    dossierDetailMediaGallery.appendChild(prevBtn);
 
-                const updateCardMediaDisplay = (index) => {
-                    const mediaItem = dossier.media[index];
-                    cardImageContainer.innerHTML = '';
-                    let mediaTag = '';
-                    if (mediaItem.type === 'image') {
-                        mediaTag = `<img src="${window.location.origin}${mediaItem.url}" class="card-image-item">`;
-                    } else if (mediaItem.type === 'video') {
-                        mediaTag = `<video src="${window.location.origin}${mediaItem.url}" class="card-image-item video" controls preload="metadata"></video>`;
-                    }
-                    cardImageContainer.innerHTML = mediaTag;
-                    // Re-add nav buttons
-                    if (dossier.media.length > 1) {
-                        cardImageContainer.insertAdjacentHTML('beforeend', '<button class="media-nav-btn left" data-direction="prev">&#10094;</button><button class="media-nav-btn right" data-direction="next">&#10095;</button>');
-                        card.querySelector('.media-nav-btn.left').onclick = (e) => { e.stopPropagation(); currentMediaIndex = (currentMediaIndex - 1 + dossier.media.length) % dossier.media.length; updateCardMediaDisplay(currentMediaIndex); };
-                        card.querySelector('.media-nav-btn.right').onclick = (e) => { e.stopPropagation(); currentMediaIndex = (currentMediaIndex + 1) % dossier.media.length; updateCardMediaDisplay(currentMediaIndex); };
-                    }
-                };
-
-                // Initial display of first media
-                updateCardMediaDisplay(0);
-
-                // Re-attach listeners for nav buttons as they might be re-rendered
-                const prevBtn = card.querySelector('.media-nav-btn.left');
-                const nextBtn = card.querySelector('.media-nav-btn.right');
-                if (prevBtn) prevBtn.onclick = (e) => { e.stopPropagation(); currentMediaIndex = (currentMediaIndex - 1 + dossier.media.length) % dossier.media.length; updateCardMediaDisplay(currentMediaIndex); };
-                if (nextBtn) nextBtn.onclick = (e) => { e.stopPropagation(); currentMediaIndex = (currentMediaIndex + 1) % dossier.media.length; updateCardMediaDisplay(currentMediaIndex); };
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className = 'dossier-detail-media-nav-btn right';
+                    nextBtn.innerHTML = '&#10095;';
+                    nextBtn.addEventListener('click', () => {
+                        let currentIndex = parseInt(dossierDetailMediaGallery.querySelector('.dossier-detail-media-item.active').dataset.mediaIndex);
+                        let newIndex = (currentIndex + 1) % dossier.media.length;
+                        updateDossierDetailMediaDisplay(newIndex);
+                    });
+                    dossierDetailMediaGallery.appendChild(nextBtn);
+                }
+                updateDossierDetailMediaDisplay(0); // Show first media initially
+            } else {
+                dossierDetailMediaGallery.innerHTML = '<i class="fas fa-file-alt" style="font-size: 5em; color: #666;"></i>';
             }
 
+            // Fill text content
+            dossierDetailTitle.textContent = dossier.title;
+            const displayAuthor = dossier.author === ASSANE_DIOP_NAME ? AGENCY_NAME : dossier.author;
+            const certifiedIcon = dossier.author === ASSANE_DIOP_NAME ? `<i class="fas fa-check-circle certification-icon"></i>` : '';
+            const certifiedLabel = dossier.author === ASSANE_DIOP_NAME ? `<span class="certified-label">L'Agence</span>` : '';
+            dossierDetailAuthor.innerHTML = `<span class="card-author">${displayAuthor} ${certifiedIcon} ${certifiedLabel}</span>`;
+            dossierDetailDesc.textContent = dossier.desc;
 
-            // Render comments recursively
-            const commentsList = card.querySelector('.comments-list');
+            // Render comments in detail modal
             const topLevelComments = (dossier.comments || []).filter(c => !c.parentId);
-            renderCommentsRecursive(commentsList, topLevelComments, (dossier.comments || []), dossier.id, isAssaneDiop);
+            renderCommentsRecursive(dossierDetailCommentsList, topLevelComments, (dossier.comments || []), dossier.id, isAssaneDiop);
 
-            const commentForm = card.querySelector('.comment-form');
-            commentForm.addEventListener('submit', async (e) => {
+            // Setup comment form for this specific dossier
+            dossierDetailCommentForm.onsubmit = async (e) => { // Use onsubmit directly
                 e.preventDefault();
-                const textarea = commentForm.querySelector('textarea');
+                const textarea = dossierDetailCommentInput;
                 const commentText = textarea.value.trim();
                 const parentId = textarea.dataset.replyToId ? parseInt(textarea.dataset.replyToId) : null;
 
                 if (commentText) {
                     try {
-                        const newCommentData = await addCommentToServer(dossier.id, commentText, currentAgentName, parentId);
-                        // No need to loadDossiers(), Socket.IO will handle the push
-                        // Update cache manually for immediate consistency
-                        const dossierIndex = window.DossierCache.findIndex(d => d.id === dossier.id);
-                        if (dossierIndex !== -1) {
-                            if (!window.DossierCache[dossierIndex].comments) {
-                                window.DossierCache[dossierIndex].comments = [];
-                            }
-                            window.DossierCache[dossierIndex].comments.push(newCommentData);
-                        }
-                        
+                        await addCommentToServer(dossier.id, commentText, currentAgentName, parentId);
+                        // Socket.IO will handle updates
                         textarea.value = '';
                         textarea.removeAttribute('data-reply-to-id');
                         textarea.placeholder = "Ajouter un commentaire...";
@@ -2938,81 +3178,82 @@
                         showMessage(`Erreur commentaire: ${error.message}`, 'error');
                     }
                 }
-            });
+            };
 
-            const dossierActionsDiv = card.querySelector('.dossier-actions');
-            if (dossierActionsDiv) {
-                dossierActionsDiv.addEventListener('click', async (e) => {
-                    const btn = e.target.closest('button');
-                    if (!btn || !currentAgentName) return;
-
-                    const action = btn.dataset.action;
-                    
-                    try {
-                        if (action === 'like-dossier') {
-                            const isLike = btn.dataset.isLike === 'true';
-                            await toggleDossierLike(dossier.id, currentAgentName, isLike);
-                        } else if (action === 'repost-dossier') {
-                            await toggleDossierRepost(dossier.id, currentAgentName);
-                        }
-                    } catch (error) {
-                        console.error('Erreur action dossier:', error);
-                        showMessage(`Erreur action dossier: ${error.message}`, 'error');
-                    }
-                });
+            // Admin controls in detail view (reuse logic from renderDossier)
+            let detailAdminControlsHtml = '';
+            if (isAssaneDiop) {
+                detailAdminControlsHtml = `
+                    <div class="admin-controls" style="position: static; margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
+                        <button class="toggle-hide" data-action="toggle-hide">${dossier.isHidden ? 'Afficher' : 'Masquer'}</button>
+                        <button class="toggle-media-hide" data-action="toggle-media-hide">${dossier.imageHidden ? 'Afficher Média' : 'Masquer Média'}</button>
+                        <button class="edit" data-action="edit">Modifier</button>
+                        <button class="delete" data-action="delete">Supprimer</button>
+                    </div>
+                `;
+            } else if (isAuthor) {
+                detailAdminControlsHtml = `
+                    <div class="admin-controls creator-only" style="position: static; margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
+                        <button class="edit" data-action="edit">Modifier</button>
+                        <button class="delete" data-action="delete">Supprimer</button>
+                    </div>
+                `;
             }
+            // Insert controls, then attach listeners
+            const existingControls = dossierDetailModal.querySelector('.dossier-detail-content .admin-controls');
+            if (existingControls) existingControls.remove(); // Remove old controls if re-rendering
+            dossierDetailModal.querySelector('.dossier-detail-content').insertAdjacentHTML('beforeend', detailAdminControlsHtml);
 
-            const cardAdminControls = card.querySelector('.admin-controls');
-            if (cardAdminControls) {
-                cardAdminControls.addEventListener('click', async (e) => {
+            // Re-attach listeners for admin controls in detail modal
+            const detailAdminControls = dossierDetailModal.querySelector('.dossier-detail-content .admin-controls');
+            if (detailAdminControls) {
+                 detailAdminControls.addEventListener('click', async (e) => {
                     const btn = e.target.closest('button');
                     if (!btn) return;
                     const action = btn.dataset.action;
 
-                    const dossierId = parseInt(card.dataset.id);
-                    const targetDossierCache = window.DossierCache.find(d => d.id === dossierId);
-
-                    if (!targetDossierCache) {
-                        showMessage('Dossier non trouvé pour cette action.', 'error');
+                    // Fetch the latest dossier from cache for modification
+                    const currentDossierCache = window.DossierCache.find(d => d.id === dossierId);
+                    if (!currentDossierCache) {
+                        showMessage('Dossier introuvable (cache).', 'error');
                         return;
                     }
 
                     try {
                         let formDataToSave = new FormData();
-                        formDataToSave.append('id', targetDossierCache.id);
-                        formDataToSave.append('title', targetDossierCache.title);
-                        formDataToSave.append('desc', targetDossierCache.desc);
-                        formDataToSave.append('author', targetDossierCache.author);
-                        formDataToSave.append('isHidden', targetDossierCache.isHidden ? 'true' : 'false');
-                        formDataToSave.append('imageHidden', targetDossierCache.imageHidden ? 'true' : 'false');
+                        formDataToSave.append('id', currentDossierCache.id);
+                        formDataToSave.append('title', currentDossierCache.title);
+                        formDataToSave.append('desc', currentDossierCache.desc);
+                        formDataToSave.append('author', currentDossierCache.author);
+                        formDataToSave.append('isHidden', currentDossierCache.isHidden ? 'true' : 'false');
+                        formDataToSave.append('imageHidden', currentDossierCache.imageHidden ? 'true' : 'false');
                         formDataToSave.append('actionPerformer', currentAgentName);
 
-                        if (targetDossierCache.media && targetDossierCache.media.length > 0) {
-                            formDataToSave.append('existingMediaUrls', JSON.stringify(targetDossierCache.media.map(m => m.url)));
+                        if (currentDossierCache.media && currentDossierCache.media.length > 0) {
+                            formDataToSave.append('existingMediaUrls', JSON.stringify(currentDossierCache.media.map(m => m.url)));
                         }
-
 
                         if (action === 'delete') {
                             if (confirm('Êtes-vous sûr de vouloir supprimer ce dossier ?')) {
                                 await deleteDossierOnServer(dossierId, currentAgentName);
                                 showMessage('Dossier supprimé !', 'success');
+                                closeDossierDetailModal(); // Close modal after deletion
                             }
                         } else if (action === 'toggle-hide') {
-                            targetDossierCache.isHidden = !targetDossierCache.isHidden;
-                            formDataToSave.set('isHidden', targetDossierCache.isHidden ? 'true' : 'false');
-                            
+                            currentDossierCache.isHidden = !currentDossierCache.isHidden;
+                            formDataToSave.set('isHidden', currentDossierCache.isHidden ? 'true' : 'false');
                             await saveDossier(formDataToSave);
-                            showMessage(`Dossier ${targetDossierCache.isHidden ? 'masqué' : 'affiché'} !`, 'info');
-                            
+                            showMessage(`Dossier ${currentDossierCache.isHidden ? 'masqué' : 'affiché'} !`, 'info');
+                            // The Socket.IO update will trigger openDossierDetailModal again if still open
                         } else if (action === 'toggle-media-hide') {
-                            targetDossierCache.imageHidden = !targetDossierCache.imageHidden;
-                            formDataToSave.set('imageHidden', targetDossierCache.imageHidden ? 'true' : 'false');
-
+                            currentDossierCache.imageHidden = !currentDossierCache.imageHidden;
+                            formDataToSave.set('imageHidden', currentDossierCache.imageHidden ? 'true' : 'false');
                             await saveDossier(formDataToSave);
-                            showMessage(`Média ${targetDossierCache.imageHidden ? 'masqué' : 'affiché'} !`, 'info');
-
+                            showMessage(`Média ${currentDossierCache.imageHidden ? 'masqué' : 'affiché'} !`, 'info');
+                            // The Socket.IO update will trigger openDossierDetailModal again if still open
                         } else if (action === 'edit') {
-                            openFolderModal('edit', targetDossierCache);
+                            closeDossierDetailModal(); // Close detail modal before opening edit modal
+                            openFolderModal('edit', currentDossierCache);
                         }
                     } catch (error) {
                         console.error('Erreur lors de l\'action administrative:', error);
@@ -3020,12 +3261,139 @@
                     }
                 });
             }
+
+            dossierDetailModal.classList.add('show');
+            dossierDetailCommentsList.scrollTop = dossierDetailCommentsList.scrollHeight;
+        }
+
+        function closeDossierDetailModal() {
+            dossierDetailModal.classList.remove('show');
+            currentDossierDetailId = null;
+            const activeVideo = dossierDetailMediaGallery.querySelector('video.active');
+            if (activeVideo) activeVideo.pause();
+        }
+
+        function updateDossierDetailMediaDisplay(index) {
+            const mediaItems = dossierDetailMediaGallery.querySelectorAll('.dossier-detail-media-item');
+            mediaItems.forEach((item, idx) => {
+                item.classList.toggle('active', idx === index);
+                if (item.tagName === 'VIDEO') {
+                    if (idx === index) item.play(); else item.pause();
+                }
+            });
+        }
+        closeDossierDetailModalBtn.addEventListener('click', closeDossierDetailModal);
+
+
+        // --- Dossier (Article) & Comment Management ---
+        window.DossierCache = []; // Global cache for dossiers, needed for permission checks
+
+        async function loadDossiers() {
+            gallery.innerHTML = '';
+            try {
+                const dossiers = await fetchDossiers();
+                window.DossierCache = dossiers;
+
+                dossiers.sort((a, b) => b.id - a.id); 
+
+                dossiers.forEach(dossier => renderDossier(dossier));
+            } catch (error) {
+                console.error("Erreur lors du chargement des dossiers:", error);
+                showMessage(`Impossible de charger les dossiers: ${error.message}`, 'error');
+            }
+        }
+
+        function renderDossier(dossier) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.dataset.id = dossier.id;
             
+            const isAssaneDiop = currentAgentName === ASSANE_DIOP_NAME;
+            const isAuthor = currentAgentName === dossier.author;
+
+            if (dossier.isHidden && !isAssaneDiop) {
+                card.style.display = 'none';
+            } else {
+                card.style.display = '';
+            }
+
+            // Media display logic (multiple images/videos) for GALLERY PREVIEW
+            let mediaHtml = '';
+            if (dossier.media && dossier.media.length > 0) {
+                const isMediaHiddenForUser = dossier.imageHidden && !isAssaneDiop;
+                
+                if (isMediaHiddenForUser) {
+                    mediaHtml = '<div class="card-image-container hidden-image"></div>';
+                } else {
+                    const firstMedia = dossier.media[0]; // Display only the first media in gallery preview
+                    const mediaUrl = firstMedia.url ? `${window.location.origin}${firstMedia.url}` : '';
+                    let mediaTag = '';
+                    if (firstMedia.type === 'image') {
+                        mediaTag = `<img src="${mediaUrl}" alt="${dossier.title}" class="card-image-item">`;
+                    } else if (firstMedia.type === 'video') {
+                        mediaTag = `<video src="${mediaUrl}" class="card-image-item video" preload="metadata"></video>`;
+                    }
+                    
+                    mediaHtml = `
+                        <div class="card-image-container" data-dossier-id="${dossier.id}">
+                            ${mediaTag}
+                            ${dossier.media.length > 1 ? '<span class="media-count-badge">+' + (dossier.media.length - 1) + '</span>' : ''}
+                        </div>`; 
+                }
+            } else {
+                mediaHtml = '<div class="card-image-container"><i class="fas fa-file-alt" style="font-size: 3em; color: #666;"></i></div>';
+            }
+            
+            const displayAuthor = dossier.author === ASSANE_DIOP_NAME ? AGENCY_NAME : dossier.author;
+            const certifiedIcon = dossier.author === ASSANE_DIOP_NAME ? `<i class="fas fa-check-circle certification-icon"></i>` : '';
+            const certifiedLabel = dossier.author === ASSANE_DIOP_NAME ? `<span class="certified-label">L'Agence</span>` : '';
+
+            const authorLabel = `<span class="card-author">${displayAuthor} ${certifiedIcon} ${certifiedLabel}</span>`;
+            
+            let addContactButtonHtml = '';
+            if (currentAgentName && currentAgentName !== dossier.author && dossier.author !== ASSANE_DIOP_NAME) {
+                const isAlreadyContact = window.ContactCache.some(c => 
+                    c.status === 'accepted' && 
+                    ((c.agent1 === currentAgentName && c.agent2 === dossier.author) || 
+                     (c.agent1 === dossier.author && c.agent2 === currentAgentName))
+                );
+                const hasPendingRequest = window.ContactCache.some(c => 
+                    c.status === 'pending' && 
+                    ((c.agent1 === currentAgentName && c.agent2 === dossier.author) || 
+                     (c.agent1 === dossier.author && c.agent2 === currentAgentName))
+                );
+
+                if (!isAlreadyContact && !hasPendingRequest) {
+                    addContactButtonHtml = `<button class="add-contact-author-btn" data-target-agent="${dossier.author}" title="Ajouter comme contact"><i class="fas fa-user-plus"></i></button>`;
+                } else if (hasPendingRequest) {
+                    addContactButtonHtml = `<span style="font-size:0.8em;color:#888;margin-left:10px;">Demande en attente</span>`;
+                }
+            }
+
+
+            card.innerHTML = `
+                ${mediaHtml}
+                <div class="card-content">
+                    <div class="card-title">${dossier.title}</div>
+                    ${authorLabel} ${addContactButtonHtml}
+                    <div class="card-desc">${dossier.desc}</div>
+                </div>
+            `;
+            // Admin controls are only in detail view. Likes/dislikes/reposts/comments are only in detail view.
+
+            gallery.prepend(card);
+
+            // Make the entire card clickable to open detail view
+            card.addEventListener('click', () => {
+                openDossierDetailModal(dossier.id);
+            });
+
             // Add contact button listener on author name if applicable
             const addContactAuthorBtn = card.querySelector('.add-contact-author-btn');
             if (addContactAuthorBtn) {
                 addContactAuthorBtn.addEventListener('click', (e) => {
-                    const targetAgent = e.target.dataset.targetAgent;
+                    e.stopPropagation(); // Prevent opening detail modal
+                    const targetAgent = e.target.closest('button').dataset.targetAgent;
                     if (targetAgent) {
                         openAddContactModal(targetAgent);
                     }
@@ -3076,24 +3444,28 @@
 
                 // Add event listeners for comment actions
                 const likeCommentBtn = commentDiv.querySelector('.like-btn');
-                likeCommentBtn.addEventListener('click', async () => {
-                    try {
-                        await toggleCommentLike(dossierId, comment.id, currentAgentName);
-                    } catch (error) {
-                        console.error('Erreur like commentaire:', error);
-                        showMessage(`Erreur like commentaire: ${error.message}`, 'error');
-                    }
-                });
+                if(likeCommentBtn) { // Ensure button exists before adding listener
+                    likeCommentBtn.addEventListener('click', async () => {
+                        try {
+                            await toggleCommentLike(dossierId, comment.id, currentAgentName);
+                        } catch (error) {
+                            console.error('Erreur like commentaire:', error);
+                            showMessage(`Erreur like commentaire: ${error.message}`, 'error');
+                        }
+                    });
+                }
 
                 const replyCommentBtn = commentDiv.querySelector('.reply-btn');
-                replyCommentBtn.addEventListener('click', () => {
-                    const commentFormTextarea = parentContainer.closest('.comments-section').querySelector('.comment-form textarea');
-                    commentFormTextarea.value = `@${comment.author} `;
-                    commentFormTextarea.dataset.replyToId = comment.id;
-                    commentFormTextarea.placeholder = `Répondre à ${comment.author}...`;
-                    commentFormTextarea.focus();
-                    showMessage(`Prêt à répondre à ${comment.author}`, 'info');
-                });
+                if(replyCommentBtn) { // Ensure button exists before adding listener
+                    replyCommentBtn.addEventListener('click', () => {
+                        const commentFormTextarea = parentContainer.closest('.comments-section').querySelector('textarea');
+                        commentFormTextarea.value = `@${comment.author} `;
+                        commentFormTextarea.dataset.replyToId = comment.id;
+                        commentFormTextarea.placeholder = `Répondre à ${comment.author}...`;
+                        commentFormTextarea.focus();
+                        showMessage(`Prêt à répondre à ${comment.author}`, 'info');
+                    });
+                }
                 
                 // Edit/Delete comment buttons
                 const editCommentBtn = commentDiv.querySelector('.edit-btn');
@@ -3174,8 +3546,8 @@
                 
                 let unreadCount = 0;
                 notifications.forEach(n => {
-                    const isRead = n.readBy && n.readBy.includes(currentAgentName);
-                    if (!isRead) { // Only count as unread if 'readBy' doesn't contain currentAgentName
+                    const isRead = n.readBy && n.readBy.includes(currentAgentName); // Check if read for this agent
+                    if (!isRead) { 
                         unreadCount++;
                     }
                     const notificationItem = document.createElement('div');
@@ -3228,11 +3600,10 @@
         }
 
         // --- Private Messaging Logic ---
-        messagingToggleBtn.addEventListener('click', () => { // New: Click to open messaging
+        messagingToggleBtn.addEventListener('click', () => { // Click to open messaging
             messagingContainer.classList.toggle('show');
             if (messagingContainer.classList.contains('show')) {
                 loadContacts();
-                // message polling starts when contact is selected
             } else {
                 activeChatContact = null;
                 chatHeader.textContent = "Sélectionnez un contact";
@@ -3418,9 +3789,9 @@
             if (message.media && message.media.url) {
                 const mediaUrl = `${window.location.origin}${message.media.url}`;
                 if (message.media.type === 'image') {
-                    mediaContent = `<div class="message-media"><img src="${mediaUrl}" alt="Média message"></div>`;
+                    mediaContent = `<div class="message-media"><img src="${mediaUrl}" alt="Média message" onclick="openLightbox([{url: '${message.media.url}', type: 'image'}], 0)"></div>`; // Click to open lightbox
                 } else if (message.media.type === 'video') {
-                    mediaContent = `<div class="message-media"><video src="${mediaUrl}" controls preload="metadata"></video></div>`;
+                    mediaContent = `<div class="message-media"><video src="${mediaUrl}" controls preload="metadata" onclick="openLightbox([{url: '${message.media.url}', type: 'video'}], 0)"></video></div>`; // Click to open lightbox
                 }
             }
 
@@ -3438,11 +3809,11 @@
             `;
             chatMessages.appendChild(messageItem);
 
-            // Add event listeners for message actions overlay hover
+            // Add event listeners for message actions overlay hover (using pointerenter/leave for better mobile response)
             const messageActionsOverlay = messageItem.querySelector('.message-actions-overlay');
             if (messageActionsOverlay) { // Ensure overlay exists
-                messageItem.addEventListener('mouseenter', () => { messageActionsOverlay.style.display = 'flex'; });
-                messageItem.addEventListener('mouseleave', () => { messageActionsOverlay.style.display = 'none'; });
+                messageItem.addEventListener('pointerenter', () => { messageActionsOverlay.style.display = 'flex'; });
+                messageItem.addEventListener('pointerleave', () => { messageActionsOverlay.style.display = 'none'; });
             }
 
             // Add reaction listeners
@@ -3451,7 +3822,6 @@
                     const emoji = btn.dataset.emoji;
                     try {
                         await reactToMessage(message.id, currentAgentName, emoji);
-                        // No need to reload messages, Socket.IO will push update
                     } catch (error) {
                         console.error('Erreur réaction message:', error);
                         showMessage(`Erreur réaction: ${error.message}`, 'error');
@@ -3494,8 +3864,9 @@
                 }
                 try {
                     await sendMessage(currentAgentName, activeChatContact, null, file); // Envoie le message média
-                    messageMediaUploadInput.value = ''; // Efface l'input fichier
-                    // Socket.IO poussera le message
+                    messageMediaUploadInput.value = ''; // Clear file input
+                    messageInput.value = ''; // Clear text input after media sent
+                    messageInput.focus(); // Keep focus
                 } catch (error) {
                     console.error('Erreur envoi média:', error);
                     showMessage(`Erreur envoi média: ${error.message}`, 'error');
@@ -3518,7 +3889,7 @@
                 await sendMessage(currentAgentName, activeChatContact, text || null, mediaFile); // Envoie le message (texte ou média)
                 messageInput.value = '';
                 messageMediaUploadInput.value = ''; // Efface l'input fichier après l'envoi
-                // Socket.IO poussera le message
+                messageInput.focus(); // Remet le focus sur le champ de texte
             } catch (error) {
                 console.error('Erreur envoi message:', error);
                 showMessage(`Erreur envoi message: ${error.message}`, 'error');
@@ -3529,8 +3900,7 @@
             if (messagePollingInterval) {
                 clearInterval(messagePollingInterval);
             }
-            // Démarre le polling uniquement si un contact de chat actif est sélectionné
-            if (activeChatContact) {
+            if (activeChatContact) { // Only poll if active contact is selected
                 messagePollingInterval = setInterval(async () => {
                     if (messagingContainer.classList.contains('show') && activeChatContact) {
                         await loadMessages(activeChatContact);
@@ -3582,18 +3952,16 @@
             const recipient = selectedContactItem.dataset.contactName;
             try {
                 let textToSend = messageToTransfer.text || null;
-                let mediaFileToSend = null; // We can't directly re-upload a File object from a URL in browser for security.
+                let mediaFileToSend = null;
 
-                // If message has media, and it's a file from our uploads, create a Blob from its URL
-                // This is a more advanced technique to simulate re-uploading the file.
                 if (messageToTransfer.media && messageToTransfer.media.url) {
                     const mediaResponse = await fetch(`${window.location.origin}${messageToTransfer.media.url}`);
                     const blob = await mediaResponse.blob();
                     // Create a File object from the blob, using the original filename and type
-                    mediaFileToSend = new File([blob], `transferred_media_${Date.now()}.${messageToTransfer.media.type.split('/')[1]}`, { type: messageToTransfer.media.type });
+                    const originalFileName = messageToTransfer.media.url.substring(messageToTransfer.media.url.lastIndexOf('/') + 1);
+                    mediaFileToSend = new File([blob], originalFileName, { type: messageToTransfer.media.type });
                     
-                    // Add "transferred from" text as well
-                    textToSend = `(Transféré de ${messageToTransfer.sender}): ${textToSend || ''}`;
+                    textToSend = `(Transféré de ${messageToTransfer.sender}${messageToTransfer.media.type === 'image' ? ' - Image' : ' - Vidéo'}): ${textToSend || ''}`;
                 } else {
                     textToSend = `(Transféré de ${messageToTransfer.sender}): ${messageToTransfer.text}`;
                 }
@@ -3620,9 +3988,13 @@
             lightbox.classList.remove('show');
             lightboxImage.style.display = 'none';
             lightboxVideo.style.display = 'none';
+            lightboxVideo.pause();
             lightboxImage.src = '';
             lightboxVideo.src = '';
-            lightboxVideo.pause();
+            // Hide buttons when lightbox is closed
+            lightboxPrev.style.display = 'none';
+            lightboxNext.style.display = 'none';
+            downloadMediaBtn.style.display = 'none';
         }
 
         function updateLightboxContent() {
@@ -3642,11 +4014,11 @@
                 lightboxVideo.src = mediaUrl;
                 lightboxVideo.style.display = 'block';
                 lightboxVideo.load();
-                // User will click play
             }
 
             lightboxPrev.style.display = currentLightboxMedia.length > 1 ? 'block' : 'none';
             lightboxNext.style.display = currentLightboxMedia.length > 1 ? 'block' : 'none';
+            downloadMediaBtn.style.display = 'block'; // Make download button visible when content is updated
         }
 
         lightboxPrev.addEventListener('click', () => {
@@ -3661,6 +4033,21 @@
 
         lightboxClose.addEventListener('click', closeLightbox);
 
+        downloadMediaBtn.addEventListener('click', () => {
+            if (currentLightboxMedia.length > 0) {
+                const mediaItem = currentLightboxMedia[currentLightboxIndex];
+                const mediaUrl = `${window.location.origin}${mediaItem.url}`;
+                const fileName = mediaUrl.substring(mediaUrl.lastIndexOf('/') + 1); // Get filename from URL
+
+                const link = document.createElement('a');
+                link.href = mediaUrl;
+                link.download = fileName; // Suggests a filename
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        });
+
 
         // --- Initial Load and Session Management ---
         async function initialLoad() {
@@ -3672,6 +4059,9 @@
                 loggedInAgentDisplay.classList.add('show');
                 digicodeTitle.textContent = 'ENTREZ CODE D\'ACCÈS';
                 agentNameInput.style.display = 'none';
+                
+                lightbox.style.display = 'none'; // Ensure lightbox is hidden
+                
                 display.style.opacity = 1;
                 keypad.classList.add('active');
                 controls.classList.add('active');
