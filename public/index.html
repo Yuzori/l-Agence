@@ -9,2231 +9,2403 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <title>Digicode Sécurisé - Arsène Lupin</title>
     <style>
-    /* Styles Généraux */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+        /* Styles Généraux */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0d0d0d;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Temporarily hidden for digicode, usually auto for content */
+            color: #ccc;
+        }
+
+        /* Anti-capture d'écran */
+        .no-screenshot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.1s ease-out;
+        }
+
+        /* --- Conteneur Principal (digicode) --- */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            perspective: 1000px;
+            position: relative;
+            z-index: 10;
+            transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transform: scale(1);
+            padding: 20px; /* Ajout d'un padding pour éviter que le digicode ne colle aux bords sur mobile */
+        }
 
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: #0d0d0d;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden; /* Temporarily hidden for digicode, usually auto for content */
-        color: #ccc;
-    }
-
-    /* Anti-capture d'écran */
-    .no-screenshot {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: black;
-        z-index: 9999;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.1s ease-out;
-    }
-
-    /* --- Conteneur Principal (digicode) --- */
-    .container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100vw;
-        height: 100vh;
-        perspective: 1000px;
-        position: relative;
-        z-index: 10;
-        transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        transform: scale(1);
-        padding: 20px; /* Ajout d'un padding pour éviter que le digicode ne colle aux bords sur mobile */
-    }
-
-    .digicode {
-        background: linear-gradient(145deg, #181818, #0b0b0b);
-        border: 1px solid #2a2a2a;
-        border-radius: 12px;
-        padding: 30px; /* Diminuer le padding pour les petits écrans */
-        box-shadow: 
-            0 15px 30px rgba(0, 0, 0, 0.7),
-            inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        position: relative;
-        transform-style: preserve-3d;
-        transform: rotateY(0deg) translateY(0);
-        transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        opacity: 1;
-        width: 100%; /* S'assurer qu'il prend toute la largeur disponible sur mobile */
-        max-width: 400px; /* Limiter la largeur sur les écrans plus grands */
-    }
-
-    .digicode.hide {
-        transform: rotateY(15deg) translateY(-50px) scale(0.8);
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .digicode::before {
-        content: '';
-        position: absolute;
-        top: -5px;
-        left: -5px;
-        right: -5px;
-        bottom: -5px;
-        background: linear-gradient(145deg, #333, #111);
-        border-radius: 15px;
-        z-index: -1;
-        filter: blur(8px);
-        opacity: 0.3;
-    }
-
-    /* Header du digicode */
-    .header {
-        text-align: center;
-        margin-bottom: 25px; /* Ajuster la marge */
-        position: relative;
-    }
-
-    .title {
-        color: #777;
-        font-size: 12px; /* Plus petit sur mobile */
-        font-weight: 500;
-        letter-spacing: 1px; /* Ajuster le letter-spacing */
-        text-transform: uppercase;
-        margin-bottom: 10px;
-        animation: fadeIn 1s ease-out;
-    }
-
-    .agent-name-input {
-        width: 100%;
-        padding: 10px 12px; /* Ajuster le padding */
-        margin-bottom: 12px;
-        border: 1px solid #333;
-        background: #050505;
-        color: #4ecdc4;
-        font-family: 'Poppins', sans-serif;
-        font-size: 18px; /* Ajuster la taille de la police */
-        text-align: center;
-        border-radius: 6px;
-        box-shadow: inset 0 0 10px rgba(78, 205, 196, 0.08);
-        text-transform: uppercase;
-        letter-spacing: 1px; /* Ajuster le letter-spacing */
-        outline: none;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .agent-name-input::placeholder {
-        color: #777;
-        text-transform: none;
-        letter-spacing: normal;
-    }
-
-    .agent-name-input:focus {
-        border-color: #4ecdc4;
-        box-shadow: inset 0 0 15px rgba(78, 205, 196, 0.2), 0 0 8px rgba(78, 205, 196, 0.5);
-    }
-
-    .display-container {
-        background: #050505;
-        border: 1px solid #333;
-        border-radius: 6px;
-        padding: 12px 15px; /* Ajuster le padding */
-        margin-bottom: 8px;
-        position: relative;
-        overflow: hidden;
-        box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.05);
-    }
-
-    .display {
-        font-family: 'Poppins', sans-serif;
-        font-size: 22px; /* Ajuster la taille de la police */
-        font-weight: 600;
-        color: #00ff41;
-        text-align: center;
-        letter-spacing: 6px; /* Ajuster le letter-spacing */
-        text-shadow: 0 0 10px rgba(0, 255, 65, 0.6);
-        min-height: 25px; /* Ajuster la hauteur minimale */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        opacity: 0;
-        animation: scanline 0.5s steps(10, end) infinite, displayFadeIn 1s forwards 0.5s;
-    }
-    
-    /* Style pour l'affichage du nom d'agent fixe */
-    .agent-info-display {
-        background: #050505;
-        border: 1px solid #333;
-        border-radius: 6px;
-        padding: 8px 12px; /* Ajuster le padding */
-        margin-top: 12px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 12px; /* Ajuster la taille de la police */
-        font-weight: 500;
-        color: #ccc;
-        text-align: center;
-        letter-spacing: 1px;
-        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-        opacity: 0;
-        transition: opacity 0.5s ease-out;
-    }
-
-    .agent-info-display.show {
-        opacity: 1;
-    }
-
-    @keyframes displayFadeIn {
-        to { opacity: 1; }
-    }
-
-    @keyframes scanline {
-        0% { text-shadow: 0 0 10px rgba(0, 255, 65, 0.6); } /* Ajuster le shadow */
-        50% { text-shadow: 0 0 12px rgba(0, 255, 65, 0.8), 0 1px 0 rgba(0, 255, 65, 0.3); }
-        100% { text-shadow: 0 0 10px rgba(0, 255, 65, 0.6); }
-    }
-
-    .display-container::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(rgba(0,0,0,0.1) 50%, transparent 50%);
-        background-size: 100% 2px;
-        pointer-events: none;
-        opacity: 0.2;
-    }
-
-    .status-light {
-        position: absolute;
-        top: 8px; /* Ajuster la position */
-        right: 8px; /* Ajuster la position */
-        width: 8px; /* Ajuster la taille */
-        height: 8px;
-        border-radius: 50%;
-        background: #ff4500;
-        box-shadow: 0 0 8px rgba(255, 69, 0, 0.8); /* Ajuster le shadow */
-        transition: all 0.5s ease-in-out;
-    }
-
-    .status-light.success {
-        background: #00ff41;
-        box-shadow: 0 0 8px rgba(0, 255, 65, 0.8);
-    }
-
-    /* --- Clavier --- */
-    .keypad {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px; /* Ajuster le gap */
-        margin-bottom: 20px;
-        justify-items: center;
-        filter: blur(5px);
-        opacity: 0.5;
-        pointer-events: none;
-        transition: filter 0.8s ease-out, opacity 0.8s ease-out;
-    }
-
-    .keypad.active {
-        filter: blur(0px);
-        opacity: 1;
-        pointer-events: all;
-    }
-
-    .key {
-        width: 60px; /* Ajuster la taille des touches */
-        height: 60px;
-        background: linear-gradient(145deg, #333, #1e1e1e);
-        border: 1px solid #444;
-        border-radius: 8px;
-        color: #fff;
-        font-size: 20px; /* Ajuster la taille de la police */
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease-out;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 
-            0 5px 10px rgba(0, 0, 0, 0.4),
-            inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        user-select: none;
-        transform: translateZ(0);
-    }
-
-    .key:hover {
-        background: linear-gradient(145deg, #3a3a3a, #282828);
-        transform: translateY(-1px) scale(1.02);
-        box-shadow: 
-            0 8px 15px rgba(0, 0, 0, 0.5),
-            inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    }
-
-    .key:active {
-        background: linear-gradient(145deg, #1e1e1e, #101010);
-        transform: translateY(1px);
-        box-shadow: 
-            0 2px 4px rgba(0, 0, 0, 0.3),
-            inset 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .key::before {
-        content: '';
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        right: 2px;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-        opacity: 0.8;
-    }
-
-    /* Contrôles (Boutons Effacer/Valider) */
-    .controls {
-        display: flex;
-        gap: 12px; /* Ajuster le gap */
-        justify-content: center;
-        filter: blur(5px);
-        opacity: 0.5;
-        pointer-events: none;
-        transition: filter 0.8s ease-out, opacity 0.8s ease-out;
-    }
-
-    .controls.active {
-        filter: blur(0px);
-        opacity: 1;
-        pointer-events: all;
-    }
-
-    .btn {
-        padding: 10px 20px; /* Ajuster le padding */
-        background: linear-gradient(145deg, #333, #1e1e1e);
-        border: 1px solid #444;
-        border-radius: 6px;
-        color: #ccc;
-        font-size: 12px; /* Ajuster la taille de la police */
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease-out;
-        text-transform: uppercase;
-        letter-spacing: 1px; /* Ajuster le letter-spacing */
-        box-shadow: 
-            0 4px 8px rgba(0, 0, 0, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        user-select: none;
-    }
-
-    .btn:hover {
-        background: linear-gradient(145deg, #3a3a3a, #282828);
-        transform: translateY(-1px);
-        color: #fff;
-    }
-
-    .btn:active {
-        background: linear-gradient(145deg, #1e1e1e, #101010);
-        transform: translateY(1px);
-        box-shadow: 
-            0 2px 4px rgba(0, 0, 0, 0.3),
-            inset 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn.clear {
-        color: #ff6b6b;
-    }
-
-    .btn.enter {
-        color: #4ecdc4;
-    }
-
-    /* Message d'état */
-    .message {
-        text-align: center;
-        font-size: 11px; /* Ajuster la taille de la police */
-        margin-top: 15px;
-        height: 20px;
-        color: #999;
-        transition: all 0.3s ease;
-        overflow: hidden;
-        position: relative;
-    }
-
-    .message.error {
-        color: #ff6b6b;
-        font-weight: 500;
-        animation: pulseError 0.5s ease-out;
-    }
-
-    .message.success {
-        color: #4ecdc4;
-        font-weight: 500;
-        animation: pulseSuccess 0.5s ease-out;
-    }
-
-    @keyframes pulseError {
-        0% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.05); opacity: 0.8; }
-        100% { transform: scale(1); opacity: 1; }
-    }
-
-    @keyframes pulseSuccess {
-        0% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.05); opacity: 0.8; }
-        100% { transform: scale(1); opacity: 1; }
-    }
-
-    /* Animations spécifiques */
-    @keyframes shake {
-        0%, 100% { transform: translateX(0) rotateZ(0); }
-        25% { transform: translateX(-5px) rotateZ(-0.5deg); }
-        75% { transform: translateX(5px) rotateZ(0.5deg); }
-    }
-
-    .shake {
-        animation: shake 0.3s ease-in-out;
-    }
-
-    /* Animation du coffre-fort (Vault) */
-    .vault-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle at center, #101010 0%, #000 100%);
-        z-index: 1000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        transition: opacity 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        pointer-events: none;
-        backdrop-filter: blur(0px);
-    }
-
-    .vault-overlay.show {
-        opacity: 1;
-        pointer-events: all;
-        backdrop-filter: blur(5px);
-    }
-
-    .vault-door {
-        width: 300px; /* Ajuster la taille de la porte sur mobile */
-        height: 300px;
-        background: 
-            radial-gradient(circle at 50% 50%, #2a2a2a 40%, #1a1a1a 60%, #0a0a0a 100%);
-        border: 8px solid #3d3d3d; /* Ajuster la bordure */
-        border-radius: 50%;
-        position: relative;
-        box-shadow: 
-            0 0 80px rgba(0, 0, 0, 0.9), /* Ajuster le shadow */
-            inset 0 0 40px rgba(0, 0, 0, 0.6);
-        transition: all 2.5s cubic-bezier(0.7, 0, 0.84, 0);
-        transform-style: preserve-3d;
-        transform: rotateY(0deg) scale(1);
-        opacity: 1;
-        overflow: hidden;
-    }
-
-    .vault-door::before,
-    .vault-door::after {
-        content: '';
-        position: absolute;
-        border-radius: 50%;
-        box-sizing: border-box;
-        background: repeating-conic-gradient(from 0deg, #151515 0% 5%, #252525 5% 10%);
-    }
-
-    .vault-door::before {
-        width: 90%;
-        height: 90%;
-        top: 5%;
-        left: 5%;
-        border: 3px solid #4a4a4a; /* Ajuster la bordure */
-        transform: translateZ(5px);
-        animation: rotateGear 60s linear infinite;
-    }
-
-    .vault-door::after {
-        width: 60%;
-        height: 60%;
-        top: 20%;
-        left: 20%;
-        border: 2px solid #555; /* Ajuster la bordure */
-        transform: translateZ(10px);
-        animation: rotateGearReverse 80s linear infinite;
-    }
-
-    .vault-door .center-handle {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 80px; /* Ajuster la taille de la poignée */
-        height: 80px;
-        background: linear-gradient(145deg, #444, #222);
-        border: 4px solid #666; /* Ajuster la bordure */
-        border-radius: 50%;
-        transform: translate(-50%, -50%) translateZ(15px);
-        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7), 0 5px 10px rgba(0, 0, 0, 0.5);
-        transition: all 1s ease-out;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 30px; /* Ajuster la taille de la police */
-        color: #aaa;
-        text-shadow: 0 0 5px #000;
-        overflow: hidden;
-    }
-
-    .vault-door .center-handle::before {
-        content: '⚙️';
-        animation: rotateGearSmall 10s linear infinite;
-    }
-
-    .vault-door.open {
-        transform: rotateY(120deg) translateX(500px) scale(0.7);
-        opacity: 0;
-        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    }
-
-    .vault-door.open .center-handle {
-        transform: translate(-50%, -50%) rotateZ(360deg) scale(0);
-        opacity: 0;
-    }
-
-    @keyframes vaultLightPulse {
-        0% { box-shadow: 0 0 0px #fff, 0 0 0px #fff; }
-        50% { box-shadow: 0 0 30px #fff, 0 0 60px rgba(255,255,255,0.8); } /* Ajuster le shadow */
-        100% { box-shadow: 0 0 0px #fff, 0 0 0px #fff; }
-    }
-
-    .vault-overlay.activating .vault-door {
-        animation: vaultLightPulse 1s ease-in-out forwards;
-    }
-
-    @keyframes rotateGear {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-
-    @keyframes rotateGearReverse {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(-360deg); }
-    }
-
-    @keyframes rotateGearSmall {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-
-    /* --- Contenu du coffre-fort --- */
-    .content {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(to bottom, #0a0a0a, #000);
-        z-index: 999;
-        display: none;
-        justify-content: center;
-        align-items: flex-start; /* Aligner en haut pour les contenus */
-        flex-direction: column;
-        opacity: 0;
-        transition: opacity 1.5s ease-in-out, transform 0.8s ease-out;
-        transform: translateY(20px);
-        overflow-y: auto;
-        padding-bottom: 80px;
-        padding-top: 20px; /* Ajout d'un padding-top pour l'en-tête */
-    }
-
-    .content.show {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .content h2 {
-        color: #eee;
-        font-size: 2.2em; /* Ajuster la taille de la police */
-        margin-top: 30px; /* Ajuster la marge */
-        margin-bottom: 30px;
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-        animation: textReveal 1.5s ease-out forwards;
-        text-align: center; /* Centrer le titre sur mobile */
-        width: 100%;
-        padding: 0 15px; /* Ajouter un padding horizontal */
-    }
-
-    @keyframes textReveal {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Minmax plus petit pour mobile */
-        gap: 20px; /* Ajuster le gap */
-        max-width: 100%; /* S'assurer que la galerie prend toute la largeur */
-        padding: 15px; /* Ajuster le padding */
-        width: 100%; /* S'assurer qu'il prend toute la largeur */
-    }
-
-    .card {
-        background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-        border: 1px solid #333;
-        border-radius: 12px;
-        overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-        transform: translateY(0);
-        position: relative;
-        cursor: pointer;
-    }
-
-    .card.hidden {
-        display: none;
-    }
-
-    .card:hover {
-        transform: translateY(-5px) scale(1.01); /* Ajuster l'effet hover */
-        border-color: #555;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
-    }
-
-    .card-image-container {
-        width: 100%;
-        height: 150px; /* Ajuster la hauteur de l'image */
-        background-color: #0d0d0d;
-        border-bottom: 1px solid #222;
-        overflow: hidden;
-        border: 2px dashed #444;
-        padding: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        cursor: pointer;
-    }
-    .card-image-container.hidden-image {
-        filter: grayscale(100%) brightness(50%) blur(5px);
-        opacity: 0.5;
-    }
-    .card-image-container.hidden-image::before {
-        content: 'ACCÈS RESTREINT';
-        position: absolute;
-        color: #ff6b6b;
-        font-size: 16px; /* Ajuster la taille de la police */
-        font-weight: bold;
-        text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
-        z-index: 1;
-    }
-
-    .card-image-item {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: cover;
-        filter: grayscale(80%) brightness(80%);
-        transition: filter 0.5s ease-out;
-    }
-    .card-image-container:hover .card-image-item {
-        filter: grayscale(0%) brightness(100%);
-    }
-    .card-image-container.hidden-image .card-image-item {
-        opacity: 0;
-    }
-    .card-image-item.video {
-        background-color: #000;
-    }
-    /* Media navigation if multiple items */
-    .media-nav-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(0,0,0,0.5);
-        border: none;
-        color: #fff;
-        padding: 5px;
-        cursor: pointer;
-        z-index: 2;
-        font-size: 1.2em; /* Ajuster la taille */
-    }
-    .media-nav-btn.left { left: 5px; }
-    .media-nav-btn.right { right: 5px; }
-
-    .card-content {
-        padding: 15px; /* Ajuster le padding */
-    }
-
-    .card-title {
-        color: #e0e0e0;
-        font-size: 16px; /* Ajuster la taille de la police */
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-    .card-author {
-        font-size: 0.75em; /* Ajuster la taille de la police */
-        color: #888;
-        margin-bottom: 8px;
-        display: block;
-    }
-    .card-author.certified {
-        color: #4ecdc4;
-        font-weight: bold;
-    }
-    .certification-icon {
-        margin-left: 3px;
-        color: #4ecdc4;
-    }
-    .add-contact-author-btn {
-        background: none;
-        border: none;
-        color: #888;
-        font-size: 0.8em; /* Ajuster la taille de la police */
-        margin-left: 5px;
-        cursor: pointer;
-        font-family: 'Poppins', sans-serif;
-    }
-    .add-contact-author-btn:hover {
-        color: #fff;
-    }
-
-    .card-desc {
-        color: #999;
-        font-size: 13px; /* Ajuster la taille de la police */
-        line-height: 1.5;
-    }
-
-    /* Bouton Déconnexion */
-    .back-btn {
-        position: fixed;
-        top: 20px; /* Ajuster la position */
-        left: 20px; /* Ajuster la position */
-        background: linear-gradient(145deg, #333, #1e1e1e);
-        border: 1px solid #444;
-        border-radius: 6px;
-        color: #aaa;
-        padding: 10px 15px; /* Ajuster le padding */
-        font-size: 11px; /* Ajuster la taille de la police */
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.2s ease-out;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        z-index: 1001;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-    }
-
-    .back-btn:hover {
-        background: linear-gradient(145deg, #3a3a3a, #282828);
-        transform: translateY(-1px);
-        color: #fff;
-    }
-
-    .back-btn:active {
-        transform: translateY(1px);
-    }
-
-    /* Nouveau Dossier et Commentaires */
-    .add-folder-btn {
-        position: fixed;
-        bottom: 20px; /* Ajuster la position */
-        right: 20px; /* Ajuster la position */
-        width: 50px; /* Ajuster la taille */
-        height: 50px;
-        background: linear-gradient(145deg, #4ecdc4, #3a9c94);
-        border-radius: 50%;
-        color: #fff;
-        font-size: 30px; /* Ajuster la taille de la police */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-        transition: all 0.3s ease;
-        z-index: 1000;
-    }
-
-    .add-folder-btn:hover {
-        transform: scale(1.08); /* Ajuster l'effet */
-        background: linear-gradient(145deg, #5eddd3, #43b3a9);
-    }
-
-    .add-folder-btn:active {
-        transform: scale(0.95);
-    }
-
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 2000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.8);
-        justify-content: center;
-        align-items: center;
-        padding: 15px; /* Ajout d'un padding */
-    }
-
-    .modal-content {
-        background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-        margin: auto;
-        padding: 25px; /* Ajuster le padding */
-        border: 1px solid #333;
-        border-radius: 10px;
-        width: 95%; /* Plus large sur mobile */
-        max-width: 450px; /* Limiter la largeur sur les écrans plus grands */
-        box-shadow: 0 10px 20px rgba(0,0,0,0.7);
-        position: relative;
-    }
-
-    .modal-content h3 {
-        color: #eee;
-        margin-bottom: 18px;
-        text-align: center;
-        font-size: 1.3em; /* Ajuster la taille de la police */
-    }
-
-    .modal-content input[type="text"],
-    .modal-content textarea,
-    .modal-content input[type="file"] {
-        width: 100%; /* Prendre toute la largeur */
-        padding: 10px;
-        margin-bottom: 12px;
-        border: 1px solid #444;
-        background-color: #0d0d0d;
-        color: #eee;
-        border-radius: 5px;
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.9em;
-    }
-
-    /* Input file specific styling */
-    .modal-content .file-upload-wrapper {
-        position: relative;
-        overflow: hidden;
-        display: inline-block;
-        width: 100%; /* Prendre toute la largeur */
-        margin-bottom: 12px;
-        border: 1px solid #444;
-        background-color: #0d0d0d;
-        color: #eee;
-        border-radius: 5px;
-        padding: 10px;
-        cursor: pointer;
-        text-align: center;
-    }
-    .modal-content .file-upload-wrapper input[type="file"] {
-        font-size: 100px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        opacity: 0;
-        cursor: pointer;
-    }
-    .modal-content .file-upload-filename {
-        display: block;
-        margin-top: 3px;
-        font-size: 0.75em;
-        color: #888;
-    }
-    /* Preview for multiple media */
-    .media-preview-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
-        margin-bottom: 10px;
-        max-height: 120px; /* Ajuster la hauteur maximale */
-        overflow-y: auto;
-        border: 1px solid #2a2a2a;
-        border-radius: 5px;
-        padding: 5px;
-    }
-    .media-preview-item {
-        position: relative;
-        width: 70px; /* Ajuster la taille */
-        height: 70px;
-        object-fit: cover;
-        border-radius: 3px;
-        border: 1px solid #555;
-    }
-    .media-preview-item.video-thumbnail::after {
-        content: "\f16a";
-        font-family: "Font Awesome 5 Free";
-        font-weight: 900;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #fff;
-        font-size: 1.8em; /* Ajuster la taille */
-        text-shadow: 0 0 5px rgba(0,0,0,0.8);
-    }
-
-    .media-preview-item .remove-media-btn {
-        position: absolute;
-        top: -3px; /* Ajuster la position */
-        right: -3px;
-        background: #ff6b6b;
-        color: #fff;
-        border: none;
-        border-radius: 50%;
-        width: 18px; /* Ajuster la taille */
-        height: 18px;
-        font-size: 0.7em;
-        line-height: 1;
-        text-align: center;
-        cursor: pointer;
-    }
-
-    .modal-content input::placeholder,
-    .modal-content textarea::placeholder {
-        color: #777;
-    }
-
-    .modal-content button {
-        display: block;
-        width: 100%;
-        padding: 10px; /* Ajuster le padding */
-        background: linear-gradient(145deg, #4ecdc4, #3a9c94);
-        border: none;
-        border-radius: 5px;
-        color: #fff;
-        font-size: 15px; /* Ajuster la taille de la police */
-        cursor: pointer;
-        transition: background 0.3s ease;
-    }
-
-    .modal-content button:hover {
-        background: linear-gradient(145deg, #5eddd3, #43b3a9);
-    }
-
-    .close-button {
-        position: absolute;
-        top: 8px; /* Ajuster la position */
-        right: 12px;
-        color: #aaa;
-        font-size: 24px; /* Ajuster la taille */
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .close-button:hover,
-    .close-button:focus {
-        color: #fff;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    /* Section Commentaires */
-    .comments-section {
-        padding: 12px 15px; /* Ajuster le padding */
-        border-top: 1px solid #2a2a2a;
-        margin-top: 12px;
-    }
-
-    .comments-section h4 {
-        color: #e0e0e0;
-        margin-bottom: 8px;
-        font-size: 1.1em; /* Ajuster la taille de la police */
-    }
-
-    .comments-list {
-        max-height: 80px; /* Ajuster la hauteur maximale */
-        overflow-y: auto;
-        margin-bottom: 8px;
-    }
-
-    .comment {
-        background-color: #151515;
-        padding: 8px; /* Ajuster le padding */
-        border-radius: 5px;
-        margin-bottom: 6px;
-        font-size: 12px; /* Ajuster la taille de la police */
-        color: #bbb;
-        position: relative;
-    }
-
-    .comment-author {
-        font-weight: bold;
-        color: #4ecdc4;
-        margin-bottom: 3px;
-        display: block;
-    }
-    .comment-meta {
-        font-size: 0.7em; /* Ajuster la taille de la police */
-        color: #888;
-        margin-top: -2px;
-        margin-bottom: 4px;
-    }
-    .comment-meta .modified-tag {
-        font-weight: bold;
-        color: #f7d794;
-        margin-left: 3px;
-    }
-
-    .comment-reply-info {
-        font-size: 0.75em;
-        color: #888;
-        margin-left: 8px;
-        display: block;
-    }
-
-    .comment-actions {
-        display: flex;
-        gap: 8px;
-        margin-top: 4px;
-        font-size: 0.8em;
-    }
-    .comment-actions button {
-        background: none;
-        border: none;
-        color: #bbb;
-        cursor: pointer;
-        padding: 0;
-        font-size: inherit;
-        transition: color 0.2s ease;
-        font-family: 'Poppins', sans-serif;
-    }
-    .comment-actions button:hover {
-        color: #fff;
-    }
-    .comment-actions .like-btn.liked {
-        color: #4ecdc4;
-        font-weight: bold;
-    }
-    .comment-actions .edit-btn {
-        color: #f7d794;
-    }
-    .comment-actions .delete-btn {
-        color: #ff6b6b;
-    }
-
-    .comment-form {
-        margin-top: 12px;
-    }
-
-    .comment-form textarea {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #444;
-        background-color: #0d0d0d;
-        color: #eee;
-        border-radius: 5px;
-        resize: vertical;
-        min-height: 50px; /* Ajuster la hauteur minimale */
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.9em;
-    }
-
-    .comment-form button {
-        padding: 8px 12px;
-        background: linear-gradient(145deg, #4ecdc4, #3a9c94);
-        border: none;
-        border-radius: 5px;
-        color: #fff;
-        font-size: 14px;
-        cursor: pointer;
-        transition: background 0.3s ease;
-        width: auto;
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .comment-form button:hover {
-        background: linear-gradient(145deg, #5eddd3, #43b3a9);
-    }
-
-    /* Boutons d'admin Assane Diop et Créateur */
-    .admin-controls {
-        position: absolute;
-        top: 8px; /* Ajuster la position */
-        right: 8px;
-        display: flex;
-        gap: 4px; /* Ajuster le gap */
-        opacity: 0.7;
-    }
-    .admin-controls.creator-only {
-        right: auto;
-        left: 8px;
-    }
-
-    .admin-controls button {
-        background: rgba(50,50,50,0.8);
-        border: 1px solid #666;
-        color: #eee;
-        padding: 4px 6px; /* Ajuster le padding */
-        border-radius: 4px;
-        font-size: 9px; /* Ajuster la taille de la police */
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .admin-controls button:hover {
-        background: #555;
-        color: #fff;
-        opacity: 1;
-    }
-
-    .admin-controls button.delete {
-        color: #ff6b6b;
-    }
-    .admin-controls button.edit {
-        color: #f7d794;
-    }
-
-    /* Dossier actions (likes, reposts) */
-    .dossier-actions {
-        display: flex;
-        justify-content: space-around;
-        padding: 8px 0;
-        border-top: 1px solid #2a2a2a;
-        margin-top: 12px;
-    }
-    .dossier-actions button {
-        background: none;
-        border: none;
-        color: #bbb;
-        cursor: pointer;
-        font-size: 1em; /* Ajuster la taille */
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        transition: color 0.2s ease, transform 0.2s ease;
-        font-family: 'Poppins', sans-serif;
-    }
-    .dossier-actions button:hover {
-        color: #fff;
-        transform: translateY(-1px);
-    }
-    .dossier-actions .like-btn.liked {
-        color: #4ecdc4;
-        font-weight: bold;
-    }
-    .dossier-actions .dislike-btn.disliked {
-        color: #ff6b6b;
-        font-weight: bold;
-    }
-    .dossier-actions .repost-btn.reposted {
-        color: #f7d794;
-        font-weight: bold;
-    }
-
-    /* Notification Center */
-    .notification-center {
-        position: fixed;
-        top: 15px; /* Ajuster la position */
-        right: 15px;
-        background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-        border: 1px solid #333;
-        border-radius: 8px;
-        padding: 12px; /* Ajuster le padding */
-        max-height: 70vh; /* Ajuster la hauteur maximale */
-        width: 280px; /* Ajuster la largeur */
-        overflow-y: auto;
-        z-index: 1000;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-        display: none;
-    }
-    .notification-center.show {
-        display: block;
-    }
-    .notification-center h4 {
-        color: #eee;
-        margin-bottom: 12px;
-        text-align: center;
-        font-size: 1.1em;
-    }
-    .notification-item {
-        background-color: #0f0f0f;
-        border: 1px solid #2a2a2a;
-        padding: 8px; /* Ajuster le padding */
-        margin-bottom: 6px;
-        border-radius: 5px;
-        font-size: 0.85em; /* Ajuster la taille de la police */
-        color: #bbb;
-        position: relative;
-    }
-    .notification-item.unread {
-        background-color: #2a1a0f;
-        border-color: #ff9800;
-        color: #ffe0b2;
-    }
-    .notification-timestamp {
-        font-size: 0.65em; /* Ajuster la taille de la police */
-        color: #777;
-        text-align: right;
-        margin-top: 3px;
-    }
-    .notification-item .delete-notification-btn {
-        position: absolute;
-        top: 3px; /* Ajuster la position */
-        right: 3px;
-        background: none;
-        border: none;
-        color: #888;
-        cursor: pointer;
-        font-size: 0.75em;
-        opacity: 0.5;
-        transition: opacity 0.2s ease;
-    }
-    .notification-item .delete-notification-btn:hover {
-        opacity: 1;
-        color: #fff;
-    }
-    .notification-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 8px;
-        margin-top: 8px;
-    }
-    .notification-actions button {
-        background: linear-gradient(145deg, #333, #1e1e1e);
-        border: 1px solid #444;
-        border-radius: 4px;
-        color: #ccc;
-        padding: 4px 8px;
-        font-size: 0.75em;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-family: 'Poppins', sans-serif;
-    }
-    .notification-actions button:hover {
-        background: linear-gradient(145deg, #3a3a3a, #282828);
-        color: #fff;
-    }
-
-    /* Icône de cloche pour notifications */
-    .notification-bell-btn {
-        position: fixed;
-        top: 20px; /* Ajuster la position */
-        right: 20px;
-        background: linear-gradient(145deg, #333, #1e1e1e);
-        border: 1px solid #444;
-        border-radius: 50%;
-        width: 40px; /* Ajuster taille */
-        height: 40px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #fff;
-        font-size: 1.1em;
-        cursor: pointer;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-        transition: all 0.2s ease;
-        z-index: 1001;
-    }
-    .notification-bell-btn:hover {
-        background: linear-gradient(145deg, #3a3a3a, #282828);
-        transform: scale(1.04);
-    }
-    .notification-bell-btn:active {
-        transform: scale(0.96);
-    }
-    .notification-bell-btn .notification-count {
-        position: absolute;
-        top: -4px; /* Ajuster la position */
-        right: -4px;
-        background-color: #ff6b6b;
-        color: #fff;
-        font-size: 0.65em;
-        padding: 1px 5px;
-        border-radius: 50%;
-        display: none;
-        line-height: 1;
-    }
-    .notification-bell-btn .notification-count.show {
-        display: block;
-    }
-    /* Message button */
-    .messaging-toggle-btn {
-        position: fixed;
-        top: 20px;
-        right: 70px; /* Position next to bell */
-        background: linear-gradient(145deg, #333, #1e1e1e);
-        border: 1px solid #444;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        color: #fff;
-        font-size: 1.1em;
-        cursor: pointer;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.4);
-        transition: all 0.2s ease;
-        z-index: 1001;
-    }
-    .messaging-toggle-btn:hover {
-        background: linear-gradient(145deg, #3a3a3a, #282828);
-        transform: scale(1.04);
-    }
-    .messaging-toggle-btn:active {
-        transform: scale(0.96);
-    }
-
-    /* --- Styles de la Messagerie Privée (Nouveau) --- */
-    .messaging-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.95);
-        z-index: 2000;
-        display: none;
-        grid-template-columns: 1fr; /* Une seule colonne sur mobile */
-        box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(5px);
-        flex-direction: column; /* Utiliser flex-direction pour l'empilement */
-    }
-    .messaging-container.show {
-        display: flex; /* Utiliser flex pour gérer l'empilement */
-    }
-
-    .navbar-vertical {
-        background: linear-gradient(180deg, #181818, #0b0b0b);
-        border-bottom: 1px solid #2a2a2a; /* Bordure en bas sur mobile */
-        padding: 10px; /* Ajuster le padding */
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto;
-        height: auto; /* Laisser la hauteur s'adapter au contenu */
-        max-height: 40%; /* Limiter la hauteur de la navbar sur mobile */
-    }
-
-    .navbar-vertical h4 {
-        color: #eee;
-        margin-bottom: 15px;
-        text-align: center;
-        text-transform: uppercase;
-        font-size: 0.8em;
-        letter-spacing: 1px;
-    }
-    .navbar-vertical .button-group {
-        display: flex;
-        flex-direction: row; /* Boutons côte à côte sur mobile */
-        justify-content: center;
-        gap: 8px;
-        margin-bottom: 10px;
-    }
-    .navbar-vertical button {
-        background: linear-gradient(145deg, #333, #1e1e1e);
-        border: 1px solid #444;
-        color: #ccc;
-        padding: 6px 8px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 0.8em;
-        font-family: 'Poppins', sans-serif;
-    }
-    .navbar-vertical button:hover {
-        background: linear-gradient(145deg, #3a3a3a, #282828);
-        color: #fff;
-    }
-    .navbar-vertical .contact-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: #0d0d0d;
-        border: 1px solid #333;
-        padding: 8px;
-        margin-bottom: 6px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.9em;
-    }
-    .navbar-vertical .contact-item:hover,
-    .navbar-vertical .contact-item.active {
-        background-color: #1e1e1e;
-        border-color: #4ecdc4;
-    }
-    .navbar-vertical .contact-item .status-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background-color: #ff6b6b;
-    }
-    .navbar-vertical .contact-item .status-dot.accepted {
-        background-color: #00ff41;
-    }
-    .navbar-vertical .contact-item .contact-actions-btns {
-        display: flex;
-        gap: 4px;
-    }
-    .navbar-vertical .contact-item .contact-actions-btns button {
-        padding: 3px 5px;
-        font-size: 0.7em;
-        background: #2a2a2a;
-        border: 1px solid #444;
-        color: #ccc;
-    }
-
-    .chat-area {
-        display: flex;
-        flex-direction: column;
-        padding: 15px; /* Ajuster le padding */
-        position: relative;
-        flex-grow: 1; /* Prend l'espace restant */
-    }
-    .chat-header {
-        color: #eee;
-        font-size: 1.5em; /* Ajuster la taille */
-        margin-bottom: 15px;
-        text-align: center;
-        border-bottom: 1px solid #333;
-        padding-bottom: 8px;
-    }
-    .chat-messages {
-        flex-grow: 1;
-        overflow-y: auto;
-        padding: 8px; /* Ajuster le padding */
-        background-color: #0a0a0a;
-        border-radius: 8px;
-        border: 1px solid #2a2a2a;
-        margin-bottom: 10px;
-    }
-    .message-item {
-        background-color: #1a1a1a;
-        padding: 8px; /* Ajuster le padding */
-        border-radius: 8px;
-        margin-bottom: 8px;
-        position: relative;
-        max-width: 90%; /* Augmenter la largeur sur mobile */
-        padding-right: 35px; /* Space for reactions overlay */
-        padding-left: 35px; /* Space for reactions overlay */
-    }
-    .message-item.sent {
-        margin-left: auto;
-        background-color: #1a2a2a;
-    }
-    .message-item.received {
-        margin-right: auto;
-        background-color: #1a1a1a;
-    }
-    .message-sender {
-        font-weight: bold;
-        color: #4ecdc4;
-        font-size: 0.85em;
-        margin-bottom: 3px;
-    }
-    .message-text {
-        color: #eee;
-        line-height: 1.3;
-        font-size: 0.9em;
-    }
-    /* Style for media in messages */
-    .message-media img, .message-media video {
-        max-width: 100%;
-        max-height: 150px; /* Ajuster la hauteur */
-        display: block;
-        margin-top: 5px;
-        border-radius: 5px;
-    }
-    .message-timestamp {
-        font-size: 0.6em;
-        color: #777;
-        text-align: right;
-        margin-top: 3px;
-    }
-    /* Message actions (reactions, copy, transfer) */
-    .message-actions-overlay {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: rgba(0,0,0,0.8);
-        border-radius: 5px;
-        display: none;
-        padding: 3px; /* Ajuster le padding */
-        gap: 3px;
-        z-index: 10;
-    }
-    .message-item.sent .message-actions-overlay {
-        left: -8px; /* Ajuster la position */
-    }
-    .message-item.received .message-actions-overlay {
-        right: -8px;
-    }
-
-    .message-item:hover .message-actions-overlay {
-        display: flex;
-    }
-    .message-actions-overlay button {
-        background: none;
-        border: none;
-        color: #fff;
-        cursor: pointer;
-        font-size: 1em; /* Ajuster la taille */
-        padding: 3px;
-    }
-    .message-actions-overlay button:hover {
-        color: #4ecdc4;
-    }
-    .message-reactions {
-        display: flex;
-        gap: 4px;
-        margin-top: 4px;
-        font-size: 0.75em;
-        flex-wrap: wrap;
-    }
-    .message-reaction-item {
-        background-color: #0d0d0d;
-        border: 1px solid #333;
-        border-radius: 8px;
-        padding: 1px 5px;
-        display: flex;
-        align-items: center;
-        gap: 2px;
-    }
-    .message-reaction-item span:first-child {
-        font-size: 1.1em;
-    }
-    .message-reaction-item span:last-child {
-        font-size: 0.85em;
-        color: #ccc;
-    }
-
-    .chat-input-area {
-        display: flex;
-        gap: 8px;
-    }
-    /* Add file upload button to chat input area */
-    .chat-input-area .file-upload-btn {
-        background: linear-gradient(145deg, #333, #1e1e1e);
-        border: 1px solid #444;
-        color: #ccc;
-        padding: 8px 12px; /* Ajuster le padding */
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .chat-input-area .file-upload-btn:hover {
-        background: linear-gradient(145deg, #3a3a3a, #282828);
-        color: #fff;
-    }
-    .chat-input-area .file-upload-btn input[type="file"] {
-        display: none;
-    }
-
-    .chat-input-area textarea {
-        flex-grow: 1;
-        padding: 8px;
-        border: 1px solid #333;
-        background-color: #0d0d0d;
-        color: #eee;
-        border-radius: 8px;
-        resize: none;
-        outline: none;
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.9em;
-    }
-    .chat-input-area textarea:focus {
-        border-color: #4ecdc4;
-    }
-    .chat-input-area button {
-        background: linear-gradient(145deg, #4ecdc4, #3a9c94);
-        border: none;
-        border-radius: 8px;
-        color: #fff;
-        padding: 8px 12px;
-        cursor: pointer;
-        transition: background 0.2s ease;
-        font-size: 0.9em;
-    }
-    .chat-input-area button:hover {
-        background: linear-gradient(145deg, #5eddd3, #43b3a9);
-    }
-
-    .messaging-close-btn {
-        position: absolute;
-        top: 8px; /* Ajuster la position */
-        right: 8px;
-        background: none;
-        border: none;
-        color: #aaa;
-        font-size: 1.8em;
-        cursor: pointer;
-        z-index: 100;
-    }
-    .messaging-close-btn:hover {
-        color: #fff;
-    }
-
-    /* Modale d'ajout de contact */
-    .add-contact-modal .modal-content {
-        max-width: 300px; /* Plus petit sur mobile */
-    }
-    .add-contact-modal input[type="text"] {
-        margin-bottom: 12px;
-        font-family: 'Poppins', sans-serif;
-    }
-    /* Modale de transfert de message */
-    .transfer-modal .modal-content {
-        max-width: 350px; /* Plus petit sur mobile */
-    }
-    .transfer-modal .contact-list-transfer {
-        max-height: 150px; /* Ajuster la hauteur */
-        overflow-y: auto;
-        border: 1px solid #333;
-        border-radius: 5px;
-        margin-bottom: 12px;
-        padding: 5px;
-    }
-    .transfer-modal .contact-item-transfer {
-        padding: 6px; /* Ajuster le padding */
-        cursor: pointer;
-        border-bottom: 1px solid #1e1e1e;
-        font-family: 'Poppins', sans-serif;
-        font-size: 0.9em;
-    }
-    .transfer-modal .contact-item-transfer:last-child {
-        border-bottom: none;
-    }
-    .transfer-modal .contact-item-transfer:hover {
-        background-color: #1a1a1a;
-    }
-    /* Message certifié par L'Agence */
-    .card-author .certified-label {
-        background-color: #4ecdc4;
-        color: #0d0d0d;
-        padding: 1px 5px; /* Ajuster le padding */
-        border-radius: 3px;
-        font-size: 0.6em; /* Ajuster la taille */
-        font-weight: bold;
-        margin-left: 3px;
-        vertical-align: middle;
-    }
-    /* Dossier Detail Modal */
-    .dossier-detail-modal {
-        display: none;
-        position: fixed;
-        z-index: 2500;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.9);
-        justify-content: center;
-        align-items: center;
-        overflow-y: auto;
-        padding: 15px; /* Ajuster le padding */
-    }
-    .dossier-detail-modal.show { display: flex; }
-    .dossier-detail-content {
-        background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-        border: 1px solid #333;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-        max-width: 95%; /* Plus large sur mobile */
-        width: 100%;
-        padding: 15px; /* Ajuster le padding */
-        position: relative;
-    }
-    .dossier-detail-close-btn {
-        position: absolute;
-        top: 8px; /* Ajuster la position */
-        right: 12px;
-        color: #aaa;
-        font-size: 24px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    .dossier-detail-close-btn:hover { color: #fff; }
-
-    .dossier-detail-media-gallery {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        max-height: 300px; /* Ajuster la hauteur maximale */
-        min-height: 150px;
-        overflow: hidden;
-        margin-bottom: 15px;
-        position: relative;
-        background-color: #0d0d0d;
-        border: 2px dashed #444;
-    }
-    .dossier-detail-media-item {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
-        display: none;
-        cursor: pointer;
-    }
-    .dossier-detail-media-item.active { display: block; }
-    .dossier-detail-media-nav-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(0,0,0,0.6);
-        border: none;
-        color: #fff;
-        padding: 6px 10px; /* Ajuster le padding */
-        cursor: pointer;
-        z-index: 10;
-        font-size: 1.5em;
-        border-radius: 5px;
-    }
-    .dossier-detail-media-nav-btn.left { left: 8px; }
-    .dossier-detail-media-nav-btn.right { right: 8px; }
-
-    .dossier-detail-title {
-        color: #eee;
-        font-size: 1.6em; /* Ajuster la taille */
-        margin-bottom: 8px;
-        text-align: center;
-    }
-    .dossier-detail-author {
-        font-size: 0.8em;
-        color: #999;
-        text-align: center;
-        margin-bottom: 12px;
-    }
-    .dossier-detail-desc {
-        color: #ccc;
-        font-size: 1em;
-        line-height: 1.5;
-        margin-bottom: 15px;
-    }
-    /* Style for download button in lightbox */
-    .download-media-btn {
-        position: absolute;
-        bottom: 15px; /* Ajuster la position */
-        right: 15px;
-        background: rgba(0,0,0,0.7);
-        border: 1px solid #fff;
-        color: #fff;
-        padding: 8px 12px; /* Ajuster le padding */
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 0.9em;
-        z-index: 1001;
-        display: none;
-        font-family: 'Poppins', sans-serif;
-    }
-    .download-media-btn:hover {
-        background: rgba(255,255,255,0.2);
-    }
-    /* Ensure lightbox elements are always hidden unless active */
-    .lightbox-prev, .lightbox-next { display: none; }
-
-
-    /* --- Media Queries pour les écrans plus grands (Tablettes et Ordinateurs) --- */
-
-    /* Pour les tablettes (largeur > 768px) */
-    @media (min-width: 768px) {
         .digicode {
-            padding: 40px;
-            max-width: 450px;
+            background: linear-gradient(145deg, #181818, #0b0b0b);
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 30px; /* Diminuer le padding pour les petits écrans */
+            box-shadow:
+                0 15px 30px rgba(0, 0, 0, 0.7),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateY(0deg) translateY(0);
+            transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            opacity: 1;
+            width: 100%; /* S'assurer qu'il prend toute la largeur disponible sur mobile */
+            max-width: 400px; /* Limiter la largeur sur les écrans plus grands */
+        }
+
+        .digicode.hide {
+            transform: rotateY(15deg) translateY(-50px) scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .digicode::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(145deg, #333, #111);
+            border-radius: 15px;
+            z-index: -1;
+            filter: blur(8px);
+            opacity: 0.3;
+        }
+
+        /* Header du digicode */
+        .header {
+            text-align: center;
+            margin-bottom: 25px; /* Ajuster la marge */
+            position: relative;
         }
 
         .title {
-            font-size: 13px;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
+            color: #777;
+            font-size: 12px; /* Plus petit sur mobile */
+            font-weight: 500;
+            letter-spacing: 1px; /* Ajuster le letter-spacing */
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            animation: fadeIn 1s ease-out;
         }
 
         .agent-name-input {
-            padding: 12px 15px;
-            margin-bottom: 15px;
-            font-size: 20px;
-            letter-spacing: 2px;
+            width: 100%;
+            padding: 10px 12px; /* Ajuster le padding */
+            margin-bottom: 12px;
+            border: 1px solid #333;
+            background: #050505;
+            color: #4ecdc4;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px; /* Ajuster la taille de la police */
+            text-align: center;
+            border-radius: 6px;
+            box-shadow: inset 0 0 10px rgba(78, 205, 196, 0.08);
+            text-transform: uppercase;
+            letter-spacing: 1px; /* Ajuster le letter-spacing */
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .agent-name-input::placeholder {
+            color: #777;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .agent-name-input:focus {
+            border-color: #4ecdc4;
+            box-shadow: inset 0 0 15px rgba(78, 205, 196, 0.2), 0 0 8px rgba(78, 205, 196, 0.5);
         }
 
         .display-container {
-            padding: 15px 20px;
+            background: #050505;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 12px 15px; /* Ajuster le padding */
+            margin-bottom: 8px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.05);
         }
 
         .display {
-            font-size: 26px;
-            letter-spacing: 8px;
-            min-height: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px; /* Ajuster la taille de la police */
+            font-weight: 600;
+            color: #00ff41;
+            text-align: center;
+            letter-spacing: 6px; /* Ajuster le letter-spacing */
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.6);
+            min-height: 25px; /* Ajuster la hauteur minimale */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            opacity: 0;
+            animation: scanline 0.5s steps(10, end) infinite, displayFadeIn 1s forwards 0.5s;
         }
 
+        /* Style pour l'affichage du nom d'agent fixe */
         .agent-info-display {
-            padding: 10px 15px;
-            margin-top: 15px;
-            font-size: 14px;
+            background: #050505;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 8px 12px; /* Ajuster le padding */
+            margin-top: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px; /* Ajuster la taille de la police */
+            font-weight: 500;
+            color: #ccc;
+            text-align: center;
             letter-spacing: 1px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .agent-info-display.show {
+            opacity: 1;
+        }
+
+        @keyframes displayFadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes scanline {
+            0% { text-shadow: 0 0 10px rgba(0, 255, 65, 0.6); } /* Ajuster le shadow */
+            50% { text-shadow: 0 0 12px rgba(0, 255, 65, 0.8), 0 1px 0 rgba(0, 255, 65, 0.3); }
+            100% { text-shadow: 0 0 10px rgba(0, 255, 65, 0.6); }
+        }
+
+        .display-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.1) 50%, transparent 50%);
+            background-size: 100% 2px;
+            pointer-events: none;
+            opacity: 0.2;
         }
 
         .status-light {
-            top: 10px;
-            right: 10px;
-            width: 10px;
-            height: 10px;
-            box-shadow: 0 0 10px rgba(255, 69, 0, 0.8);
+            position: absolute;
+            top: 8px; /* Ajuster la position */
+            right: 8px; /* Ajuster la position */
+            width: 8px; /* Ajuster la taille */
+            height: 8px;
+            border-radius: 50%;
+            background: #ff4500;
+            box-shadow: 0 0 8px rgba(255, 69, 0, 0.8); /* Ajuster le shadow */
+            transition: all 0.5s ease-in-out;
         }
 
+        .status-light.success {
+            background: #00ff41;
+            box-shadow: 0 0 8px rgba(0, 255, 65, 0.8);
+        }
+
+        /* --- Clavier --- */
         .keypad {
-            gap: 15px;
-            margin-bottom: 25px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px; /* Ajuster le gap */
+            margin-bottom: 20px;
+            justify-items: center;
+            filter: blur(5px);
+            opacity: 0.5;
+            pointer-events: none;
+            transition: filter 0.8s ease-out, opacity 0.8s ease-out;
+        }
+
+        .keypad.active {
+            filter: blur(0px);
+            opacity: 1;
+            pointer-events: all;
         }
 
         .key {
-            width: 65px;
-            height: 65px;
-            font-size: 22px;
+            width: 60px; /* Ajuster la taille des touches */
+            height: 60px;
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 20px; /* Ajuster la taille de la police */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow:
+                0 5px 10px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            user-select: none;
+            transform: translateZ(0);
         }
 
+        .key:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            transform: translateY(-1px) scale(1.02);
+            box-shadow:
+                0 8px 15px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        .key:active {
+            background: linear-gradient(145deg, #1e1e1e, #101010);
+            transform: translateY(1px);
+            box-shadow:
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .key::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            opacity: 0.8;
+        }
+
+        /* Contrôles (Boutons Effacer/Valider) */
         .controls {
-            gap: 15px;
+            display: flex;
+            gap: 12px; /* Ajuster le gap */
+            justify-content: center;
+            filter: blur(5px);
+            opacity: 0.5;
+            pointer-events: none;
+            transition: filter 0.8s ease-out, opacity 0.8s ease-out;
+        }
+
+        .controls.active {
+            filter: blur(0px);
+            opacity: 1;
+            pointer-events: all;
         }
 
         .btn {
-            padding: 12px 28px;
-            font-size: 13px;
-            letter-spacing: 1.5px;
+            padding: 10px 20px; /* Ajuster le padding */
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #ccc;
+            font-size: 12px; /* Ajuster la taille de la police */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+            text-transform: uppercase;
+            letter-spacing: 1px; /* Ajuster le letter-spacing */
+            box-shadow:
+                0 4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            user-select: none;
         }
 
+        .btn:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            transform: translateY(-1px);
+            color: #fff;
+        }
+
+        .btn:active {
+            background: linear-gradient(145deg, #1e1e1e, #101010);
+            transform: translateY(1px);
+            box-shadow:
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn.clear {
+            color: #ff6b6b;
+        }
+
+        .btn.enter {
+            color: #4ecdc4;
+        }
+
+        /* Message d'état */
         .message {
-            font-size: 12px;
+            text-align: center;
+            font-size: 11px; /* Ajuster la taille de la police */
+            margin-top: 15px;
+            height: 20px;
+            color: #999;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .message.error {
+            color: #ff6b6b;
+            font-weight: 500;
+            animation: pulseError 0.5s ease-out;
+        }
+
+        .message.success {
+            color: #4ecdc4;
+            font-weight: 500;
+            animation: pulseSuccess 0.5s ease-out;
+        }
+
+        @keyframes pulseError {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes pulseSuccess {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Animations spécifiques */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0) rotateZ(0); }
+            25% { transform: translateX(-5px) rotateZ(-0.5deg); }
+            75% { transform: translateX(5px) rotateZ(0.5deg); }
+        }
+
+        .shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        /* Animation du coffre-fort (Vault) */
+        .vault-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #101010 0%, #000 100%);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            pointer-events: none;
+            backdrop-filter: blur(0px);
+        }
+
+        .vault-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+            backdrop-filter: blur(5px);
         }
 
         .vault-door {
-            width: 400px; /* Augmenter la taille sur tablette */
-            height: 400px;
-            border: 10px solid #3d3d3d;
-            box-shadow: 0 0 100px rgba(0, 0, 0, 0.9), inset 0 0 50px rgba(0, 0, 0, 0.6);
+            width: 300px; /* Ajuster la taille de la porte sur mobile */
+            height: 300px;
+            background:
+                radial-gradient(circle at 50% 50%, #2a2a2a 40%, #1a1a1a 60%, #0a0a0a 100%);
+            border: 8px solid #3d3d3d; /* Ajuster la bordure */
+            border-radius: 50%;
+            position: relative;
+            box-shadow:
+                0 0 80px rgba(0, 0, 0, 0.9), /* Ajuster le shadow */
+                inset 0 0 40px rgba(0, 0, 0, 0.6);
+            transition: all 2.5s cubic-bezier(0.7, 0, 0.84, 0);
+            transform-style: preserve-3d;
+            transform: rotateY(0deg) scale(1);
+            opacity: 1;
+            overflow: hidden;
         }
-        .vault-door::before {
-            border: 4px solid #4a4a4a;
-        }
+
+        .vault-door::before,
         .vault-door::after {
-            border: 3px solid #555;
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            box-sizing: border-box;
+            background: repeating-conic-gradient(from 0deg, #151515 0% 5%, #252525 5% 10%);
         }
+
+        .vault-door::before {
+            width: 90%;
+            height: 90%;
+            top: 5%;
+            left: 5%;
+            border: 3px solid #4a4a4a; /* Ajuster la bordure */
+            transform: translateZ(5px);
+            animation: rotateGear 60s linear infinite;
+        }
+
+        .vault-door::after {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            border: 2px solid #555; /* Ajuster la bordure */
+            transform: translateZ(10px);
+            animation: rotateGearReverse 80s linear infinite;
+        }
+
         .vault-door .center-handle {
-            width: 100px;
-            height: 100px;
-            border: 5px solid #666;
-            font-size: 40px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80px; /* Ajuster la taille de la poignée */
+            height: 80px;
+            background: linear-gradient(145deg, #444, #222);
+            border: 4px solid #666; /* Ajuster la bordure */
+            border-radius: 50%;
+            transform: translate(-50%, -50%) translateZ(15px);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7), 0 5px 10px rgba(0, 0, 0, 0.5);
+            transition: all 1s ease-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px; /* Ajuster la taille de la police */
+            color: #aaa;
+            text-shadow: 0 0 5px #000;
+            overflow: hidden;
+        }
+
+        .vault-door .center-handle::before {
+            content: '⚙️';
+            animation: rotateGearSmall 10s linear infinite;
+        }
+
+        .vault-door.open {
+            transform: rotateY(120deg) translateX(500px) scale(0.7);
+            opacity: 0;
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+        }
+
+        .vault-door.open .center-handle {
+            transform: translate(-50%, -50%) rotateZ(360deg) scale(0);
+            opacity: 0;
+        }
+
+        @keyframes vaultLightPulse {
+            0% { box-shadow: 0 0 0px #fff, 0 0 0px #fff; }
+            50% { box-shadow: 0 0 30px #fff, 0 0 60px rgba(255,255,255,0.8); } /* Ajuster le shadow */
+            100% { box-shadow: 0 0 0px #fff, 0 0 0px #fff; }
+        }
+
+        .vault-overlay.activating .vault-door {
+            animation: vaultLightPulse 1s ease-in-out forwards;
+        }
+
+        @keyframes rotateGear {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotateGearReverse {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+
+        @keyframes rotateGearSmall {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- Contenu du coffre-fort --- */
+        .content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #0a0a0a, #000);
+            z-index: 999;
+            display: none;
+            justify-content: center;
+            align-items: flex-start; /* Aligner en haut pour les contenus */
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out, transform 0.8s ease-out;
+            transform: translateY(20px);
+            overflow-y: auto;
+            padding-bottom: 80px;
+            padding-top: 20px; /* Ajout d'un padding-top pour l'en-tête */
+        }
+
+        .content.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .content h2 {
-            font-size: 2.8em;
-            margin-top: 50px;
-            margin-bottom: 40px;
+            color: #eee;
+            font-size: 2.2em; /* Ajuster la taille de la police */
+            margin-top: 30px; /* Ajuster la marge */
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            animation: textReveal 1.5s ease-out forwards;
+            text-align: center; /* Centrer le titre sur mobile */
+            width: 100%;
+            padding: 0 15px; /* Ajouter un padding horizontal */
+        }
+
+        @keyframes textReveal {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .gallery {
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Minmax plus petit pour mobile */
+            gap: 20px; /* Ajuster le gap */
+            max-width: 100%; /* S'assurer que la galerie prend toute la largeur */
+            padding: 15px; /* Ajuster le padding */
+            width: 100%; /* S'assurer qu'il prend toute la largeur */
+        }
+
+        .card {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            transform: translateY(0);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .card.hidden {
+            display: none;
+        }
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.01); /* Ajuster l'effet hover */
+            border-color: #555;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
         }
 
         .card-image-container {
-            height: 180px;
-        }
-        .card-image-container.hidden-image::before {
-            font-size: 18px;
+            width: 100%;
+            height: 150px; /* Ajuster la hauteur de l'image */
+            background-color: #0d0d0d;
+            border-bottom: 1px solid #222;
+            overflow: hidden;
+            border: 2px dashed #444;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
         }
 
+        .card-image-container.hidden-image {
+            filter: grayscale(100%) brightness(50%) blur(5px);
+            opacity: 0.5;
+        }
+
+        .card-image-container.hidden-image::before {
+            content: 'ACCÈS RESTREINT';
+            position: absolute;
+            color: #ff6b6b;
+            font-size: 16px; /* Ajuster la taille de la police */
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+            z-index: 1;
+        }
+
+        .card-image-item {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            filter: grayscale(80%) brightness(80%);
+            transition: filter 0.5s ease-out;
+        }
+
+        .card-image-container:hover .card-image-item {
+            filter: grayscale(0%) brightness(100%);
+        }
+
+        .card-image-container.hidden-image .card-image-item {
+            opacity: 0;
+        }
+
+        .card-image-item.video {
+            background-color: #000;
+        }
+
+        /* Media navigation if multiple items */
+        .media-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            border: none;
+            color: #fff;
+            padding: 5px;
+            cursor: pointer;
+            z-index: 2;
+            font-size: 1.2em; /* Ajuster la taille */
+        }
+
+        .media-nav-btn.left { left: 5px; }
+
+        .media-nav-btn.right { right: 5px; }
+
         .card-content {
-            padding: 20px;
+            padding: 15px; /* Ajuster le padding */
         }
 
         .card-title {
-            font-size: 18px;
-            margin-bottom: 10px;
+            color: #e0e0e0;
+            font-size: 16px; /* Ajuster la taille de la police */
+            font-weight: bold;
+            margin-bottom: 8px;
         }
+
         .card-author {
-            font-size: 0.8em;
-            margin-bottom: 10px;
+            font-size: 0.75em; /* Ajuster la taille de la police */
+            color: #888;
+            margin-bottom: 8px;
+            display: block;
         }
+
+        .card-author.certified {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .certification-icon {
+            margin-left: 3px;
+            color: #4ecdc4;
+        }
+
         .add-contact-author-btn {
-            font-size: 0.9em;
-            margin-left: 10px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 0.8em; /* Ajuster la taille de la police */
+            margin-left: 5px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
         }
+
+        .add-contact-author-btn:hover {
+            color: #fff;
+        }
+
         .card-desc {
-            font-size: 14px;
-            line-height: 1.6;
+            color: #999;
+            font-size: 13px; /* Ajuster la taille de la police */
+            line-height: 1.5;
         }
 
+        /* Bouton Déconnexion */
         .back-btn {
-            top: 30px;
-            left: 30px;
-            padding: 12px 20px;
-            font-size: 12px;
+            position: fixed;
+            top: 20px; /* Ajuster la position */
+            left: 20px; /* Ajuster la position */
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #aaa;
+            padding: 10px 15px; /* Ajuster le padding */
+            font-size: 11px; /* Ajuster la taille de la police */
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+            text-transform: uppercase;
             letter-spacing: 1px;
+            z-index: 1001;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
         }
 
+        .back-btn:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            transform: translateY(-1px);
+            color: #fff;
+        }
+
+        .back-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Nouveau Dossier et Commentaires */
         .add-folder-btn {
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            font-size: 36px;
+            position: fixed;
+            bottom: 20px; /* Ajuster la position */
+            right: 20px; /* Ajuster la position */
+            width: 50px; /* Ajuster la taille */
+            height: 50px;
+            background: linear-gradient(145deg, #4ecdc4, #3a9c94);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 30px; /* Ajuster la taille de la police */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .add-folder-btn:hover {
+            transform: scale(1.08); /* Ajuster l'effet */
+            background: linear-gradient(145deg, #5eddd3, #43b3a9);
+        }
+
+        .add-folder-btn:active {
+            transform: scale(0.95);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            padding: 15px; /* Ajout d'un padding */
         }
 
         .modal-content {
-            padding: 30px;
-            max-width: 500px;
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            margin: auto;
+            padding: 25px; /* Ajuster le padding */
+            border: 1px solid #333;
+            border-radius: 10px;
+            width: 95%; /* Plus large sur mobile */
+            max-width: 450px; /* Limiter la largeur sur les écrans plus grands */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.7);
+            position: relative;
         }
 
         .modal-content h3 {
-            margin-bottom: 20px;
-            font-size: 1.5em;
+            color: #eee;
+            margin-bottom: 18px;
+            text-align: center;
+            font-size: 1.3em; /* Ajuster la taille de la police */
         }
 
         .modal-content input[type="text"],
         .modal-content textarea,
         .modal-content input[type="file"] {
-            margin-bottom: 15px;
-            font-size: 1em;
+            width: 100%; /* Prendre toute la largeur */
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #444;
+            background-color: #0d0d0d;
+            color: #eee;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9em;
         }
+
+        /* Input file specific styling */
         .modal-content .file-upload-wrapper {
-            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%; /* Prendre toute la largeur */
+            margin-bottom: 12px;
+            border: 1px solid #444;
+            background-color: #0d0d0d;
+            color: #eee;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
         }
+
+        .modal-content .file-upload-wrapper input[type="file"] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
         .modal-content .file-upload-filename {
-            font-size: 0.8em;
+            display: block;
+            margin-top: 3px;
+            font-size: 0.75em;
+            color: #888;
         }
+
+        /* Preview for multiple media */
         .media-preview-container {
-            max-height: 150px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+            max-height: 120px; /* Ajuster la hauteur maximale */
+            overflow-y: auto;
+            border: 1px solid #2a2a2a;
+            border-radius: 5px;
+            padding: 5px;
         }
+
         .media-preview-item {
-            width: 80px;
-            height: 80px;
+            position: relative;
+            width: 70px; /* Ajuster la taille */
+            height: 70px;
+            object-fit: cover;
+            border-radius: 3px;
+            border: 1px solid #555;
         }
+
         .media-preview-item.video-thumbnail::after {
-            font-size: 2em;
+            content: "\f16a";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 1.8em; /* Ajuster la taille */
+            text-shadow: 0 0 5px rgba(0,0,0,0.8);
         }
+
         .media-preview-item .remove-media-btn {
-            width: 20px;
-            height: 20px;
-            font-size: 0.8em;
+            position: absolute;
+            top: -3px; /* Ajuster la position */
+            right: -3px;
+            background: #ff6b6b;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 18px; /* Ajuster la taille */
+            height: 18px;
+            font-size: 0.7em;
+            line-height: 1;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .modal-content input::placeholder,
+        .modal-content textarea::placeholder {
+            color: #777;
         }
 
         .modal-content button {
-            padding: 12px;
-            font-size: 16px;
+            display: block;
+            width: 100%;
+            padding: 10px; /* Ajuster le padding */
+            background: linear-gradient(145deg, #4ecdc4, #3a9c94);
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 15px; /* Ajuster la taille de la police */
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .modal-content button:hover {
+            background: linear-gradient(145deg, #5eddd3, #43b3a9);
         }
 
         .close-button {
-            top: 10px;
-            right: 15px;
-            font-size: 28px;
+            position: absolute;
+            top: 8px; /* Ajuster la position */
+            right: 12px;
+            color: #aaa;
+            font-size: 24px; /* Ajuster la taille */
+            font-weight: bold;
+            cursor: pointer;
         }
 
+        .close-button:hover,
+        .close-button:focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Section Commentaires */
         .comments-section {
-            padding: 15px 20px;
-            margin-top: 15px;
+            padding: 12px 15px; /* Ajuster le padding */
+            border-top: 1px solid #2a2a2a;
+            margin-top: 12px;
         }
+
         .comments-section h4 {
-            margin-bottom: 10px;
-            font-size: 1.2em;
+            color: #e0e0e0;
+            margin-bottom: 8px;
+            font-size: 1.1em; /* Ajuster la taille de la police */
         }
+
         .comments-list {
-            max-height: 100px;
+            max-height: 80px; /* Ajuster la hauteur maximale */
+            overflow-y: auto;
+            margin-bottom: 8px;
+        }
+
+        .comment {
+            background-color: #151515;
+            padding: 8px; /* Ajuster le padding */
+            border-radius: 5px;
+            margin-bottom: 6px;
+            font-size: 12px; /* Ajuster la taille de la police */
+            color: #bbb;
+            position: relative;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 3px;
+            display: block;
+        }
+
+        .comment-meta {
+            font-size: 0.7em; /* Ajuster la taille de la police */
+            color: #888;
+            margin-top: -2px;
+            margin-bottom: 4px;
+        }
+
+        .comment-meta .modified-tag {
+            font-weight: bold;
+            color: #f7d794;
+            margin-left: 3px;
+        }
+
+        .comment-reply-info {
+            font-size: 0.75em;
+            color: #888;
+            margin-left: 8px;
+            display: block;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+            font-size: 0.8em;
+        }
+
+        .comment-actions button {
+            background: none;
+            border: none;
+            color: #bbb;
+            cursor: pointer;
+            padding: 0;
+            font-size: inherit;
+            transition: color 0.2s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .comment-actions button:hover {
+            color: #fff;
+        }
+
+        .comment-actions .like-btn.liked {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .comment-actions .edit-btn {
+            color: #f7d794;
+        }
+
+        .comment-actions .delete-btn {
+            color: #ff6b6b;
+        }
+
+        .comment-form {
+            margin-top: 12px;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #444;
+            background-color: #0d0d0d;
+            color: #eee;
+            border-radius: 5px;
+            resize: vertical;
+            min-height: 50px; /* Ajuster la hauteur minimale */
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9em;
+        }
+
+        .comment-form button {
+            padding: 8px 12px;
+            background: linear-gradient(145deg, #4ecdc4, #3a9c94);
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: auto;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .comment-form button:hover {
+            background: linear-gradient(145deg, #5eddd3, #43b3a9);
+        }
+
+        /* Boutons d'admin Assane Diop et Créateur */
+        .admin-controls {
+            position: absolute;
+            top: 8px; /* Ajuster la position */
+            right: 8px;
+            display: flex;
+            gap: 4px; /* Ajuster le gap */
+            opacity: 0.7;
+        }
+
+        .admin-controls.creator-only {
+            right: auto;
+            left: 8px;
+        }
+
+        .admin-controls button {
+            background: rgba(50,50,50,0.8);
+            border: 1px solid #666;
+            color: #eee;
+            padding: 4px 6px; /* Ajuster le padding */
+            border-radius: 4px;
+            font-size: 9px; /* Ajuster la taille de la police */
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .admin-controls button:hover {
+            background: #555;
+            color: #fff;
+            opacity: 1;
+        }
+
+        .admin-controls button.delete {
+            color: #ff6b6b;
+        }
+
+        .admin-controls button.edit {
+            color: #f7d794;
+        }
+
+        /* Dossier actions (likes, reposts) */
+        .dossier-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            border-top: 1px solid #2a2a2a;
+            margin-top: 12px;
+        }
+
+        .dossier-actions button {
+            background: none;
+            border: none;
+            color: #bbb;
+            cursor: pointer;
+            font-size: 1em; /* Ajuster la taille */
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s ease, transform 0.2s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .dossier-actions button:hover {
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        .dossier-actions .like-btn.liked {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .dossier-actions .dislike-btn.disliked {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .dossier-actions .repost-btn.reposted {
+            color: #f7d794;
+            font-weight: bold;
+        }
+
+        /* Notification Center */
+        .notification-center {
+            position: fixed;
+            top: 15px; /* Ajuster la position */
+            right: 15px;
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px; /* Ajuster le padding */
+            max-height: 70vh; /* Ajuster la hauteur maximale */
+            width: 280px; /* Ajuster la largeur */
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            display: none;
+        }
+
+        .notification-center.show {
+            display: block;
+        }
+
+        .notification-center h4 {
+            color: #eee;
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .notification-item {
+            background-color: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            padding: 8px; /* Ajuster le padding */
+            margin-bottom: 6px;
+            border-radius: 5px;
+            font-size: 0.85em; /* Ajuster la taille de la police */
+            color: #bbb;
+            position: relative;
+        }
+
+        .notification-item.unread {
+            background-color: #2a1a0f;
+            border-color: #ff9800;
+            color: #ffe0b2;
+        }
+
+        .notification-timestamp {
+            font-size: 0.65em; /* Ajuster la taille de la police */
+            color: #777;
+            text-align: right;
+            margin-top: 3px;
+        }
+
+        .notification-item .delete-notification-btn {
+            position: absolute;
+            top: 3px; /* Ajuster la position */
+            right: 3px;
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 0.75em;
+            opacity: 0.5;
+            transition: opacity 0.2s ease;
+        }
+
+        .notification-item .delete-notification-btn:hover {
+            opacity: 1;
+            color: #fff;
+        }
+
+        .notification-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .notification-actions button {
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #ccc;
+            padding: 4px 8px;
+            font-size: 0.75em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .notification-actions button:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            color: #fff;
+        }
+
+        /* Icône de cloche pour notifications */
+        .notification-bell-btn {
+            position: fixed;
+            top: 20px; /* Ajuster la position */
+            right: 20px;
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            border-radius: 50%;
+            width: 40px; /* Ajuster taille */
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s ease;
+            z-index: 1001;
+        }
+
+        .notification-bell-btn:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            transform: scale(1.04);
+        }
+
+        .notification-bell-btn:active {
+            transform: scale(0.96);
+        }
+
+        .notification-bell-btn .notification-count {
+            position: absolute;
+            top: -4px; /* Ajuster la position */
+            right: -4px;
+            background-color: #ff6b6b;
+            color: #fff;
+            font-size: 0.65em;
+            padding: 1px 5px;
+            border-radius: 50%;
+            display: none;
+            line-height: 1;
+        }
+
+        .notification-bell-btn .notification-count.show {
+            display: block;
+        }
+
+        /* Message button */
+        .messaging-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 70px; /* Position next to bell */
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+            transition: all 0.2s ease;
+            z-index: 1001;
+        }
+
+        .messaging-toggle-btn:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            transform: scale(1.04);
+        }
+
+        .messaging-toggle-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* --- Styles de la Messagerie Privée (Nouveau) --- */
+        .messaging-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: none;
+            grid-template-columns: 1fr; /* Une seule colonne sur mobile */
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            flex-direction: column; /* Utiliser flex-direction pour l'empilement */
+        }
+
+        .messaging-container.show {
+            display: flex; /* Utiliser flex pour gérer l'empilement */
+        }
+
+        .navbar-vertical {
+            background: linear-gradient(180deg, #181818, #0b0b0b);
+            border-bottom: 1px solid #2a2a2a; /* Bordure en bas sur mobile */
+            padding: 10px; /* Ajuster le padding */
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            height: auto; /* Laisser la hauteur s'adapter au contenu */
+            max-height: 40%; /* Limiter la hauteur de la navbar sur mobile */
+        }
+
+        .navbar-vertical h4 {
+            color: #eee;
+            margin-bottom: 15px;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 0.8em;
+            letter-spacing: 1px;
+        }
+
+        .navbar-vertical .button-group {
+            display: flex;
+            flex-direction: row; /* Boutons côte à côte sur mobile */
+            justify-content: center;
+            gap: 8px;
             margin-bottom: 10px;
         }
-        .comment {
-            padding: 10px;
-            margin-bottom: 8px;
-            font-size: 13px;
-        }
-        .comment-author {
-            margin-bottom: 5px;
-        }
-        .comment-meta {
-            font-size: 0.75em;
-            margin-top: -3px;
-            margin-bottom: 5px;
-        }
-        .comment-reply-info {
-            font-size: 0.8em;
-            margin-left: 10px;
-        }
-        .comment-actions {
-            gap: 10px;
-            margin-top: 5px;
-            font-size: 0.9em;
-        }
-        .comment-form {
-            margin-top: 15px;
-        }
-        .comment-form textarea {
-            min-height: 60px;
-            font-size: 1em;
-        }
-        .comment-form button {
-            padding: 8px 15px;
-            font-size: 16px;
-        }
 
-        .admin-controls {
-            top: 10px;
-            right: 10px;
-            gap: 5px;
-        }
-        .admin-controls.creator-only {
-            left: 10px;
-        }
-        .admin-controls button {
-            padding: 5px 8px;
-            font-size: 10px;
-        }
-
-        .dossier-actions {
-            padding: 10px 0;
-            margin-top: 15px;
-        }
-        .dossier-actions button {
-            font-size: 1.1em;
-            gap: 5px;
-        }
-
-        .notification-center {
-            top: 20px;
-            right: 20px;
-            padding: 15px;
-            max-height: 80vh;
-            width: 300px;
-        }
-        .notification-center h4 {
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
-        .notification-item {
-            padding: 10px;
-            margin-bottom: 8px;
-            font-size: 0.9em;
-        }
-        .notification-timestamp {
-            font-size: 0.7em;
-        }
-        .notification-item .delete-notification-btn {
-            top: 5px;
-            right: 5px;
-            font-size: 0.8em;
-        }
-        .notification-actions {
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .notification-actions button {
-            padding: 5px 10px;
-            font-size: 0.8em;
-        }
-
-        .notification-bell-btn {
-            top: 30px;
-            right: 30px;
-            width: 45px;
-            height: 45px;
-            font-size: 1.2em;
-        }
-        .notification-bell-btn .notification-count {
-            top: -5px;
-            right: -5px;
-            font-size: 0.7em;
-            padding: 2px 6px;
-        }
-        .messaging-toggle-btn {
-            top: 30px;
-            right: 85px;
-            width: 45px;
-            height: 45px;
-            font-size: 1.2em;
-        }
-
-        .messaging-container {
-            grid-template-columns: 200px 1fr; /* Revenir à la disposition 2 colonnes */
-            flex-direction: row; /* Revenir à la direction de ligne */
-        }
-        .navbar-vertical {
-            border-right: 1px solid #2a2a2a;
-            border-bottom: none; /* Supprimer la bordure du bas */
-            padding: 15px;
-            max-height: none; /* Ne plus limiter la hauteur */
-        }
-        .navbar-vertical h4 {
-            margin-bottom: 20px;
-            font-size: 0.9em;
-        }
-        .navbar-vertical .button-group {
-            flex-direction: column; /* Revenir à la colonne */
-            gap: 5px;
-            margin-bottom: 15px;
-        }
         .navbar-vertical button {
-            padding: 8px 10px;
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            color: #ccc;
+            padding: 6px 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.8em;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .navbar-vertical button:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            color: #fff;
+        }
+
+        .navbar-vertical .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #0d0d0d;
+            border: 1px solid #333;
+            padding: 8px;
+            margin-bottom: 6px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            font-family: 'Poppins', sans-serif;
             font-size: 0.9em;
         }
-        .navbar-vertical .contact-item {
-            padding: 10px;
-            margin-bottom: 8px;
-            font-size: 1em;
+
+        .navbar-vertical .contact-item:hover,
+        .navbar-vertical .contact-item.active {
+            background-color: #1e1e1e;
+            border-color: #4ecdc4;
         }
+
         .navbar-vertical .contact-item .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #ff6b6b;
         }
+
+        .navbar-vertical .contact-item .status-dot.accepted {
+            background-color: #00ff41;
+        }
+
+        .navbar-vertical .contact-item .contact-actions-btns {
+            display: flex;
+            gap: 4px;
+        }
+
         .navbar-vertical .contact-item .contact-actions-btns button {
-            padding: 4px 6px;
-            font-size: 0.8em;
+            padding: 3px 5px;
+            font-size: 0.7em;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #ccc;
         }
 
         .chat-area {
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            padding: 15px; /* Ajuster le padding */
+            position: relative;
+            flex-grow: 1; /* Prend l'espace restant */
         }
+
         .chat-header {
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-        }
-        .chat-messages {
-            padding: 10px;
+            color: #eee;
+            font-size: 1.5em; /* Ajuster la taille */
             margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
         }
-        .message-item {
-            padding: 10px;
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 8px; /* Ajuster le padding */
+            background-color: #0a0a0a;
+            border-radius: 8px;
+            border: 1px solid #2a2a2a;
             margin-bottom: 10px;
-            max-width: 80%;
-            padding-right: 40px;
-            padding-left: 40px;
         }
+
+        .message-item {
+            background-color: #1a1a1a;
+            padding: 8px; /* Ajuster le padding */
+            border-radius: 8px;
+            margin-bottom: 8px;
+            position: relative;
+            max-width: 90%; /* Augmenter la largeur sur mobile */
+            padding-right: 35px; /* Space for reactions overlay */
+            padding-left: 35px; /* Space for reactions overlay */
+        }
+
+        .message-item.sent {
+            margin-left: auto;
+            background-color: #1a2a2a;
+        }
+
+        .message-item.received {
+            margin-right: auto;
+            background-color: #1a1a1a;
+        }
+
         .message-sender {
-            font-size: 0.9em;
-            margin-bottom: 5px;
+            font-weight: bold;
+            color: #4ecdc4;
+            font-size: 0.85em;
+            margin-bottom: 3px;
         }
+
         .message-text {
-            font-size: 1em;
-        }
-        .message-media img, .message-media video {
-            max-height: 200px;
-        }
-        .message-timestamp {
-            font-size: 0.7em;
-        }
-        .message-actions-overlay {
-            padding: 5px;
-            gap: 5px;
-        }
-        .message-actions-overlay button {
-            font-size: 1.2em;
-            padding: 5px;
-        }
-        .message-reactions {
-            gap: 5px;
-            margin-top: 5px;
-            font-size: 0.8em;
-        }
-        .message-reaction-item {
-            padding: 2px 6px;
-            gap: 3px;
-        }
-        .message-reaction-item span:first-child {
-            font-size: 1.2em;
-        }
-        .message-reaction-item span:last-child {
+            color: #eee;
+            line-height: 1.3;
             font-size: 0.9em;
+        }
+
+        /* Style for media in messages */
+        .message-media img, .message-media video {
+            max-width: 100%;
+            max-height: 150px; /* Ajuster la hauteur */
+            display: block;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+
+        .message-timestamp {
+            font-size: 0.6em;
+            color: #777;
+            text-align: right;
+            margin-top: 3px;
+        }
+
+        /* Message actions (reactions, copy, transfer) */
+        .message-actions-overlay {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0,0,0,0.8);
+            border-radius: 5px;
+            display: none;
+            padding: 3px; /* Ajuster le padding */
+            gap: 3px;
+            z-index: 10;
+        }
+
+        .message-item.sent .message-actions-overlay {
+            left: -8px; /* Ajuster la position */
+        }
+
+        .message-item.received .message-actions-overlay {
+            right: -8px;
+        }
+
+        .message-item:hover .message-actions-overlay {
+            display: flex;
+        }
+
+        .message-actions-overlay button {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1em; /* Ajuster la taille */
+            padding: 3px;
+        }
+
+        .message-actions-overlay button:hover {
+            color: #4ecdc4;
+        }
+
+        .message-reactions {
+            display: flex;
+            gap: 4px;
+            margin-top: 4px;
+            font-size: 0.75em;
+            flex-wrap: wrap;
+        }
+
+        .message-reaction-item {
+            background-color: #0d0d0d;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1px 5px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .message-reaction-item span:first-child {
+            font-size: 1.1em;
+        }
+
+        .message-reaction-item span:last-child {
+            font-size: 0.85em;
+            color: #ccc;
         }
 
         .chat-input-area {
-            gap: 10px;
+            display: flex;
+            gap: 8px;
         }
+
+        /* Add file upload button to chat input area */
         .chat-input-area .file-upload-btn {
-            padding: 10px 15px;
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            color: #ccc;
+            padding: 8px 12px; /* Ajuster le padding */
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
+        .chat-input-area .file-upload-btn:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            color: #fff;
+        }
+
+        .chat-input-area .file-upload-btn input[type="file"] {
+            display: none;
+        }
+
         .chat-input-area textarea {
-            padding: 10px;
-            font-size: 1em;
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #333;
+            background-color: #0d0d0d;
+            color: #eee;
+            border-radius: 8px;
+            resize: none;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9em;
         }
+
+        .chat-input-area textarea:focus {
+            border-color: #4ecdc4;
+        }
+
         .chat-input-area button {
-            padding: 10px 15px;
-            font-size: 1em;
+            background: linear-gradient(145deg, #4ecdc4, #3a9c94);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-size: 0.9em;
+        }
+
+        .chat-input-area button:hover {
+            background: linear-gradient(145deg, #5eddd3, #43b3a9);
         }
 
         .messaging-close-btn {
-            font-size: 2em;
+            position: absolute;
+            top: 8px; /* Ajuster la position */
+            right: 8px;
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1.8em;
+            cursor: pointer;
+            z-index: 100;
         }
 
+        .messaging-close-btn:hover {
+            color: #fff;
+        }
+
+        /* Modale d'ajout de contact */
         .add-contact-modal .modal-content {
-            max-width: 350px;
+            max-width: 300px; /* Plus petit sur mobile */
         }
+
         .add-contact-modal input[type="text"] {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            font-family: 'Poppins', sans-serif;
         }
+
+        /* Modale de transfert de message */
         .transfer-modal .modal-content {
-            max-width: 400px;
+            max-width: 350px; /* Plus petit sur mobile */
         }
+
         .transfer-modal .contact-list-transfer {
-            max-height: 200px;
-            margin-bottom: 15px;
+            max-height: 150px; /* Ajuster la hauteur */
+            overflow-y: auto;
+            border: 1px solid #333;
+            border-radius: 5px;
+            margin-bottom: 12px;
             padding: 5px;
         }
+
         .transfer-modal .contact-item-transfer {
-            padding: 8px;
-            font-size: 1em;
+            padding: 6px; /* Ajuster le padding */
+            cursor: pointer;
+            border-bottom: 1px solid #1e1e1e;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9em;
         }
+
+        .transfer-modal .contact-item-transfer:last-child {
+            border-bottom: none;
+        }
+
+        .transfer-modal .contact-item-transfer:hover {
+            background-color: #1a1a1a;
+        }
+
+        /* Message certifié par L'Agence */
         .card-author .certified-label {
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.7em;
-            margin-left: 5px;
+            background-color: #4ecdc4;
+            color: #0d0d0d;
+            padding: 1px 5px; /* Ajuster le padding */
+            border-radius: 3px;
+            font-size: 0.6em; /* Ajuster la taille */
+            font-weight: bold;
+            margin-left: 3px;
+            vertical-align: middle;
         }
+
+        /* Dossier Detail Modal */
+        .dossier-detail-modal {
+            display: none;
+            position: fixed;
+            z-index: 2500;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 15px; /* Ajuster le padding */
+        }
+
+        .dossier-detail-modal.show { display: flex; }
 
         .dossier-detail-content {
-            max-width: 800px;
-            padding: 20px;
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border: 1px solid #333;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            max-width: 95%; /* Plus large sur mobile */
+            width: 100%;
+            padding: 15px; /* Ajuster le padding */
+            position: relative;
         }
+
         .dossier-detail-close-btn {
-            font-size: 28px;
+            position: absolute;
+            top: 8px; /* Ajuster la position */
+            right: 12px;
+            color: #aaa;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
         }
+
+        .dossier-detail-close-btn:hover { color: #fff; }
+
         .dossier-detail-media-gallery {
-            max-height: 400px;
-            min-height: 200px;
-            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-height: 300px; /* Ajuster la hauteur maximale */
+            min-height: 150px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            position: relative;
+            background-color: #0d0d0d;
+            border: 2px dashed #444;
         }
+
+        .dossier-detail-media-item {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: none;
+            cursor: pointer;
+        }
+
+        .dossier-detail-media-item.active { display: block; }
+
         .dossier-detail-media-nav-btn {
-            padding: 8px 12px;
-            font-size: 1.8em;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.6);
+            border: none;
+            color: #fff;
+            padding: 6px 10px; /* Ajuster le padding */
+            cursor: pointer;
+            z-index: 10;
+            font-size: 1.5em;
+            border-radius: 5px;
         }
+
+        .dossier-detail-media-nav-btn.left { left: 8px; }
+
+        .dossier-detail-media-nav-btn.right { right: 8px; }
+
         .dossier-detail-title {
-            font-size: 2em;
-            margin-bottom: 10px;
+            color: #eee;
+            font-size: 1.6em; /* Ajuster la taille */
+            margin-bottom: 8px;
+            text-align: center;
         }
+
         .dossier-detail-author {
-            font-size: 0.9em;
+            font-size: 0.8em;
+            color: #999;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .dossier-detail-desc {
+            color: #ccc;
+            font-size: 1em;
+            line-height: 1.5;
             margin-bottom: 15px;
         }
-        .dossier-detail-desc {
-            font-size: 1.1em;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
+
+        /* Style for download button in lightbox */
         .download-media-btn {
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 15px;
-            font-size: 1em;
+            position: absolute;
+            bottom: 15px; /* Ajuster la position */
+            right: 15px;
+            background: rgba(0,0,0,0.7);
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 8px 12px; /* Ajuster le padding */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            z-index: 1001;
+            display: none;
+            font-family: 'Poppins', sans-serif;
         }
-    }
 
-    /* Pour les très grands écrans (largeur > 1200px), si nécessaire */
-    @media (min-width: 1200px) {
-        /* Vous pouvez ajouter des ajustements supplémentaires ici si vous souhaitez des styles très spécifiques pour les très grands écrans.
-        Par exemple, augmenter les max-width des conteneurs, ajuster les marges ou les tailles de police si le design le permet. */
-    }
+        .download-media-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
 
-</style>
+        /* Ensure lightbox elements are always hidden unless active */
+        .lightbox-prev, .lightbox-next { display: none; }
+
+        /* --- Media Queries pour les écrans plus grands (Tablettes et Ordinateurs) --- */
+        /* Pour les tablettes (largeur > 768px) */
+        @media (min-width: 768px) {
+            .digicode {
+                padding: 40px;
+                max-width: 450px;
+            }
+
+            .title {
+                font-size: 13px;
+                letter-spacing: 2px;
+                margin-bottom: 15px;
+            }
+
+            .agent-name-input {
+                padding: 12px 15px;
+                margin-bottom: 15px;
+                font-size: 20px;
+                letter-spacing: 2px;
+            }
+
+            .display-container {
+                padding: 15px 20px;
+            }
+
+            .display {
+                font-size: 26px;
+                letter-spacing: 8px;
+                min-height: 30px;
+            }
+
+            .agent-info-display {
+                padding: 10px 15px;
+                margin-top: 15px;
+                font-size: 14px;
+                letter-spacing: 1px;
+            }
+
+            .status-light {
+                top: 10px;
+                right: 10px;
+                width: 10px;
+                height: 10px;
+                box-shadow: 0 0 10px rgba(255, 69, 0, 0.8);
+            }
+
+            .keypad {
+                gap: 15px;
+                margin-bottom: 25px;
+            }
+
+            .key {
+                width: 65px;
+                height: 65px;
+                font-size: 22px;
+            }
+
+            .controls {
+                gap: 15px;
+            }
+
+            .btn {
+                padding: 12px 28px;
+                font-size: 13px;
+                letter-spacing: 1.5px;
+            }
+
+            .message {
+                font-size: 12px;
+            }
+
+            .vault-door {
+                width: 400px; /* Augmenter la taille sur tablette */
+                height: 400px;
+                border: 10px solid #3d3d3d;
+                box-shadow: 0 0 100px rgba(0, 0, 0, 0.9), inset 0 0 50px rgba(0, 0, 0, 0.6);
+            }
+
+            .vault-door::before {
+                border: 4px solid #4a4a4a;
+            }
+
+            .vault-door::after {
+                border: 3px solid #555;
+            }
+
+            .vault-door .center-handle {
+                width: 100px;
+                height: 100px;
+                border: 5px solid #666;
+                font-size: 40px;
+            }
+
+            .content h2 {
+                font-size: 2.8em;
+                margin-top: 50px;
+                margin-bottom: 40px;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 30px;
+                padding: 20px;
+            }
+
+            .card-image-container {
+                height: 180px;
+            }
+
+            .card-image-container.hidden-image::before {
+                font-size: 18px;
+            }
+
+            .card-content {
+                padding: 20px;
+            }
+
+            .card-title {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+
+            .card-author {
+                font-size: 0.8em;
+                margin-bottom: 10px;
+            }
+
+            .add-contact-author-btn {
+                font-size: 0.9em;
+                margin-left: 10px;
+            }
+
+            .card-desc {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+            .back-btn {
+                top: 30px;
+                left: 30px;
+                padding: 12px 20px;
+                font-size: 12px;
+                letter-spacing: 1px;
+            }
+
+            .add-folder-btn {
+                bottom: 30px;
+                right: 30px;
+                width: 60px;
+                height: 60px;
+                font-size: 36px;
+            }
+
+            .modal-content {
+                padding: 30px;
+                max-width: 500px;
+            }
+
+            .modal-content h3 {
+                margin-bottom: 20px;
+                font-size: 1.5em;
+            }
+
+            .modal-content input[type="text"],
+            .modal-content textarea,
+            .modal-content input[type="file"] {
+                margin-bottom: 15px;
+                font-size: 1em;
+            }
+
+            .modal-content .file-upload-wrapper {
+                margin-bottom: 15px;
+            }
+
+            .modal-content .file-upload-filename {
+                font-size: 0.8em;
+            }
+
+            .media-preview-container {
+                max-height: 150px;
+            }
+
+            .media-preview-item {
+                width: 80px;
+                height: 80px;
+            }
+
+            .media-preview-item.video-thumbnail::after {
+                font-size: 2em;
+            }
+
+            .media-preview-item .remove-media-btn {
+                width: 20px;
+                height: 20px;
+                font-size: 0.8em;
+            }
+
+            .modal-content button {
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            .close-button {
+                top: 10px;
+                right: 15px;
+                font-size: 28px;
+            }
+
+            .comments-section {
+                padding: 15px 20px;
+                margin-top: 15px;
+            }
+
+            .comments-section h4 {
+                margin-bottom: 10px;
+                font-size: 1.2em;
+            }
+
+            .comments-list {
+                max-height: 100px;
+                margin-bottom: 10px;
+            }
+
+            .comment {
+                padding: 10px;
+                margin-bottom: 8px;
+                font-size: 13px;
+            }
+
+            .comment-author {
+                margin-bottom: 5px;
+            }
+
+            .comment-meta {
+                font-size: 0.75em;
+                margin-top: -3px;
+                margin-bottom: 5px;
+            }
+
+            .comment-reply-info {
+                font-size: 0.8em;
+                margin-left: 10px;
+            }
+
+            .comment-actions {
+                gap: 10px;
+                margin-top: 5px;
+                font-size: 0.9em;
+            }
+
+            .comment-form {
+                margin-top: 15px;
+            }
+
+            .comment-form textarea {
+                min-height: 60px;
+                font-size: 1em;
+            }
+
+            .comment-form button {
+                padding: 8px 15px;
+                font-size: 16px;
+            }
+
+            .admin-controls {
+                top: 10px;
+                right: 10px;
+                gap: 5px;
+            }
+
+            .admin-controls.creator-only {
+                left: 10px;
+            }
+
+            .admin-controls button {
+                padding: 5px 8px;
+                font-size: 10px;
+            }
+
+            .dossier-actions {
+                padding: 10px 0;
+                margin-top: 15px;
+            }
+
+            .dossier-actions button {
+                font-size: 1.1em;
+                gap: 5px;
+            }
+
+            .notification-center {
+                top: 20px;
+                right: 20px;
+                padding: 15px;
+                max-height: 80vh;
+                width: 300px;
+            }
+
+            .notification-center h4 {
+                margin-bottom: 15px;
+                font-size: 1.2em;
+            }
+
+            .notification-item {
+                padding: 10px;
+                margin-bottom: 8px;
+                font-size: 0.9em;
+            }
+
+            .notification-timestamp {
+                font-size: 0.7em;
+            }
+
+            .notification-item .delete-notification-btn {
+                top: 5px;
+                right: 5px;
+                font-size: 0.8em;
+            }
+
+            .notification-actions {
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .notification-actions button {
+                padding: 5px 10px;
+                font-size: 0.8em;
+            }
+
+            .notification-bell-btn {
+                top: 30px;
+                right: 30px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.2em;
+            }
+
+            .notification-bell-btn .notification-count {
+                top: -5px;
+                right: -5px;
+                font-size: 0.7em;
+                padding: 2px 6px;
+            }
+
+            .messaging-toggle-btn {
+                top: 30px;
+                right: 85px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.2em;
+            }
+
+            .messaging-container {
+                grid-template-columns: 200px 1fr; /* Revenir à la disposition 2 colonnes */
+                flex-direction: row; /* Revenir à la direction de ligne */
+            }
+
+            .navbar-vertical {
+                border-right: 1px solid #2a2a2a;
+                border-bottom: none; /* Supprimer la bordure du bas */
+                padding: 15px;
+                max-height: none; /* Ne plus limiter la hauteur */
+            }
+
+            .navbar-vertical h4 {
+                margin-bottom: 20px;
+                font-size: 0.9em;
+            }
+
+            .navbar-vertical .button-group {
+                flex-direction: column; /* Revenir à la colonne */
+                gap: 5px;
+                margin-bottom: 15px;
+            }
+
+            .navbar-vertical button {
+                padding: 8px 10px;
+                font-size: 0.9em;
+            }
+
+            .navbar-vertical .contact-item {
+                padding: 10px;
+                margin-bottom: 8px;
+                font-size: 1em;
+            }
+
+            .navbar-vertical .contact-item .status-dot {
+                width: 8px;
+                height: 8px;
+            }
+
+            .navbar-vertical .contact-item .contact-actions-btns button {
+                padding: 4px 6px;
+                font-size: 0.8em;
+            }
+
+            .chat-area {
+                padding: 20px;
+            }
+
+            .chat-header {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+            }
+
+            .chat-messages {
+                padding: 10px;
+                margin-bottom: 15px;
+            }
+
+            .message-item {
+                padding: 10px;
+                margin-bottom: 10px;
+                max-width: 80%;
+                padding-right: 40px;
+                padding-left: 40px;
+            }
+
+            .message-sender {
+                font-size: 0.9em;
+                margin-bottom: 5px;
+            }
+
+            .message-text {
+                font-size: 1em;
+            }
+
+            .message-media img, .message-media video {
+                max-height: 200px;
+            }
+
+            .message-timestamp {
+                font-size: 0.7em;
+            }
+
+            .message-actions-overlay {
+                padding: 5px;
+                gap: 5px;
+            }
+
+            .message-actions-overlay button {
+                font-size: 1.2em;
+                padding: 5px;
+            }
+
+            .message-reactions {
+                gap: 5px;
+                margin-top: 5px;
+                font-size: 0.8em;
+            }
+
+            .message-reaction-item {
+                padding: 2px 6px;
+                gap: 3px;
+            }
+
+            .message-reaction-item span:first-child {
+                font-size: 1.2em;
+            }
+
+            .message-reaction-item span:last-child {
+                font-size: 0.9em;
+            }
+
+            .chat-input-area {
+                gap: 10px;
+            }
+
+            .chat-input-area .file-upload-btn {
+                padding: 10px 15px;
+            }
+
+            .chat-input-area textarea {
+                padding: 10px;
+                font-size: 1em;
+            }
+
+            .chat-input-area button {
+                padding: 10px 15px;
+                font-size: 1em;
+            }
+
+            .messaging-close-btn {
+                font-size: 2em;
+            }
+
+            .add-contact-modal .modal-content {
+                max-width: 350px;
+            }
+
+            .add-contact-modal input[type="text"] {
+                margin-bottom: 15px;
+            }
+
+            .transfer-modal .modal-content {
+                max-width: 400px;
+            }
+
+            .transfer-modal .contact-list-transfer {
+                max-height: 200px;
+                margin-bottom: 15px;
+                padding: 5px;
+            }
+
+            .transfer-modal .contact-item-transfer {
+                padding: 8px;
+                font-size: 1em;
+            }
+
+            .card-author .certified-label {
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-size: 0.7em;
+                margin-left: 5px;
+            }
+
+            .dossier-detail-content {
+                max-width: 800px;
+                padding: 20px;
+            }
+
+            .dossier-detail-close-btn {
+                font-size: 28px;
+            }
+
+            .dossier-detail-media-gallery {
+                max-height: 400px;
+                min-height: 200px;
+                margin-bottom: 20px;
+            }
+
+            .dossier-detail-media-nav-btn {
+                padding: 8px 12px;
+                font-size: 1.8em;
+            }
+
+            .dossier-detail-title {
+                font-size: 2em;
+                margin-bottom: 10px;
+            }
+
+            .dossier-detail-author {
+                font-size: 0.9em;
+                margin-bottom: 15px;
+            }
+
+            .dossier-detail-desc {
+                font-size: 1.1em;
+                line-height: 1.6;
+                margin-bottom: 20px;
+            }
+
+            .download-media-btn {
+                bottom: 20px;
+                right: 20px;
+                padding: 10px 15px;
+                font-size: 1em;
+            }
+        }
+
+        /* Pour les très grands écrans (largeur > 1200px), si nécessaire */
+        @media (min-width: 1200px) {
+            /* Vous pouvez ajouter des ajustements supplémentaires ici si vous souhaitez des styles très spécifiques pour les très grands écrans.
+            Par exemple, augmenter les max-width des conteneurs, ajuster les marges ou les tailles de police si le design le permet. */
+        }
+    </style>
 </head>
 <body>
     <div class="no-screenshot" id="noScreenshotOverlay"></div>
@@ -2243,9 +2415,9 @@
             <div class="header">
                 <div class="title" id="digicodeTitle">ENTREZ NOM D'AGENT</div>
                 <input type="text" id="agentNameInput" class="agent-name-input" placeholder="Saisissez votre nom d'agent" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-                
                 <div class="display-container">
-                    <div class="display" id="display">_ _ _ _ _ _ _ _</div> <div class="status-light" id="statusLight"></div>
+                    <div class="display" id="display">_ _ _ _ _ _ _ _</div>
+                    <div class="status-light" id="statusLight"></div>
                 </div>
             </div>
 
@@ -2268,9 +2440,9 @@
                 <button class="btn clear" id="clearBtn">Effacer</button>
                 <button class="btn enter" id="enterBtn">Valider</button>
             </div>
-            
+
             <div class="agent-info-display" id="loggedInAgentDisplay"></div>
-            
+
             <div class="message" id="message"></div>
         </div>
     </div>
@@ -2291,14 +2463,14 @@
 
         <h2 id="welcomeAgentMessage">BIENVENUE, AGENT.</h2>
         <div class="gallery" id="gallery">
-            </div>
+        </div>
         <button class="add-folder-btn" id="addFolderBtn">+</button>
 
         <div class="notification-center" id="notificationCenter">
             <button class="close-notifications-btn" id="closeNotificationsBtn">&times;</button>
             <h4>Centre de Notifications</h4>
             <div id="notificationList">
-                </div>
+            </div>
             <div class="notification-actions">
                 <button id="deleteAllNotificationsBtn">Supprimer tout</button>
             </div>
@@ -2309,14 +2481,15 @@
         <div class="modal-content">
             <span class="close-button" id="closeFolderModalBtn">&times;</span>
             <h3 id="folderModalTitle">Ajouter un Nouveau Dossier</h3>
-            <input type="hidden" id="folderId"> <input type="text" id="folderTitle" placeholder="Titre du dossier" required>
+            <input type="hidden" id="folderId">
+            <input type="text" id="folderTitle" placeholder="Titre du dossier" required>
             <div class="file-upload-wrapper">
                 <span><i class="fas fa-paperclip"></i> Sélectionner médias (images/vidéos)</span>
                 <input type="file" id="folderMediaUpload" accept="image/*,video/*" multiple>
                 <span class="file-upload-filename" id="folderMediaUploadFilename">Aucun fichier sélectionné</span>
             </div>
             <div id="mediaPreviewContainer" class="media-preview-container">
-                </div>
+            </div>
             <textarea id="folderDesc" placeholder="Description du dossier" rows="4" required></textarea>
             <button id="saveFolderBtn">Sauvegarder Dossier</button>
         </div>
@@ -2331,21 +2504,20 @@
         <button id="downloadMediaBtn" class="download-media-btn" title="Télécharger"><i class="fas fa-download"></i> Télécharger</button>
     </div>
 
-
     <div id="messagingContainer" class="messaging-container">
         <button class="messaging-close-btn" id="closeMessagingBtn">&times;</button>
         <div class="navbar-vertical">
             <h4>Contacts</h4>
             <div class="button-group">
                 <button id="addContactBtn"><i class="fas fa-user-plus"></i> Ajouter Contact</button>
-                </div>
+            </div>
             <div id="contactList">
-                </div>
+            </div>
         </div>
         <div class="chat-area" id="chatArea">
             <h3 class="chat-header" id="chatHeader">Sélectionnez un contact</h3>
             <div class="chat-messages" id="chatMessages">
-                </div>
+            </div>
             <div class="chat-input-area">
                 <button class="file-upload-btn" id="messageMediaUploadBtn">
                     <i class="fas fa-paperclip"></i>
@@ -2371,7 +2543,7 @@
             <span class="close-button" id="closeTransferModalBtn">&times;</span>
             <h3>Transférer le message à...</h3>
             <div id="transferContactList" class="contact-list-transfer">
-                </div>
+            </div>
             <button id="confirmTransferBtn">Transférer</button>
         </div>
     </div>
@@ -2380,7 +2552,7 @@
         <div class="dossier-detail-content">
             <span class="dossier-detail-close-btn" id="closeDossierDetailModalBtn">&times;</span>
             <div class="dossier-detail-media-gallery" id="dossierDetailMediaGallery">
-                </div>
+            </div>
             <h3 class="dossier-detail-title" id="dossierDetailTitle"></h3>
             <div class="dossier-detail-author" id="dossierDetailAuthor"></div>
             <p class="dossier-detail-desc" id="dossierDetailDesc"></p>
@@ -2395,7 +2567,6 @@
             </div>
         </div>
     </div>
-
 
     <audio id="keyClickSound" src="sounds/click.mp3" preload="auto"></audio>
     <audio id="codeEnterSound" src="sounds/chime.mp3" preload="auto"></audio>
@@ -2412,8 +2583,8 @@
         const SOCKET_IO_URL = 'http://localhost:3000';
 
         // Polling intervals (fallbacks for initial load or if WebSocket temporarily fails)
-        const MESSAGE_POLLING_INTERVAL = 3000; 
-        const NOTIFICATION_POLLING_INTERVAL = 10000; 
+        const MESSAGE_POLLING_INTERVAL = 3000;
+        const NOTIFICATION_POLLING_INTERVAL = 10000;
 
         // Volume des sons (0.0 à 1.0)
         const KEY_CLICK_VOLUME = 0.3;
@@ -2443,7 +2614,7 @@
         const folderIdInput = document.getElementById('folderId');
         const folderTitleInput = document.getElementById('folderTitle');
         // Media upload for posts
-        const folderMediaUploadInput = document.getElementById('folderMediaUpload'); 
+        const folderMediaUploadInput = document.getElementById('folderMediaUpload');
         const folderMediaUploadFilename = document.getElementById('folderMediaUploadFilename');
         const mediaPreviewContainer = document.getElementById('mediaPreviewContainer');
         const folderDescInput = document.getElementById('folderDesc');
@@ -2500,7 +2671,6 @@
         const dossierDetailCommentInput = document.getElementById('dossierDetailCommentInput');
         let currentDossierDetailId = null; // ID of the dossier currently open in detail view
 
-
         // Audio Elements
         const keyClickSound = document.getElementById('keyClickSound');
         const codeEnterSound = document.getElementById('codeEnterSound');
@@ -2519,11 +2689,9 @@
         let notificationsPollingInterval; // Pour le polling des notifications (fallback)
         let messagePollingInterval; // Pour le polling des messages privés (fallback)
         let activeChatContact = null; // Nom du contact de chat actuellement actif
-
         // Emojis pour les réactions aux messages
         const reactionEmojis = ['👍', '👎', '❤️', '😂', '😮', '😢', '😡'];
         let messageToTransfer = null; // Stocke l'objet message lorsqu'un bouton de transfert est cliqué
-
         // Instance client Socket.IO
         let socket;
 
@@ -2565,7 +2733,7 @@
         }
 
         async function deleteDossierOnServer(id, actionPerformer) {
-            return fetchAPI(`/dossiers/${id}`, { 
+            return fetchAPI(`/dossiers/${id}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ actionPerformer })
@@ -2595,7 +2763,7 @@
                 body: JSON.stringify({ text: commentText, author, parentId })
             });
         }
-        
+
         async function updateCommentOnServer(dossierId, commentId, newText, actionPerformer, noModifiedTag) {
             return fetchAPI(`/dossiers/${dossierId}/comments/${commentId}`, {
                 method: 'PUT',
@@ -2713,6 +2881,7 @@
                 noScreenshotOverlay.style.opacity = 0;
             }
         }
+
         function handleVisibilityChange() {
             if (document.hidden) {
                 noScreenshotOverlay.style.opacity = 1;
@@ -2720,15 +2889,18 @@
                 noScreenshotOverlay.style.opacity = 0;
             }
         }
+
         function handleBlur() {
             noScreenshotOverlay.style.opacity = 1;
         }
+
         function handleKeyUp(e) {
             if (e.key === "PrintScreen" || e.keyCode === 44) {
                 noScreenshotOverlay.style.opacity = 1;
                 setTimeout(() => noScreenshotOverlay.style.opacity = 0, 200);
             }
         }
+
         function handleKeyDown(e) {
             if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === '3' || e.key === '4')) {
                 noScreenshotOverlay.style.opacity = 1;
@@ -2740,12 +2912,16 @@
         document.querySelectorAll('.key').forEach(key => {
             key.addEventListener('click', function() {
                 if (isUnlocked || isAgentNamePhase) return;
-                keyClickSound.currentTime = 0; keyClickSound.play();
+                keyClickSound.currentTime = 0;
+                keyClickSound.play();
                 const keyValue = this.getAttribute('data-key');
-                this.style.transition = 'none'; this.style.transform = 'translateY(1px)';
+                this.style.transition = 'none';
+                this.style.transform = 'translateY(1px)';
                 setTimeout(() => { this.style.transition = 'all 0.2s ease-out'; this.style.transform = 'translateY(0)'; }, 50);
                 if (currentCodeInput.length < CORRECT_CODE_LENGTH) {
-                    currentCodeInput += keyValue; updateDisplayCode(); clearMessage();
+                    currentCodeInput += keyValue;
+                    updateDisplayCode();
+                    clearMessage();
                 }
             });
         });
@@ -2754,7 +2930,7 @@
         agentNameInput.addEventListener('input', () => {
             clearTimeout(agentNameTimeout);
             clearMessage();
-            
+
             if (agentNameInput.value.trim() === '') {
                 digicodeTitle.textContent = 'ENTREZ NOM D\'AGENT';
                 loggedInAgentDisplay.classList.remove('show');
@@ -2762,22 +2938,28 @@
                 return;
             }
 
-            // Trigger validation on mobile devices when input changes
+            // Trigger validation on mobile devices (e.g., small screens) or after a delay on desktop
             if (window.innerWidth <= 768) { // Assuming mobile for screens <= 768px
                 checkAgentNameAuto();
             } else {
                 agentNameTimeout = setTimeout(checkAgentNameAuto, AUTO_VALIDATE_DELAY);
             }
         });
-        
+
         document.getElementById('clearBtn').addEventListener('click', function() {
-            if (isUnlocked) return; clearMessage(); statusLight.classList.remove('success');
-            statusLight.style.background = '#ff4500'; statusLight.style.boxShadow = '0 0 10px rgba(255, 69, 0, 0.8)';
+            if (isUnlocked) return;
+            clearMessage();
+            statusLight.classList.remove('success');
+            statusLight.style.background = '#ff4500';
+            statusLight.style.boxShadow = '0 0 10px rgba(255, 69, 0, 0.8)';
             if (isAgentNamePhase) {
-                agentNameInput.value = ''; digicodeTitle.textContent = 'ENTREZ NOM D\'AGENT';
-                loggedInAgentDisplay.classList.remove('show'); loggedInAgentDisplay.textContent = '';
+                agentNameInput.value = '';
+                digicodeTitle.textContent = 'ENTREZ NOM D\'AGENT';
+                loggedInAgentDisplay.classList.remove('show');
+                loggedInAgentDisplay.textContent = '';
             } else {
-                currentCodeInput = ''; updateDisplayCode();
+                currentCodeInput = '';
+                updateDisplayCode();
             }
         });
 
@@ -2785,8 +2967,10 @@
             if (isUnlocked) return;
             if (isAgentNamePhase) {
                 // Now, explicit click on "Valider" will force validation on mobile too
-                checkAgentNameAuto(); 
-            } else { validateCode(); }
+                checkAgentNameAuto();
+            } else {
+                validateCode();
+            }
         });
 
         // "Déconnexion" button
@@ -2808,7 +2992,7 @@
 
         folderMediaUploadInput.addEventListener('change', (event) => {
             // Clear previous selection visually and from array for *new* uploads
-            mediaPreviewContainer.innerHTML = ''; 
+            mediaPreviewContainer.innerHTML = '';
             uploadedMediaFiles.length = 0;
 
             if (event.target.files.length > 0) {
@@ -2819,8 +3003,8 @@
                         const previewItem = document.createElement(file.type.startsWith('video/') ? 'video' : 'img');
                         previewItem.src = e.target.result;
                         previewItem.className = 'media-preview-item' + (file.type.startsWith('video/') ? ' video-thumbnail' : '');
-                        if (file.type.startsWith('video/')) previewItem.setAttribute('controls', ''); 
-                        
+                        if (file.type.startsWith('video/')) previewItem.setAttribute('controls', '');
+
                         const removeBtn = document.createElement('button');
                         removeBtn.className = 'remove-media-btn';
                         removeBtn.innerHTML = '&times;';
@@ -2850,14 +3034,13 @@
             }
         });
 
-
         saveFolderBtn.addEventListener('click', async () => {
             const id = folderIdInput.value;
             const title = folderTitleInput.value.trim();
             const desc = folderDescInput.value.trim();
 
             if (!title || !desc) { alert('Veuillez remplir le titre et la description.'); return; }
-            
+
             // Allow post creation without media, but not empty post
             if (!id && uploadedMediaFiles.length === 0 && !title && !desc) {
                 alert('Veuillez ajouter du texte ou sélectionner des médias pour le nouveau dossier.');
@@ -2869,7 +3052,6 @@
             formData.append('title', title);
             formData.append('desc', desc);
             formData.append('author', currentAgentName); // Author is always currentAgentName
-            
             formData.append('isHidden', 'false'); // New posts are always visible by default
             formData.append('imageHidden', 'false'); // Initial value for new posts
 
@@ -2879,7 +3061,7 @@
                 if (existingDossier) {
                     formData.set('isHidden', existingDossier.isHidden ? 'true' : 'false');
                     formData.set('imageHidden', existingDossier.imageHidden ? 'true' : 'false');
-                    
+
                     // Collect URLs of media items that are still in the preview container
                     const retainedMediaElements = Array.from(mediaPreviewContainer.querySelectorAll('.media-preview-wrapper[data-original-url]'));
                     const retainedMediaUrls = retainedMediaElements.map(item => item.dataset.originalUrl);
@@ -2891,7 +3073,6 @@
             uploadedMediaFiles.forEach((file, index) => {
                 formData.append(`media`, file); // Append each file with the name 'media'
             });
-
 
             try {
                 const savedDossier = await saveDossier(formData);
@@ -2930,7 +3111,7 @@
                 }
             }
         }
-        
+
         function addMediaPreview(url, type, isExisting = false, file = null) {
             const previewItem = document.createElement(type === 'video' ? 'video' : 'img');
             previewItem.src = url;
@@ -2938,7 +3119,7 @@
             if (type === 'video') {
                 previewItem.setAttribute('preload', 'metadata'); // Load metadata for video duration/thumbnail
             }
-            
+
             const removeBtn = document.createElement('button');
             removeBtn.className = 'remove-media-btn';
             removeBtn.innerHTML = '&times;';
@@ -2993,7 +3174,7 @@
                 showMessage(`Nom d'agent validé. Veuillez entrer le code.`, 'success');
                 isAgentNamePhase = false;
 
-                agentNameInput.style.display = 'none'; 
+                agentNameInput.style.display = 'none';
                 display.style.opacity = 1;
 
                 keypad.classList.add('active');
@@ -3037,13 +3218,14 @@
                 }, 1200);
             }
         }
-        
+
         async function unlock() {
             isUnlocked = true;
             statusLight.classList.add('success');
             showMessage(`Accès autorisé - Bienvenue, Agent ${currentAgentName}.`, 'success');
-            codeEnterSound.currentTime = 0; codeEnterSound.play();
-            
+            codeEnterSound.currentTime = 0;
+            codeEnterSound.play();
+
             toggleScreenshotProtection(true);
             welcomeAgentMessage.textContent = `BIENVENUE, AGENT ${currentAgentName.toUpperCase()}.`;
 
@@ -3051,13 +3233,13 @@
             localStorage.setItem('loggedInAgentName', currentAgentName);
 
             digicode.classList.add('hide');
-            
+
             // Ensure lightbox is hidden before vault opens
-            closeLightbox(); 
+            closeLightbox();
 
             setTimeout(() => {
                 vaultOverlay.style.display = 'flex';
-                vaultOverlay.classList.add('activating'); 
+                vaultOverlay.classList.add('activating');
                 setTimeout(() => {
                     vaultOverlay.classList.add('show');
 
@@ -3068,10 +3250,10 @@
                             content.style.display = 'flex';
                             await loadDossiers();
                             addFolderBtn.style.display = 'flex'; // All users can create dossiers
-                            
+
                             notificationBellBtn.style.display = 'flex';
                             messagingToggleBtn.style.display = 'flex'; // Show messaging button
-                            
+
                             // Initialize Socket.IO connection
                             socket = io(SOCKET_IO_URL);
                             socket.on('connect', () => {
@@ -3087,12 +3269,11 @@
                                 showMessage('Erreur de connexion en temps réel.', 'error');
                             });
 
-
                             // Real-time event listeners setup
                             setupSocketListeners();
                             startNotificationPolling(); // Start polling notifications as a sync mechanism
                             loadNotifications(); // Initial load of notifications after login
-                            
+
                             setTimeout(() => {
                                 content.classList.add('show');
                                 vaultOverlay.style.display = 'none';
@@ -3104,16 +3285,25 @@
         }
 
         function resetSystem() {
-            isUnlocked = false; isAgentNamePhase = true; currentCodeInput = ''; currentAgentName = '';
-            clearMessage(); statusLight.classList.remove('success');
-            
-            keypad.classList.remove('active'); controls.classList.remove('active');
+            isUnlocked = false;
+            isAgentNamePhase = true;
+            currentCodeInput = '';
+            currentAgentName = '';
+            clearMessage();
+            statusLight.classList.remove('success');
 
-            agentNameInput.value = ''; agentNameInput.style.display = 'block'; agentNameInput.focus();
-            
-            display.style.opacity = 0; digicodeTitle.textContent = 'ENTREZ NOM D\'AGENT';
+            keypad.classList.remove('active');
+            controls.classList.remove('active');
 
-            loggedInAgentDisplay.classList.remove('show'); loggedInAgentDisplay.textContent = '';
+            agentNameInput.value = '';
+            agentNameInput.style.display = 'block';
+            agentNameInput.focus();
+
+            display.style.opacity = 0;
+            digicodeTitle.textContent = 'ENTREZ NOM D\'AGENT';
+
+            loggedInAgentDisplay.classList.remove('show');
+            loggedInAgentDisplay.textContent = '';
 
             content.classList.remove('show');
             addFolderBtn.style.display = 'none';
@@ -3123,7 +3313,7 @@
             clearInterval(notificationsPollingInterval);
             notificationCount.textContent = '0';
             notificationCount.classList.remove('show');
-            
+
             messagingContainer.classList.remove('show');
             clearInterval(messagePollingInterval);
             activeChatContact = null;
@@ -3138,10 +3328,13 @@
             closeLightbox();
 
             setTimeout(() => {
-                vaultDoor.classList.remove('open'); vaultOverlay.classList.remove('show'); vaultOverlay.classList.remove('activating');
+                vaultDoor.classList.remove('open');
+                vaultOverlay.classList.remove('show');
+                vaultOverlay.classList.remove('activating');
                 setTimeout(() => {
-                    vaultOverlay.style.display = 'none'; digicode.classList.remove('hide');
-                    toggleScreenshotProtection(false); 
+                    vaultOverlay.style.display = 'none';
+                    digicode.classList.remove('hide');
+                    toggleScreenshotProtection(false);
                 }, 500);
             }, 800);
         }
@@ -3150,6 +3343,7 @@
             message.textContent = text;
             message.className = `message ${type}`;
         }
+
         function clearMessage() {
             message.textContent = '';
             message.className = 'message';
@@ -3164,10 +3358,9 @@
                 console.log('Real-time: Nouveau dossier reçu', dossier);
                 const existingCard = document.querySelector(`.card[data-id="${dossier.id}"]`);
                 if (existingCard) return; // Avoid duplicates
-                
                 window.DossierCache.unshift(dossier);
                 window.DossierCache.sort((a, b) => b.id - a.id);
-                loadDossiers(); 
+                loadDossiers();
                 showMessage(`Nouveau dossier de ${dossier.author}: "${dossier.title}"`, 'info');
             });
 
@@ -3176,7 +3369,7 @@
                 const index = window.DossierCache.findIndex(d => d.id === updatedDossier.id);
                 if (index !== -1) {
                     window.DossierCache[index] = updatedDossier;
-                    loadDossiers(); 
+                    loadDossiers();
                 }
                 // If the updated dossier is open in the detail modal, update its content
                 if (dossierDetailModal.classList.contains('show') && currentDossierDetailId === updatedDossier.id) {
@@ -3307,7 +3500,7 @@
                         i++;
                     }
                     dossier.comments = dossier.comments.filter(c => !commentsToDelete.includes(c.id));
-                    
+
                     // Update comments in the main gallery card
                     const commentsListElement = document.querySelector(`.card[data-id="${data.dossierId}"] .comments-list`);
                     if (commentsListElement) {
@@ -3365,7 +3558,7 @@
                 loadNotifications(); // Reload to refresh list and count
                 showMessage('Nouvelle notification !', 'info');
             });
-            
+
             socket.on('delete_notification_client', (data) => {
                 console.log('Real-time: Notification supprimée côté client', data.notificationId);
                 const removedItem = document.querySelector(`.notification-item[data-id="${data.notificationId}"]`);
@@ -3408,7 +3601,7 @@
                     loadNotifications(); // Clear contact request notification
                 }
             });
-            
+
             socket.on('contact_declined_event', (contact) => {
                 console.log('Real-time: Contact décliné', contact);
                 if (contact.agent1 === currentAgentName || contact.agent2 === currentAgentName) {
@@ -3424,7 +3617,7 @@
                 let recipient = data.recipient || null;
 
                 const isRelevantToCurrentUser = (sender === currentAgentName) || (recipient === currentAgentName);
-                
+
                 if (isRelevantToCurrentUser && (activeChatContact === sender || activeChatContact === recipient)) {
                     loadMessages(activeChatContact); // Reload messages to ensure order and context
                 }
@@ -3436,7 +3629,7 @@
                 // Only update if this reaction is for the currently active chat
                 if (activeChatContact && (data.conversationParticipants.includes(currentAgentName)) &&
                     (activeChatContact === data.conversationParticipants[0] || activeChatContact === data.conversationParticipants[1])) {
-                    
+
                     const messageElement = document.querySelector(`.message-item[data-message-id="${data.messageId}"]`);
                     if (messageElement) {
                         const reactionsContainer = messageElement.querySelector('.message-reactions');
@@ -3462,7 +3655,6 @@
             });
         }
 
-
         // --- Dossier (Article) & Comment Management ---
         window.DossierCache = []; // Global cache for dossiers, needed for permission checks
 
@@ -3472,8 +3664,7 @@
                 const dossiers = await fetchDossiers();
                 window.DossierCache = dossiers;
 
-                dossiers.sort((a, b) => b.id - a.id); 
-
+                dossiers.sort((a, b) => b.id - a.id);
                 dossiers.forEach(dossier => renderDossier(dossier));
             } catch (error) {
                 console.error("Erreur lors du chargement des dossiers:", error);
@@ -3485,7 +3676,7 @@
             const card = document.createElement('div');
             card.className = 'card';
             card.dataset.id = dossier.id;
-            
+
             const isAssaneDiop = currentAgentName === ASSANE_DIOP_NAME;
             const isAuthor = currentAgentName === dossier.author;
 
@@ -3499,7 +3690,7 @@
             let mediaHtml = '';
             if (dossier.media && dossier.media.length > 0) {
                 const isMediaHiddenForUser = dossier.imageHidden && !isAssaneDiop;
-                
+
                 if (isMediaHiddenForUser) {
                     mediaHtml = '<div class="card-image-container hidden-image"></div>';
                 } else {
@@ -3511,34 +3702,34 @@
                     } else if (firstMedia.type === 'video') {
                         mediaTag = `<video src="${mediaUrl}" class="card-image-item video" preload="metadata"></video>`;
                     }
-                    
+
                     mediaHtml = `
                         <div class="card-image-container" data-dossier-id="${dossier.id}">
                             ${mediaTag}
                             ${dossier.media.length > 1 ? '<span class="media-count-badge">+' + (dossier.media.length - 1) + '</span>' : ''}
-                        </div>`; 
+                        </div>`;
                 }
             } else {
                 mediaHtml = '<div class="card-image-container"><i class="fas fa-file-alt" style="font-size: 3em; color: #666;"></i></div>';
             }
-            
+
             const displayAuthor = dossier.author === ASSANE_DIOP_NAME ? AGENCY_NAME : dossier.author;
             const certifiedIcon = dossier.author === ASSANE_DIOP_NAME ? `<i class="fas fa-check-circle certification-icon"></i>` : '';
             const certifiedLabel = dossier.author === ASSANE_DIOP_NAME ? `<span class="certified-label">L'Agence</span>` : '';
 
             const authorLabel = `<span class="card-author">${displayAuthor} ${certifiedIcon} ${certifiedLabel}</span>`;
-            
+
             let addContactButtonHtml = '';
             if (currentAgentName && currentAgentName !== dossier.author && dossier.author !== ASSANE_DIOP_NAME) {
-                const isAlreadyContact = window.ContactCache.some(c => 
-                    c.status === 'accepted' && 
-                    ((c.agent1 === currentAgentName && c.agent2 === dossier.author) || 
-                     (c.agent1 === dossier.author && c.agent2 === currentAgentName))
+                const isAlreadyContact = window.ContactCache.some(c =>
+                    c.status === 'accepted' &&
+                    ((c.agent1 === currentAgentName && c.agent2 === dossier.author) ||
+                        (c.agent1 === dossier.author && c.agent2 === currentAgentName))
                 );
-                const hasPendingRequest = window.ContactCache.some(c => 
-                    c.status === 'pending' && 
-                    ((c.agent1 === currentAgentName && c.agent2 === dossier.author) || 
-                     (c.agent1 === dossier.author && c.agent2 === currentAgentName))
+                const hasPendingRequest = window.ContactCache.some(c =>
+                    c.status === 'pending' &&
+                    ((c.agent1 === currentAgentName && c.agent2 === dossier.author) ||
+                        (c.agent1 === dossier.author && c.agent2 === currentAgentName))
                 );
 
                 if (!isAlreadyContact && !hasPendingRequest) {
@@ -3547,7 +3738,6 @@
                     addContactButtonHtml = `<span style="font-size:0.8em;color:#888;margin-left:10px;">Demande en attente</span>`;
                 }
             }
-
 
             card.innerHTML = `
                 ${mediaHtml}
@@ -3600,7 +3790,6 @@
             dossierDetailCommentsList.innerHTML = '';
             dossierDetailCommentInput.value = '';
             dossierDetailCommentInput.removeAttribute('data-reply-to-id');
-
 
             // Render all media in the detail gallery
             if (dossier.media && dossier.media.length > 0) {
@@ -3715,7 +3904,7 @@
             // Re-attach listeners for admin controls in detail modal
             const detailAdminControls = dossierDetailModal.querySelector('.dossier-detail-content .admin-controls');
             if (detailAdminControls) {
-                 detailAdminControls.addEventListener('click', async (e) => {
+                detailAdminControls.addEventListener('click', async (e) => {
                     const btn = e.target.closest('button');
                     if (!btn) return;
                     const action = btn.dataset.action;
@@ -3786,128 +3975,12 @@
             mediaItems.forEach((item, idx) => {
                 item.classList.toggle('active', idx === index);
                 if (item.tagName === 'VIDEO') {
-                    if (idx === index) item.play(); else item.pause();
+                    if (idx === index) item.play();
+                    else item.pause();
                 }
             });
         }
         closeDossierDetailModalBtn.addEventListener('click', closeDossierDetailModal);
-
-
-        // --- Dossier (Article) & Comment Management ---
-        window.DossierCache = []; // Global cache for dossiers, needed for permission checks
-
-        async function loadDossiers() {
-            gallery.innerHTML = '';
-            try {
-                const dossiers = await fetchDossiers();
-                window.DossierCache = dossiers;
-
-                dossiers.sort((a, b) => b.id - a.id); 
-
-                dossiers.forEach(dossier => renderDossier(dossier));
-            } catch (error) {
-                console.error("Erreur lors du chargement des dossiers:", error);
-                showMessage(`Impossible de charger les dossiers: ${error.message}`, 'error');
-            }
-        }
-
-        function renderDossier(dossier) {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.dataset.id = dossier.id;
-            
-            const isAssaneDiop = currentAgentName === ASSANE_DIOP_NAME;
-            const isAuthor = currentAgentName === dossier.author;
-
-            if (dossier.isHidden && !isAssaneDiop) {
-                card.style.display = 'none';
-            } else {
-                card.style.display = '';
-            }
-
-            // Media display logic (multiple images/videos) for GALLERY PREVIEW
-            let mediaHtml = '';
-            if (dossier.media && dossier.media.length > 0) {
-                const isMediaHiddenForUser = dossier.imageHidden && !isAssaneDiop;
-                
-                if (isMediaHiddenForUser) {
-                    mediaHtml = '<div class="card-image-container hidden-image"></div>';
-                } else {
-                    const firstMedia = dossier.media[0]; // Display only the first media in gallery preview
-                    const mediaUrl = firstMedia.url ? `${window.location.origin}${firstMedia.url}` : '';
-                    let mediaTag = '';
-                    if (firstMedia.type === 'image') {
-                        mediaTag = `<img src="${mediaUrl}" alt="${dossier.title}" class="card-image-item">`;
-                    } else if (firstMedia.type === 'video') {
-                        mediaTag = `<video src="${mediaUrl}" class="card-image-item video" preload="metadata"></video>`;
-                    }
-                    
-                    mediaHtml = `
-                        <div class="card-image-container" data-dossier-id="${dossier.id}">
-                            ${mediaTag}
-                            ${dossier.media.length > 1 ? '<span class="media-count-badge">+' + (dossier.media.length - 1) + '</span>' : ''}
-                        </div>`; 
-                }
-            } else {
-                mediaHtml = '<div class="card-image-container"><i class="fas fa-file-alt" style="font-size: 3em; color: #666;"></i></div>';
-            }
-            
-            const displayAuthor = dossier.author === ASSANE_DIOP_NAME ? AGENCY_NAME : dossier.author;
-            const certifiedIcon = dossier.author === ASSANE_DIOP_NAME ? `<i class="fas fa-check-circle certification-icon"></i>` : '';
-            const certifiedLabel = dossier.author === ASSANE_DIOP_NAME ? `<span class="certified-label">L'Agence</span>` : '';
-
-            const authorLabel = `<span class="card-author">${displayAuthor} ${certifiedIcon} ${certifiedLabel}</span>`;
-            
-            let addContactButtonHtml = '';
-            if (currentAgentName && currentAgentName !== dossier.author && dossier.author !== ASSANE_DIOP_NAME) {
-                const isAlreadyContact = window.ContactCache.some(c => 
-                    c.status === 'accepted' && 
-                    ((c.agent1 === currentAgentName && c.agent2 === dossier.author) || 
-                     (c.agent1 === dossier.author && c.agent2 === currentAgentName))
-                );
-                const hasPendingRequest = window.ContactCache.some(c => 
-                    c.status === 'pending' && 
-                    ((c.agent1 === currentAgentName && c.agent2 === dossier.author) || 
-                     (c.agent1 === dossier.author && c.agent2 === currentAgentName))
-                );
-
-                if (!isAlreadyContact && !hasPendingRequest) {
-                    addContactButtonHtml = `<button class="add-contact-author-btn" data-target-agent="${dossier.author}" title="Ajouter comme contact"><i class="fas fa-user-plus"></i></button>`;
-                } else if (hasPendingRequest) {
-                    addContactButtonHtml = `<span style="font-size:0.8em;color:#888;margin-left:10px;">Demande en attente</span>`;
-                }
-            }
-
-
-            card.innerHTML = `
-                ${mediaHtml}
-                <div class="card-content">
-                    <div class="card-title">${dossier.title}</div>
-                    ${authorLabel} ${addContactButtonHtml}
-                    <div class="card-desc">${dossier.desc}</div>
-                </div>
-            `;
-            // Admin controls are only in detail view. Likes/dislikes/reposts/comments are only in detail view.
-
-            gallery.prepend(card);
-
-            // Make the entire card clickable to open detail view
-            card.addEventListener('click', () => {
-                openDossierDetailModal(dossier.id);
-            });
-
-            // Add contact button listener on author name if applicable
-            const addContactAuthorBtn = card.querySelector('.add-contact-author-btn');
-            if (addContactAuthorBtn) {
-                addContactAuthorBtn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // Prevent opening detail modal
-                    const targetAgent = e.target.closest('button').dataset.targetAgent;
-                    if (targetAgent) {
-                        openAddContactModal(targetAgent);
-                    }
-                });
-            }
-        }
 
         // Recursive function to render comments and their replies
         function renderCommentsRecursive(parentContainer, comments, allComments, dossierId, isAssaneDiop, depth = 0) {
@@ -3919,14 +3992,13 @@
                 commentDiv.dataset.commentId = comment.id;
                 commentDiv.style.marginLeft = `${depth * 20}px`;
 
-                const replyInfo = comment.parentId ? 
+                const replyInfo = comment.parentId ?
                     `<span class="comment-reply-info">en réponse à un commentaire</span>` : '';
 
                 const likedByCurrentUser = comment.likes && comment.likes.includes(currentAgentName);
                 const isCommentAuthor = currentAgentName === comment.author;
 
                 const modifiedTag = comment.modified && !(isAssaneDiop && comment.author !== ASSANE_DIOP_NAME) ? '<span class="modified-tag">(modifié)</span>' : ''; // Show (modifié) unless Assane Diop edited someone else's post
-
                 const displayCommentAuthor = comment.author === ASSANE_DIOP_NAME ? AGENCY_NAME : comment.author;
                 const commentAuthorCertifiedIcon = comment.author === ASSANE_DIOP_NAME ? `<i class="fas fa-check-circle certification-icon"></i>` : '';
 
@@ -3943,7 +4015,7 @@
                         <button class="reply-btn" data-action="reply-comment">Répondre</button>
                         ${(isCommentAuthor && !isAssaneDiop) || isAssaneDiop ? // Show edit/delete if author or Assane Diop
                             `<button class="edit-btn" data-action="edit-comment">Modifier</button>
-                             <button class="delete-btn" data-action="delete-comment">Supprimer</button>` 
+                             <button class="delete-btn" data-action="delete-comment">Supprimer</button>`
                             : ''
                         }
                     </div>
@@ -3974,7 +4046,7 @@
                         showMessage(`Prêt à répondre à ${comment.author}`, 'info');
                     });
                 }
-                
+
                 // Edit/Delete comment buttons
                 const editCommentBtn = commentDiv.querySelector('.edit-btn');
                 if (editCommentBtn) {
@@ -4046,16 +4118,16 @@
                     return;
                 }
                 const notifications = await fetchNotifications(currentAgentName);
-                
+
                 if (notifications.length === 0) {
                     notificationList.innerHTML = '<div class="notification-item">Aucune notification.</div>';
                     return;
                 }
-                
+
                 let unreadCount = 0;
                 notifications.forEach(n => {
                     const isRead = n.readBy && n.readBy.includes(currentAgentName); // Check if read for this agent
-                    if (!isRead) { 
+                    if (!isRead) {
                         unreadCount++;
                     }
                     const notificationItem = document.createElement('div');
@@ -4073,7 +4145,7 @@
                         markNotificationAsReadOnServer(n.id, currentAgentName).catch(console.error);
                     }
                 });
-                
+
                 notificationCount.textContent = unreadCount;
                 if (unreadCount > 0) {
                     notificationCount.classList.add('show');
@@ -4104,7 +4176,7 @@
                 clearInterval(notificationsPollingInterval);
             }
             // Poll for notifications periodically as a fallback/sync mechanism
-            notificationsPollingInterval = setInterval(loadNotifications, NOTIFICATION_POLLING_INTERVAL); 
+            notificationsPollingInterval = setInterval(loadNotifications, NOTIFICATION_POLLING_INTERVAL);
         }
 
         // --- Private Messaging Logic ---
@@ -4120,7 +4192,6 @@
                 clearInterval(messagePollingInterval);
             }
         });
-
 
         closeMessagingBtn.addEventListener('click', () => {
             messagingContainer.classList.remove('show');
@@ -4159,8 +4230,8 @@
                 addContactModal.style.display = 'none';
                 await loadContacts(); // Refresh contact list
             } catch (error) {
-            console.error("Erreur envoi demande contact:", error);
-            alert(`Erreur: ${error.message}`);
+                console.error("Erreur envoi demande contact:", error);
+                alert(`Erreur: ${error.message}`);
             }
         });
 
@@ -4171,7 +4242,7 @@
             try {
                 const contacts = await fetchContacts(currentAgentName);
                 window.ContactCache = contacts; // Update cache
-                
+
                 contacts.forEach(contact => {
                     const otherAgent = contact.agent1 === currentAgentName ? contact.agent2 : contact.agent1;
                     const contactItem = document.createElement('div');
@@ -4202,7 +4273,7 @@
                     }
 
                     contactItem.innerHTML = `<span class="contact-name">${otherAgent}</span> <span class="${statusDotClass}"></span> ${statusText} ${actionButtonsHtml}`;
-                    
+
                     // Add event listeners for accept/decline buttons if applicable
                     if (contact.status === 'pending' && contact.initiator !== currentAgentName) {
                         contactItem.querySelector('.accept-request-btn').addEventListener('click', async (e) => {
@@ -4228,7 +4299,7 @@
                             }
                         });
                     }
-                    
+
                     contactItem.addEventListener('click', () => {
                         if (contact.status === 'accepted') {
                             selectContact(otherAgent);
@@ -4279,7 +4350,6 @@
             const messageItem = document.createElement('div');
             messageItem.className = 'message-item ' + (message.sender === currentAgentName ? 'sent' : 'received');
             messageItem.dataset.messageId = message.id; // Store message ID for reactions
-
             const reactionsMap = new Map(); // Map to group reactions: emoji -> [agent1, agent2, ...]
             (message.reactions || []).forEach(r => {
                 if (!reactionsMap.has(r.emoji)) {
@@ -4288,7 +4358,7 @@
                 reactionsMap.get(r.emoji).push(r.agent);
             });
 
-            const reactionsHtml = Array.from(reactionsMap.entries()).map(([emoji, agents]) => 
+            const reactionsHtml = Array.from(reactionsMap.entries()).map(([emoji, agents]) =>
                 `<span class="message-reaction-item" title="${agents.join(', ')}"><span>${emoji}</span><span>${agents.length}</span></span>`
             ).join('');
 
@@ -4354,7 +4424,7 @@
                 openTransferModal();
             });
         }
-        
+
         messageInput.addEventListener('keypress', async (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault(); // Empêche le retour à la ligne
@@ -4387,7 +4457,6 @@
             const mediaFile = messageMediaUploadInput.files[0] || null;
 
             if (!text && !mediaFile) return; // Rien à envoyer
-
             if (!activeChatContact) {
                 showMessage("Veuillez sélectionner un contact pour envoyer un message.", "info");
                 return;
@@ -4419,17 +4488,18 @@
 
         // Transfer Message Modal Logic
         window.ContactCache = [];
+
         function openTransferModal() {
             transferMessageModal.style.display = 'flex';
             transferContactList.innerHTML = '';
-            
+
             // Popule les contacts pour le transfert
-            const contactsForTransfer = window.ContactCache.filter(c => 
-                c.status === 'accepted' && 
+            const contactsForTransfer = window.ContactCache.filter(c =>
+                c.status === 'accepted' &&
                 (c.agent1 === currentAgentName || c.agent2 === currentAgentName) &&
                 (c.agent1 !== activeChatContact && c.agent2 !== activeChatContact) // Exclut le partenaire de chat actuel
             );
-            
+
             if (contactsForTransfer.length === 0) {
                 transferContactList.innerHTML = '<div style="padding: 10px; color: #777;">Aucun contact disponible pour le transfert.</div>';
                 confirmTransferBtn.disabled = true;
@@ -4450,7 +4520,7 @@
                 transferContactList.appendChild(contactItem);
             });
         }
-        
+
         confirmTransferBtn.addEventListener('click', async () => {
             const selectedContactItem = transferContactList.querySelector('.contact-item-transfer.active');
             if (!selectedContactItem || !messageToTransfer) {
@@ -4468,12 +4538,12 @@
                     // Create a File object from the blob, using the original filename and type
                     const originalFileName = messageToTransfer.media.url.substring(messageToTransfer.media.url.lastIndexOf('/') + 1);
                     mediaFileToSend = new File([blob], originalFileName, { type: messageToTransfer.media.type });
-                    
+
                     textToSend = `(Transféré de ${messageToTransfer.sender}${messageToTransfer.media.type === 'image' ? ' - Image' : ' - Vidéo'}): ${textToSend || ''}`;
                 } else {
                     textToSend = `(Transféré de ${messageToTransfer.sender}): ${messageToTransfer.text}`;
                 }
-                
+
                 await sendMessage(currentAgentName, recipient, textToSend, mediaFileToSend, messageToTransfer.id);
                 transferMessageModal.style.display = 'none';
                 messageToTransfer = null;
@@ -4556,7 +4626,6 @@
             }
         });
 
-
         // --- Initial Load and Session Management ---
         async function initialLoad() {
             const storedAgentName = localStorage.getItem('loggedInAgentName');
@@ -4567,9 +4636,9 @@
                 loggedInAgentDisplay.classList.add('show');
                 digicodeTitle.textContent = 'ENTREZ CODE D\'ACCÈS';
                 agentNameInput.style.display = 'none';
-                
+
                 lightbox.style.display = 'none'; // Ensure lightbox is hidden
-                
+
                 display.style.opacity = 1;
                 keypad.classList.add('active');
                 controls.classList.add('active');
@@ -4581,7 +4650,6 @@
 
         // Call initialLoad on page load
         document.addEventListener('DOMContentLoaded', initialLoad);
-
     </script>
 </body>
 </html>
