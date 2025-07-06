@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Norican&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Norican&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>l'Agence - Garanted</title>
+    <title>Digicode Sécurisé - Arsène Lupin</title>
     <style>
         /* Styles Généraux */
         * {
@@ -606,51 +606,67 @@
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
         }
 
-        .card-image {
+        .card-image-container { /* Container for multiple media items */
             width: 100%;
             height: 180px;
             background-color: #0d0d0d;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 48px;
-            color: #666;
             border-bottom: 1px solid #222;
             overflow: hidden;
-            /* NOUVEAU: Contour en tirets */
-            border: 2px dashed #444; /* Contour de base */
-            padding: 5px; /* Pour que le tiret ne soit pas collé au bord */
-        }
-        /* Style pour les images cachées */
-        .card-image.hidden-image {
-            filter: grayscale(100%) brightness(50%) blur(5px) !important;
-            opacity: 0.5; /* Rend l'image cachée plus subtile */
-            content: 'ACCÈS RESTREINT'; /* Texte pour image cachée */
-            display: flex;
+            border: 2px dashed #444; /* Contour en tirets */
+            padding: 5px;
+            display: flex; /* For multiple media */
             align-items: center;
             justify-content: center;
+            position: relative;
+            cursor: pointer;
+        }
+        .card-image-container.hidden-image {
+            filter: grayscale(100%) brightness(50%) blur(5px);
+            opacity: 0.5;
+        }
+        .card-image-container.hidden-image::before {
+            content: 'ACCÈS RESTREINT';
+            position: absolute;
             color: #ff6b6b;
             font-size: 18px;
             font-weight: bold;
             text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+            z-index: 1;
         }
 
-        .card-image.hidden-image img {
-            opacity: 0; /* Masque l'image si cachée */
-        }
-
-
-        .card-image img {
+        .card-image-item { /* Individual media item inside container */
             width: 100%;
             height: 100%;
             object-fit: cover;
             filter: grayscale(80%) brightness(80%);
             transition: filter 0.5s ease-out;
         }
-
-        .card:hover .card-image img {
+        .card-image-container:hover .card-image-item {
             filter: grayscale(0%) brightness(100%);
         }
+        .card-image-container.hidden-image .card-image-item {
+            opacity: 0; /* Hide actual media if container is hidden */
+        }
+        /* Style for videos in posts */
+        .card-image-item.video {
+            background-color: #000; /* Ensure black background for videos */
+        }
+        /* Media navigation if multiple items */
+        .media-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            border: none;
+            color: #fff;
+            padding: 5px;
+            cursor: pointer;
+            z-index: 2;
+            font-size: 1.5em;
+        }
+        .media-nav-btn.left { left: 5px; }
+        .media-nav-btn.right { right: 5px; }
+
 
         .card-content {
             padding: 20px;
@@ -676,7 +692,18 @@
             margin-left: 5px;
             color: #4ecdc4; /* Couleur de la coche */
         }
-
+        /* Add contact button near author */
+        .add-contact-author-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 0.9em;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .add-contact-author-btn:hover {
+            color: #fff;
+        }
 
         .card-desc {
             color: #999;
@@ -684,7 +711,7 @@
             line-height: 1.6;
         }
 
-        /* Bouton Retour */
+        /* Bouton Déconnexion */
         .back-btn {
             position: fixed;
             top: 30px;
@@ -788,23 +815,84 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        /* Style spécifique pour le bouton parcourir des fichiers */
-        .modal-content input[type="file"] {
-            padding: 8px; /* Moins de padding pour input file */
+        /* Input file specific styling */
+        .modal-content .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: calc(100% - 20px);
+            margin-bottom: 15px;
+            border: 1px solid #444;
+            background-color: #0d0d0d;
+            color: #eee;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .modal-content .file-upload-wrapper input[type="file"] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
             cursor: pointer;
         }
-        .modal-content input[type="file"]::-webkit-file-upload-button {
-            background: linear-gradient(145deg, #3a3a3a, #282828);
+        .modal-content .file-upload-filename {
+            display: block;
+            margin-top: 5px;
+            font-size: 0.8em;
+            color: #888;
+        }
+        /* Preview for multiple media */
+        .media-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #2a2a2a;
+            border-radius: 5px;
+            padding: 5px;
+        }
+        .media-preview-item {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 3px;
             border: 1px solid #555;
-            color: #ccc;
-            padding: 8px 15px;
-            border-radius: 4px;
+        }
+        .media-preview-item.video-thumbnail::after {
+            content: "\f16a"; /* Font Awesome play icon */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 2em;
+            text-shadow: 0 0 5px rgba(0,0,0,0.8);
+        }
+
+        .media-preview-item .remove-media-btn {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff6b6b;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.8em;
+            line-height: 1;
+            text-align: center;
             cursor: pointer;
-            transition: background 0.2s ease;
         }
-        .modal-content input[type="file"]::-webkit-file-upload-button:hover {
-            background: linear-gradient(145deg, #4a4a4a, #343434);
-        }
+
 
         .modal-content input::placeholder,
         .modal-content textarea::placeholder {
@@ -1158,6 +1246,35 @@
         .notification-bell-btn .notification-count.show {
             display: block;
         }
+        /* Message button */
+        .messaging-toggle-btn {
+            position: fixed;
+            top: 30px;
+            right: 85px; /* Position next to bell */
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+            transition: all 0.2s ease;
+            z-index: 1001;
+        }
+        .messaging-toggle-btn:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            transform: scale(1.05);
+        }
+        .messaging-toggle-btn:active {
+            transform: scale(0.95);
+        }
+
+
 
         /* --- Styles de la Messagerie Privée (Nouveau) --- */
         .messaging-container {
@@ -1194,13 +1311,18 @@
             font-size: 0.9em;
             letter-spacing: 1px;
         }
+        .navbar-vertical .button-group { /* For add contact and maybe group chat */
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
         .navbar-vertical button {
             background: linear-gradient(145deg, #333, #1e1e1e);
             border: 1px solid #444;
             color: #ccc;
             padding: 8px 10px;
             border-radius: 5px;
-            margin-bottom: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
             font-size: 0.9em;
@@ -1234,6 +1356,17 @@
         }
         .navbar-vertical .contact-item .status-dot.accepted {
             background-color: #00ff41; /* Green for accepted */
+        }
+        .navbar-vertical .contact-item .contact-actions-btns {
+            display: flex;
+            gap: 5px;
+        }
+        .navbar-vertical .contact-item .contact-actions-btns button {
+            padding: 4px 6px;
+            font-size: 0.8em;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #ccc;
         }
 
 
@@ -1288,6 +1421,14 @@
         .message-text {
             color: #eee;
             line-height: 1.4;
+        }
+        /* Style for media in messages */
+        .message-media img, .message-media video {
+            max-width: 100%;
+            max-height: 200px;
+            display: block;
+            margin-top: 5px;
+            border-radius: 5px;
         }
         .message-timestamp {
             font-size: 0.7em;
@@ -1356,6 +1497,27 @@
             display: flex;
             gap: 10px;
         }
+        /* Add file upload button to chat input area */
+        .chat-input-area .file-upload-btn {
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            color: #ccc;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-input-area .file-upload-btn:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            color: #fff;
+        }
+        .chat-input-area .file-upload-btn input[type="file"] {
+            display: none; /* Hide actual file input */
+        }
+
         .chat-input-area textarea {
             flex-grow: 1;
             padding: 10px;
@@ -1493,6 +1655,9 @@
             <i class="fas fa-bell"></i>
             <span class="notification-count" id="notificationCount">0</span>
         </button>
+        <button class="messaging-toggle-btn" id="messagingToggleBtn">
+            <i class="fas fa-comments"></i>
+        </button>
 
         <h2 id="welcomeAgentMessage">BIENVENUE, AGENT.</h2>
         <div class="gallery" id="gallery">
@@ -1515,16 +1680,34 @@
             <span class="close-button" id="closeFolderModalBtn">&times;</span>
             <h3 id="folderModalTitle">Ajouter un Nouveau Dossier</h3>
             <input type="hidden" id="folderId"> <input type="text" id="folderTitle" placeholder="Titre du dossier" required>
-            <input type="file" id="folderImageUpload" accept="image/*"> <textarea id="folderDesc" placeholder="Description du dossier" rows="4" required></textarea>
+            <div class="file-upload-wrapper">
+                <span><i class="fas fa-paperclip"></i> Sélectionner médias (images/vidéos)</span>
+                <input type="file" id="folderMediaUpload" accept="image/*,video/*" multiple>
+                <span class="file-upload-filename" id="folderMediaUploadFilename">Aucun fichier sélectionné</span>
+            </div>
+            <div id="mediaPreviewContainer" class="media-preview-container">
+                </div>
+            <textarea id="folderDesc" placeholder="Description du dossier" rows="4" required></textarea>
             <button id="saveFolderBtn">Sauvegarder Dossier</button>
         </div>
     </div>
+
+    <div id="lightbox" class="lightbox">
+        <span id="lightboxClose" class="lightbox-close">&times;</span>
+        <button id="lightboxPrev" class="lightbox-prev">&#10094;</button>
+        <button id="lightboxNext" class="lightbox-next">&#10095;</button>
+        <img id="lightboxImage" class="lightbox-content" style="display: none;">
+        <video id="lightboxVideo" class="lightbox-content" controls style="display: none;"></video>
+    </div>
+
 
     <div id="messagingContainer" class="messaging-container">
         <button class="messaging-close-btn" id="closeMessagingBtn">&times;</button>
         <div class="navbar-vertical">
             <h4>Contacts</h4>
-            <button id="addContactBtn"><i class="fas fa-user-plus"></i> Ajouter Contact</button>
+            <div class="button-group">
+                <button id="addContactBtn"><i class="fas fa-user-plus"></i> Ajouter Contact</button>
+                </div>
             <div id="contactList">
                 </div>
         </div>
@@ -1533,6 +1716,10 @@
             <div class="chat-messages" id="chatMessages">
                 </div>
             <div class="chat-input-area">
+                <button class="file-upload-btn" id="messageMediaUploadBtn">
+                    <i class="fas fa-paperclip"></i>
+                    <input type="file" id="messageMediaUpload" accept="image/*,video/*">
+                </button>
                 <textarea id="messageInput" placeholder="Écrire un message..."></textarea>
                 <button id="sendMessageBtn"><i class="fas fa-paper-plane"></i> Envoyer</button>
             </div>
@@ -1568,17 +1755,19 @@
         // CONFIGURATION
         const CORRECT_CODE_LENGTH = 8;
         const ASSANE_DIOP_NAME = 'Assane Diop';
+        const AGENCY_NAME = 'L\'Agence'; // Nom d'affichage pour Assane Diop
         const AUTO_VALIDATE_DELAY = 500;
         const API_BASE_URL = 'http://localhost:3000/api';
-        const SOCKET_IO_URL = 'http://localhost:3000'; // Socket.IO server URL
+        const SOCKET_IO_URL = 'http://localhost:3000';
 
-        const MESSAGE_POLLING_INTERVAL = 3000; // Poll messages every 3 seconds (fallback if WebSocket fails)
-        const NOTIFICATION_POLLING_INTERVAL = 10000; // Poll notifications every 10 seconds
+        // Polling intervals (fallbacks for initial load or if WebSocket temporarily fails)
+        const MESSAGE_POLLING_INTERVAL = 3000; 
+        const NOTIFICATION_POLLING_INTERVAL = 10000; 
 
         // Volume des sons (0.0 à 1.0)
         const KEY_CLICK_VOLUME = 0.3;
         const CODE_ENTER_VOLUME = 0.5;
-        const CODE_ERROR_VOLUME = 0.3;
+        const CODE_ERROR_VOLUME = 0.6;
 
         // DOM Elements
         const display = document.getElementById('display');
@@ -1602,7 +1791,10 @@
         const folderModalTitle = document.getElementById('folderModalTitle');
         const folderIdInput = document.getElementById('folderId');
         const folderTitleInput = document.getElementById('folderTitle');
-        const folderImageUploadInput = document.getElementById('folderImageUpload');
+        // Media upload for posts
+        const folderMediaUploadInput = document.getElementById('folderMediaUpload'); 
+        const folderMediaUploadFilename = document.getElementById('folderMediaUploadFilename');
+        const mediaPreviewContainer = document.getElementById('mediaPreviewContainer');
         const folderDescInput = document.getElementById('folderDesc');
         const welcomeAgentMessage = document.getElementById('welcomeAgentMessage');
         // Notification elements
@@ -1613,6 +1805,7 @@
         const notificationList = document.getElementById('notificationList');
         const deleteAllNotificationsBtn = document.getElementById('deleteAllNotificationsBtn');
         // Messaging elements
+        const messagingToggleBtn = document.getElementById('messagingToggleBtn'); // Nouveau bouton pour ouvrir la messagerie
         const messagingContainer = document.getElementById('messagingContainer');
         const closeMessagingBtn = document.getElementById('closeMessagingBtn');
         const addContactBtn = document.getElementById('addContactBtn');
@@ -1630,6 +1823,18 @@
         const closeTransferModalBtn = document.getElementById('closeTransferModalBtn');
         const transferContactList = document.getElementById('transferContactList');
         const confirmTransferBtn = document.getElementById('confirmTransferBtn');
+        const messageMediaUploadBtn = document.getElementById('messageMediaUploadBtn'); // Bouton média dans le chat
+        const messageMediaUploadInput = document.getElementById('messageMediaUpload'); // Input média dans le chat
+
+        // Lightbox elements
+        const lightbox = document.getElementById('lightbox');
+        const lightboxClose = document.getElementById('lightboxClose');
+        const lightboxImage = document.getElementById('lightboxImage');
+        const lightboxVideo = document.getElementById('lightboxVideo');
+        const lightboxPrev = document.getElementById('lightboxPrev');
+        const lightboxNext = document.getElementById('lightboxNext');
+        let currentLightboxMedia = [];
+        let currentLightboxIndex = 0;
 
         // Audio Elements
         const keyClickSound = document.getElementById('keyClickSound');
@@ -1646,15 +1851,15 @@
         let isUnlocked = false;
 
         let agentNameTimeout;
-        let notificationsPollingInterval; // For polling notifications
-        let messagePollingInterval; // For polling private messages
-        let activeChatContact = null; // Stores the name of the currently active chat contact
+        let notificationsPollingInterval; // Pour le polling des notifications (fallback)
+        let messagePollingInterval; // Pour le polling des messages privés (fallback)
+        let activeChatContact = null; // Nom du contact de chat actuellement actif
 
-        // Emojis for message reactions
+        // Emojis pour les réactions aux messages
         const reactionEmojis = ['👍', '👎', '❤️', '😂', '😮', '😢', '😡'];
-        let messageToTransfer = null; // Stores message object when transfer button is clicked
+        let messageToTransfer = null; // Stocke l'objet message lorsqu'un bouton de transfert est cliqué
 
-        // Socket.IO client instance
+        // Instance client Socket.IO
         let socket;
 
         // --- Backend Interaction Functions ---
@@ -1754,7 +1959,7 @@
             return fetchAPI(`/notifications/${agentName}`);
         }
 
-        async function markNotificationAsReadOnServer(notificationId, agentName) { // New API call
+        async function markNotificationAsReadOnServer(notificationId, agentName) {
             return fetchAPI(`/notifications/mark-read/${notificationId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -1787,6 +1992,14 @@
             });
         }
 
+        async function declineContactRequest(contactId, declinerAgentName) {
+            return fetchAPI('/contacts/decline', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contactId, declinerAgentName })
+            });
+        }
+
         async function fetchContacts(agentName) {
             return fetchAPI(`/contacts/${agentName}`);
         }
@@ -1795,11 +2008,17 @@
             return fetchAPI(`/messages/${agent1}/${agent2}`);
         }
 
-        async function sendMessage(sender, recipient, text, transferFromMessageId = null) {
+        async function sendMessage(sender, recipient, text, mediaFile = null, transferFromMessageId = null) {
+            const formData = new FormData();
+            formData.append('sender', sender);
+            formData.append('recipient', recipient);
+            if (text) formData.append('text', text);
+            if (mediaFile) formData.append('media', mediaFile); // 'media' is the field name Multer expects
+            if (transferFromMessageId) formData.append('transferFromMessageId', transferFromMessageId);
+
             return fetchAPI('/messages', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ sender, recipient, text, transferFromMessageId })
+                body: formData // No Content-Type header with FormData
             });
         }
 
@@ -1907,43 +2126,106 @@
         addFolderBtn.addEventListener('click', () => { openFolderModal('add'); });
         closeFolderModalBtn.addEventListener('click', () => { folderModal.style.display = 'none'; });
         window.addEventListener('click', (event) => {
-            if (event.target == folderModal) { folderModal.style.display = 'none'; }
+            if (event.target == folderModal) { folderModal.style.display = 'none'; uploadedMediaFiles.length = 0; mediaPreviewContainer.innerHTML = ''; } // Clear media previews on modal close
             if (event.target == addContactModal) { addContactModal.style.display = 'none'; }
             if (event.target == transferMessageModal) { transferMessageModal.style.display = 'none'; messageToTransfer = null; }
+            if (event.target == lightbox) { closeLightbox(); } // Close lightbox if clicking outside content
         });
+
+        // Multiple media upload preview logic for posts
+        const uploadedMediaFiles = []; // Stores File objects for new uploads
+
+        folderMediaUploadInput.addEventListener('change', (event) => {
+            // Clear previous selection visually and from array for *new* uploads
+            mediaPreviewContainer.innerHTML = ''; 
+            uploadedMediaFiles.length = 0;
+
+            if (event.target.files.length > 0) {
+                for (const file of event.target.files) {
+                    uploadedMediaFiles.push(file); // Store File object
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const previewItem = document.createElement(file.type.startsWith('video/') ? 'video' : 'img');
+                        previewItem.src = e.target.result;
+                        previewItem.className = 'media-preview-item' + (file.type.startsWith('video/') ? ' video-thumbnail' : '');
+                        if (file.type.startsWith('video/')) previewItem.setAttribute('controls', ''); 
+                        
+                        const removeBtn = document.createElement('button');
+                        removeBtn.className = 'remove-media-btn';
+                        removeBtn.innerHTML = '&times;';
+                        removeBtn.onclick = (ev) => {
+                            ev.stopPropagation(); // Prevent modal closing
+                            const indexToRemove = uploadedMediaFiles.indexOf(file);
+                            if (indexToRemove > -1) {
+                                uploadedMediaFiles.splice(indexToRemove, 1);
+                                ev.target.closest('.media-preview-wrapper').remove();
+                                if (mediaPreviewContainer.children.length === 0) {
+                                    folderMediaUploadFilename.textContent = 'Aucun fichier sélectionné';
+                                }
+                            }
+                        };
+                        const wrapper = document.createElement('div');
+                        wrapper.style.position = 'relative';
+                        wrapper.className = 'media-preview-wrapper';
+                        wrapper.appendChild(previewItem);
+                        wrapper.appendChild(removeBtn);
+                        mediaPreviewContainer.appendChild(wrapper);
+                    };
+                    reader.readAsDataURL(file);
+                }
+                folderMediaUploadFilename.textContent = `${event.target.files.length} fichier(s) sélectionné(s)`;
+            } else {
+                folderMediaUploadFilename.textContent = 'Aucun fichier sélectionné';
+            }
+        });
+
 
         saveFolderBtn.addEventListener('click', async () => {
             const id = folderIdInput.value;
             const title = folderTitleInput.value.trim();
-            const imageFile = folderImageUploadInput.files[0];
             const desc = folderDescInput.value.trim();
 
             if (!title || !desc) { alert('Veuillez remplir le titre et la description.'); return; }
-            if (!id && !imageFile) { alert('Veuillez sélectionner une image pour le nouveau dossier.'); return; }
             
+            // Check if there's text OR media for a new post
+            if (!id && !uploadedMediaFiles.length && !title && !desc) {
+                alert('Veuillez ajouter du texte ou sélectionner des médias pour le nouveau dossier.');
+                return;
+            }
+
             const formData = new FormData();
             if (id) formData.append('id', id);
             formData.append('title', title);
             formData.append('desc', desc);
-            formData.append('author', currentAgentName);
+            formData.append('author', currentAgentName); // Author is always currentAgentName
             
             formData.append('isHidden', 'false');
-            formData.append('imageHidden', 'false');
+            formData.append('imageHidden', 'false'); // Initial value for new posts
 
+            // If editing, send existing media URLs that were NOT removed
             if (id) {
                 const existingDossier = window.DossierCache.find(d => String(d.id) === String(id));
                 if (existingDossier) {
                     formData.set('isHidden', existingDossier.isHidden ? 'true' : 'false');
                     formData.set('imageHidden', existingDossier.imageHidden ? 'true' : 'false');
+                    
+                    // Collect URLs of media items that are still in the preview container
+                    const retainedMediaElements = Array.from(mediaPreviewContainer.querySelectorAll('.media-preview-wrapper[data-original-url]'));
+                    const retainedMediaUrls = retainedMediaElements.map(item => item.dataset.originalUrl);
+                    formData.append('existingMediaUrls', JSON.stringify(retainedMediaUrls));
                 }
             }
 
-            if (imageFile) { formData.append('image', imageFile); }
+            // Append newly uploaded files (from folderMediaUploadInput)
+            uploadedMediaFiles.forEach((file, index) => {
+                formData.append(`media`, file); // Append each file with the name 'media'
+            });
+
 
             try {
                 const savedDossier = await saveDossier(formData);
                 console.log('Dossier sauvegardé:', savedDossier);
-                // No need to loadDossiers() here, Socket.IO will push the update
+                // No need to loadDossiers(), Socket.IO will push the update
                 folderModal.style.display = 'none';
                 showMessage(`Dossier ${id ? 'mis à jour' : 'créé'} !`, 'success');
             } catch (error) {
@@ -1957,17 +2239,66 @@
             folderIdInput.value = dossier.id || '';
             folderTitleInput.value = dossier.title || '';
             folderDescInput.value = dossier.desc || '';
-            folderImageUploadInput.value = '';
+            folderMediaUploadInput.value = ''; // Reset file input value
+            uploadedMediaFiles.length = 0; // Clear client-side stored files
+            mediaPreviewContainer.innerHTML = ''; // Clear previews
+            folderMediaUploadFilename.textContent = 'Aucun fichier sélectionné';
 
             if (mode === 'add') {
                 folderModalTitle.textContent = 'Ajouter un Nouveau Dossier';
                 saveFolderBtn.textContent = 'Créer Dossier';
-                folderImageUploadInput.style.display = 'block';
             } else if (mode === 'edit') {
                 folderModalTitle.textContent = 'Modifier Dossier';
                 saveFolderBtn.textContent = 'Sauvegarder Modifications';
-                folderImageUploadInput.style.display = 'block';
+                // Populate media preview for editing (only existing media initially)
+                if (dossier.media && dossier.media.length > 0) {
+                    dossier.media.forEach(mediaItem => {
+                        addMediaPreview(mediaItem.url, mediaItem.type, true); // True for existing media
+                    });
+                    folderMediaUploadFilename.textContent = `${dossier.media.length} fichier(s) existant(s)`;
+                }
             }
+        }
+        
+        function addMediaPreview(url, type, isExisting = false, file = null) {
+            const previewItem = document.createElement(type === 'video' ? 'video' : 'img');
+            previewItem.src = url;
+            previewItem.className = 'media-preview-item' + (type === 'video' ? ' video-thumbnail' : '');
+            if (type === 'video') {
+                previewItem.setAttribute('preload', 'metadata'); // Load metadata for video duration/thumbnail
+                previewItem.onloadedmetadata = function() {
+                    // This is a common way to get a frame from video as thumbnail, but might be too complex for now.
+                    // For now, just rely on CSS ::after for video icon.
+                };
+            }
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-media-btn';
+            removeBtn.innerHTML = '&times;';
+            removeBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (isExisting) { // Remove from displayed existing media
+                    e.target.closest('.media-preview-wrapper').remove();
+                } else { // Remove from new uploaded files
+                    const indexToRemove = uploadedMediaFiles.indexOf(file);
+                    if (indexToRemove > -1) {
+                        uploadedMediaFiles.splice(indexToRemove, 1);
+                        e.target.closest('.media-preview-wrapper').remove();
+                    }
+                }
+                if (mediaPreviewContainer.children.length === 0) {
+                    folderMediaUploadFilename.textContent = 'Aucun fichier sélectionné';
+                }
+            };
+
+            const wrapper = document.createElement('div');
+            wrapper.style.position = 'relative';
+            wrapper.className = 'media-preview-wrapper';
+            if (isExisting) wrapper.dataset.originalUrl = url; // Store original URL for existing media
+
+            wrapper.appendChild(previewItem);
+            wrapper.appendChild(removeBtn);
+            mediaPreviewContainer.appendChild(wrapper);
         }
 
         // --- Digicode Display & Validation Functions ---
@@ -2069,7 +2400,7 @@
                             addFolderBtn.style.display = 'flex';
                             
                             notificationBellBtn.style.display = 'flex';
-                            startNotificationPolling(); // Use polling for initial load and fallback
+                            messagingToggleBtn.style.display = 'flex'; // Show messaging button
                             
                             // Initialize Socket.IO connection
                             socket = io(SOCKET_IO_URL);
@@ -2079,12 +2410,14 @@
                             });
                             socket.on('disconnect', () => {
                                 console.log('Déconnecté de Socket.IO');
+                                showMessage('Déconnecté du serveur en temps réel.', 'error');
                             });
 
-                            // Real-time event listeners
+                            // Real-time event listeners setup
                             setupSocketListeners();
-
-
+                            startNotificationPolling(); // Start polling notifications as a sync mechanism
+                            loadNotifications(); // Initial load of notifications after login
+                            
                             setTimeout(() => {
                                 content.classList.add('show');
                                 vaultOverlay.style.display = 'none';
@@ -2110,6 +2443,7 @@
             content.classList.remove('show');
             addFolderBtn.style.display = 'none';
             notificationBellBtn.style.display = 'none';
+            messagingToggleBtn.style.display = 'none'; // Hide messaging button on logout
             notificationCenter.classList.remove('show');
             clearInterval(notificationsPollingInterval);
             notificationCount.textContent = '0';
@@ -2149,9 +2483,15 @@
 
             socket.on('new_dossier', (dossier) => {
                 console.log('Real-time: Nouveau dossier reçu', dossier);
-                // Prepend new dossier to cache and re-render
+                const existingCard = document.querySelector(`.card[data-id="${dossier.id}"]`);
+                if (existingCard) return; // Avoid duplicates
+                
+                // Add to cache
                 window.DossierCache.unshift(dossier);
-                loadDossiers(); // Re-render all to maintain order
+                // Sort the cache for consistent display order
+                window.DossierCache.sort((a, b) => b.id - a.id);
+                // Re-render all dossiers to insert new one in correct order
+                loadDossiers(); 
                 showMessage(`Nouveau dossier de ${dossier.author}: "${dossier.title}"`, 'info');
             });
 
@@ -2160,14 +2500,15 @@
                 const index = window.DossierCache.findIndex(d => d.id === updatedDossier.id);
                 if (index !== -1) {
                     window.DossierCache[index] = updatedDossier;
-                    loadDossiers(); // Re-render to reflect changes
+                    // Re-render all dossiers to reflect changes and maintain order
+                    loadDossiers(); 
                 }
             });
 
             socket.on('delete_dossier', (data) => {
                 console.log('Real-time: Dossier supprimé', data.id);
                 window.DossierCache = window.DossierCache.filter(d => d.id !== data.id);
-                document.querySelector(`.card[data-id="${data.id}"]`)?.remove(); // Remove from DOM directly
+                document.querySelector(`.card[data-id="${data.id}"]`)?.remove();
                 showMessage('Un dossier a été supprimé.', 'info');
             });
 
@@ -2177,14 +2518,12 @@
                 if (dossier) {
                     dossier.likes = data.likes;
                     dossier.dislikes = data.dislikes;
-                    // Update the specific card's like/dislike counts and styles
                     const cardElement = document.querySelector(`.card[data-id="${data.dossierId}"]`);
                     if (cardElement) {
                         const likeBtn = cardElement.querySelector('.dossier-actions .like-btn');
                         const dislikeBtn = cardElement.querySelector('.dossier-actions .dislike-btn');
                         likeBtn.querySelector('.like-count').textContent = data.likes.length;
                         dislikeBtn.querySelector('.dislike-count').textContent = data.dislikes.length;
-                        // Re-evaluate liked/disliked status for current user if needed
                         const likedByCurrentUser = data.likes.includes(currentAgentName);
                         const dislikedByCurrentUser = data.dislikes.includes(currentAgentName);
                         likeBtn.classList.toggle('liked', likedByCurrentUser);
@@ -2212,13 +2551,12 @@
                 const dossier = window.DossierCache.find(d => d.id === data.dossierId);
                 if (dossier) {
                     dossier.comments.push(data.comment);
-                    // Re-render comments list for that specific card
                     const commentsListElement = document.querySelector(`.card[data-id="${data.dossierId}"] .comments-list`);
                     if (commentsListElement) {
-                        commentsListElement.innerHTML = ''; // Clear and re-render
+                        commentsListElement.innerHTML = '';
                         const topLevelComments = (dossier.comments || []).filter(c => !c.parentId);
                         renderCommentsRecursive(commentsListElement, topLevelComments, (dossier.comments || []), dossier.id, currentAgentName === ASSANE_DIOP_NAME);
-                        commentsListElement.scrollTop = commentsListElement.scrollHeight; // Scroll to new comment
+                        commentsListElement.scrollTop = commentsListElement.scrollHeight;
                     }
                 }
             });
@@ -2230,7 +2568,6 @@
                     const commentIndex = dossier.comments.findIndex(c => c.id === data.comment.id);
                     if (commentIndex !== -1) {
                         dossier.comments[commentIndex] = data.comment;
-                        // Re-render comments list for that specific card
                         const commentsListElement = document.querySelector(`.card[data-id="${data.dossierId}"] .comments-list`);
                         if (commentsListElement) {
                             commentsListElement.innerHTML = '';
@@ -2245,7 +2582,6 @@
                 console.log('Real-time: Commentaire supprimé', data);
                 const dossier = window.DossierCache.find(d => d.id === data.dossierId);
                 if (dossier) {
-                    // Remove comment and its replies from cache
                     const commentsToDelete = [data.commentId];
                     let i = 0;
                     while(i < commentsToDelete.length) {
@@ -2256,7 +2592,6 @@
                     }
                     dossier.comments = dossier.comments.filter(c => !commentsToDelete.includes(c.id));
                     
-                    // Re-render comments list for that specific card
                     const commentsListElement = document.querySelector(`.card[data-id="${data.dossierId}"] .comments-list`);
                     if (commentsListElement) {
                         commentsListElement.innerHTML = '';
@@ -2273,7 +2608,6 @@
                     const comment = dossier.comments.find(c => c.id === data.commentId);
                     if (comment) {
                         comment.likes = data.likes;
-                        // Find the specific comment element and update its like count/style
                         const commentElement = document.querySelector(`.comment[data-comment-id="${data.commentId}"]`);
                         if(commentElement) {
                             const likeBtn = commentElement.querySelector('.like-btn');
@@ -2286,49 +2620,69 @@
 
             socket.on('new_notification', (notification) => {
                 console.log('Real-time: Nouvelle notification', notification);
-                // Only show if it's for current agent or for "all" and not read by current agent
-                const isForCurrentUser = notification.recipient === currentAgentName || notification.recipient === "all";
-                const isReadByCurrentUser = notification.recipient === "all" && notification.readBy && notification.readBy.includes(currentAgentName);
-
-                if (isForCurrentUser && !isReadByCurrentUser) {
-                    loadNotifications(); // Reload all notifications to update count and list
-                    showMessage('Nouvelle notification !', 'info');
+                // Trigger a full reload of notifications to ensure correct state and count
+                loadNotifications();
+                showMessage('Nouvelle notification !', 'info');
+            });
+            
+            socket.on('delete_notification_client', (data) => {
+                console.log('Real-time: Notification supprimée côté client', data.notificationId);
+                document.querySelector(`.notification-item[data-id="${data.notificationId}"]`)?.remove();
+                // Update count after removal
+                notificationCount.textContent = parseInt(notificationCount.textContent) - 1;
+                if (parseInt(notificationCount.textContent) <= 0) {
+                    notificationCount.classList.remove('show');
+                    if (notificationList.children.length === 0) {
+                        notificationList.innerHTML = '<div class="notification-item">Aucune notification.</div>';
+                    }
                 }
             });
 
-            socket.on('contact_request_sent', (data) => {
-                if (data.recipient === currentAgentName) {
-                    console.log('Real-time: Demande de contact reçue', data);
-                    showMessage(`Nouvelle demande de contact de ${data.sender}`, 'info');
-                    loadNotifications(); // Update notifications
-                    loadContacts(); // Update contact list
+            socket.on('delete_all_notifications_client', (data) => {
+                if (data.agentName === currentAgentName) {
+                    console.log('Real-time: Toutes les notifications supprimées côté client');
+                    notificationList.innerHTML = '<div class="notification-item">Aucune notification.</div>';
+                    notificationCount.textContent = '0';
+                    notificationCount.classList.remove('show');
                 }
             });
 
-            socket.on('contact_accepted_event', (data) => {
-                if (data.agent1 === currentAgentName || data.agent2 === currentAgentName) {
-                    console.log('Real-time: Demande de contact acceptée', data);
-                    showMessage(`Demande de contact acceptée avec ${data.agent1 === currentAgentName ? data.agent2 : data.agent1}`, 'success');
-                    loadNotifications();
-                    loadContacts();
+            socket.on('contact_request_received', (newContactRequest) => {
+                console.log('Real-time: Demande de contact reçue', newContactRequest);
+                if (newContactRequest.recipient === currentAgentName) {
+                    showMessage(`Nouvelle demande de contact de ${newContactRequest.sender}`, 'info');
+                    loadContacts(); // Refresh contacts list to show pending request
+                }
+            });
+
+            socket.on('contact_accepted_event', (contact) => {
+                console.log('Real-time: Contact accepté', contact);
+                if (contact.agent1 === currentAgentName || contact.agent2 === currentAgentName) {
+                    showMessage(`Contact ${contact.agent1 === currentAgentName ? contact.agent2 : contact.agent1} accepté !`, 'success');
+                    loadContacts(); // Refresh contacts list to show accepted contact
+                }
+            });
+            
+            socket.on('contact_declined_event', (contact) => {
+                console.log('Real-time: Contact décliné', contact);
+                if (contact.agent1 === currentAgentName || contact.agent2 === currentAgentName) {
+                    showMessage(`Demande de contact déclinée par ${contact.agent1 === currentAgentName ? contact.agent2 : contact.agent1}.`, 'error');
+                    loadContacts(); // Refresh contacts list to remove pending request
                 }
             });
 
             socket.on('new_private_message', (data) => {
                 console.log('Real-time: Nouveau message privé', data);
-                // If the message is for me, and I'm currently chatting with this person
-                let sender = data.sender || data.message.sender; // Adjust based on emit structure
+                let sender = data.sender || data.message.sender;
                 let recipient = data.recipient || null;
 
-                if (recipient && recipient === currentAgentName && activeChatContact === sender) {
-                    renderMessage(data.message, sender); // Render the message directly
-                    chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
-                } else if (sender && sender === currentAgentName && activeChatContact === recipient) {
-                     // If I sent the message, and I'm in the chat, render it too
-                     renderMessage(data.message, recipient);
-                     chatMessages.scrollTop = chatMessages.scrollHeight;
+                const isRelevantToCurrentUser = (sender === currentAgentName) || (recipient === currentAgentName);
+                
+                if (isRelevantToCurrentUser && (activeChatContact === sender || activeChatContact === recipient)) {
+                    // Only re-render chat if it's the currently active one
+                    loadMessages(activeChatContact); 
                 }
-                 loadNotifications(); // Update bell count for potential new message notification
+                loadNotifications(); // Reload notifications to update bell count for new message
             });
 
             socket.on('message_reaction_update', (data) => {
@@ -2339,7 +2693,7 @@
                     const messageElement = document.querySelector(`.message-item[data-message-id="${data.messageId}"]`);
                     if (messageElement) {
                         const reactionsContainer = messageElement.querySelector('.message-reactions');
-                        reactionsContainer.innerHTML = ''; // Clear existing reactions
+                        reactionsContainer.innerHTML = '';
                         const groupedReactions = {};
                         data.reactions.forEach(r => {
                             if (!groupedReactions[r.emoji]) {
@@ -2351,13 +2705,13 @@
                         Object.entries(groupedReactions).forEach(([emoji, agents]) => {
                             const reactionItem = document.createElement('span');
                             reactionItem.className = 'message-reaction-item';
-                            reactionItem.title = agents.join(', '); // Show who reacted
+                            reactionItem.title = agents.join(', ');
                             reactionItem.innerHTML = `<span>${emoji}</span><span>${agents.length}</span>`;
                             reactionsContainer.appendChild(reactionItem);
                         });
                     }
                 }
-                loadNotifications(); // For reaction notifications
+                loadNotifications(); // For message reaction notifications
             });
         }
 
@@ -2394,28 +2748,74 @@
                 card.style.display = '';
             }
 
-            let imageHtml = '';
-            if (dossier.imageHidden && !isAssaneDiop) {
-                imageHtml = '<div class="card-image hidden-image">ACCÈS RESTREINT</div>';
+            // Media display logic (multiple images/videos)
+            let mediaHtml = '';
+            if (dossier.media && dossier.media.length > 0) {
+                const isMediaHiddenForUser = dossier.imageHidden && !isAssaneDiop;
+                
+                // Use a generic placeholder if media is hidden for the user
+                if (isMediaHiddenForUser) {
+                    mediaHtml = '<div class="card-image-container hidden-image"></div>';
+                } else {
+                    // Render the first media item as a preview
+                    const firstMedia = dossier.media[0];
+                    const mediaUrl = firstMedia.url ? `${window.location.origin}${firstMedia.url}` : '';
+                    let mediaTag = '';
+                    if (firstMedia.type === 'image') {
+                        mediaTag = `<img src="${mediaUrl}" alt="${dossier.title}" class="card-image-item">`;
+                    } else if (firstMedia.type === 'video') {
+                        mediaTag = `<video src="${mediaUrl}" class="card-image-item video" preload="metadata"></video>`; // preload for quicker thumbnail
+                    }
+                    
+                    mediaHtml = `
+                        <div class="card-image-container" data-dossier-id="${dossier.id}">
+                            ${mediaTag}
+                            ${dossier.media.length > 1 ? '<button class="media-nav-btn left" data-direction="prev">&#10094;</button><button class="media-nav-btn right" data-direction="next">&#10095;</button>' : ''}
+                        </div>`;
+                }
             } else {
-                const imageUrl = dossier.image ? `${window.location.origin}${dossier.image}` : '';
-                imageHtml = `<div class="card-image"><img src="${imageUrl}" alt="${dossier.title}"></div>`;
+                // Fallback if no media or empty array
+                mediaHtml = '<div class="card-image-container"><i class="fas fa-file-alt" style="font-size: 3em; color: #666;"></i></div>';
             }
-
+            
             const liked = dossier.likes && dossier.likes.includes(currentAgentName);
             const disliked = dossier.dislikes && dossier.dislikes.includes(currentAgentName);
             const reposted = dossier.reposts && dossier.reposts.includes(currentAgentName);
 
-            const authorLabel = dossier.author === ASSANE_DIOP_NAME 
-                ? `<span class="card-author certified">${dossier.author} <i class="fas fa-check-circle certification-icon"></i> <span class="certified-label">L'Agence</span></span>`
-                : `<span class="card-author">${dossier.author}</span>`;
+            // Certified label for Assane Diop's posts
+            const displayAuthor = dossier.author === ASSANE_DIOP_NAME ? AGENCY_NAME : dossier.author;
+            const certifiedIcon = dossier.author === ASSANE_DIOP_NAME ? `<i class="fas fa-check-circle certification-icon"></i>` : '';
+            const certifiedLabel = dossier.author === ASSANE_DIOP_NAME ? `<span class="certified-label">L'Agence</span>` : '';
+
+            const authorLabel = `<span class="card-author">${displayAuthor} ${certifiedIcon} ${certifiedLabel}</span>`;
+            
+            // Add contact button if not current user, not Assane Diop, and not already friends/pending
+            let addContactButtonHtml = '';
+            if (currentAgentName && currentAgentName !== dossier.author && dossier.author !== ASSANE_DIOP_NAME) {
+                const isAlreadyContact = window.ContactCache.some(c => 
+                    c.status === 'accepted' && 
+                    ((c.agent1 === currentAgentName && c.agent2 === dossier.author) || 
+                     (c.agent1 === dossier.author && c.agent2 === currentAgentName))
+                );
+                const hasPendingRequest = window.ContactCache.some(c => 
+                    c.status === 'pending' && 
+                    ((c.agent1 === currentAgentName && c.agent2 === dossier.author) || 
+                     (c.agent1 === dossier.author && c.agent2 === currentAgentName))
+                );
+
+                if (!isAlreadyContact && !hasPendingRequest) {
+                    addContactButtonHtml = `<button class="add-contact-author-btn" data-target-agent="${dossier.author}" title="Ajouter comme contact"><i class="fas fa-user-plus"></i></button>`;
+                } else if (hasPendingRequest) {
+                    addContactButtonHtml = `<span style="font-size:0.8em;color:#888;margin-left:10px;">Demande en attente</span>`;
+                }
+            }
 
 
             card.innerHTML = `
-                ${imageHtml}
+                ${mediaHtml}
                 <div class="card-content">
                     <div class="card-title">${dossier.title}</div>
-                    ${authorLabel}
+                    ${authorLabel} ${addContactButtonHtml}
                     <div class="card-desc">${dossier.desc}</div>
                     
                     <div class="dossier-actions">
@@ -2446,7 +2846,7 @@
                 adminControlsHtml += `
                     <div class="admin-controls">
                         <button class="toggle-hide" data-action="toggle-hide">${dossier.isHidden ? 'Afficher' : 'Masquer'}</button>
-                        <button class="toggle-image" data-action="toggle-image">${dossier.imageHidden ? 'Afficher Image' : 'Masquer Image'}</button>
+                        <button class="toggle-media-hide" data-action="toggle-media-hide">${dossier.imageHidden ? 'Afficher Média' : 'Masquer Média'}</button>
                         <button class="edit" data-action="edit">Modifier</button>
                         <button class="delete" data-action="delete">Supprimer</button>
                     </div>
@@ -2461,8 +2861,50 @@
             }
             card.insertAdjacentHTML('beforeend', adminControlsHtml);
 
-            gallery.prepend(card);
+            gallery.prepend(card); // Add to the beginning of the gallery
 
+            // Add listener for lightbox
+            const cardImageContainer = card.querySelector('.card-image-container');
+            if (cardImageContainer && dossier.media && dossier.media.length > 0) {
+                cardImageContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('media-nav-btn')) return;
+                    if (dossier.imageHidden && !isAssaneDiop) return;
+                    openLightbox(dossier.media);
+                });
+
+                // Media navigation buttons for multiple media
+                let currentMediaIndex = 0; // State for this specific card's media display
+
+                const updateCardMediaDisplay = (index) => {
+                    const mediaItem = dossier.media[index];
+                    cardImageContainer.innerHTML = '';
+                    let mediaTag = '';
+                    if (mediaItem.type === 'image') {
+                        mediaTag = `<img src="${window.location.origin}${mediaItem.url}" class="card-image-item">`;
+                    } else if (mediaItem.type === 'video') {
+                        mediaTag = `<video src="${window.location.origin}${mediaItem.url}" class="card-image-item video" controls preload="metadata"></video>`;
+                    }
+                    cardImageContainer.innerHTML = mediaTag;
+                    // Re-add nav buttons
+                    if (dossier.media.length > 1) {
+                        cardImageContainer.insertAdjacentHTML('beforeend', '<button class="media-nav-btn left" data-direction="prev">&#10094;</button><button class="media-nav-btn right" data-direction="next">&#10095;</button>');
+                        card.querySelector('.media-nav-btn.left').onclick = (e) => { e.stopPropagation(); currentMediaIndex = (currentMediaIndex - 1 + dossier.media.length) % dossier.media.length; updateCardMediaDisplay(currentMediaIndex); };
+                        card.querySelector('.media-nav-btn.right').onclick = (e) => { e.stopPropagation(); currentMediaIndex = (currentMediaIndex + 1) % dossier.media.length; updateCardMediaDisplay(currentMediaIndex); };
+                    }
+                };
+
+                // Initial display of first media
+                updateCardMediaDisplay(0);
+
+                // Re-attach listeners for nav buttons as they might be re-rendered
+                const prevBtn = card.querySelector('.media-nav-btn.left');
+                const nextBtn = card.querySelector('.media-nav-btn.right');
+                if (prevBtn) prevBtn.onclick = (e) => { e.stopPropagation(); currentMediaIndex = (currentMediaIndex - 1 + dossier.media.length) % dossier.media.length; updateCardMediaDisplay(currentMediaIndex); };
+                if (nextBtn) nextBtn.onclick = (e) => { e.stopPropagation(); currentMediaIndex = (currentMediaIndex + 1) % dossier.media.length; updateCardMediaDisplay(currentMediaIndex); };
+            }
+
+
+            // Render comments recursively
             const commentsList = card.querySelector('.comments-list');
             const topLevelComments = (dossier.comments || []).filter(c => !c.parentId);
             renderCommentsRecursive(commentsList, topLevelComments, (dossier.comments || []), dossier.id, isAssaneDiop);
@@ -2477,7 +2919,7 @@
                 if (commentText) {
                     try {
                         const newCommentData = await addCommentToServer(dossier.id, commentText, currentAgentName, parentId);
-                        // No need to reloadDossiers, Socket.IO will handle the push
+                        // No need to loadDossiers(), Socket.IO will handle the push
                         // Update cache manually for immediate consistency
                         const dossierIndex = window.DossierCache.findIndex(d => d.id === dossier.id);
                         if (dossierIndex !== -1) {
@@ -2510,10 +2952,8 @@
                         if (action === 'like-dossier') {
                             const isLike = btn.dataset.isLike === 'true';
                             await toggleDossierLike(dossier.id, currentAgentName, isLike);
-                            // No need for client-side update here, Socket.IO will push
                         } else if (action === 'repost-dossier') {
                             await toggleDossierRepost(dossier.id, currentAgentName);
-                            // No need for client-side update here, Socket.IO will push
                         }
                     } catch (error) {
                         console.error('Erreur action dossier:', error);
@@ -2545,29 +2985,31 @@
                         formDataToSave.append('author', targetDossierCache.author);
                         formDataToSave.append('isHidden', targetDossierCache.isHidden ? 'true' : 'false');
                         formDataToSave.append('imageHidden', targetDossierCache.imageHidden ? 'true' : 'false');
-                        formDataToSave.append('actionPerformer', currentAgentName); // Pass who performs action
+                        formDataToSave.append('actionPerformer', currentAgentName);
+
+                        if (targetDossierCache.media && targetDossierCache.media.length > 0) {
+                            formDataToSave.append('existingMediaUrls', JSON.stringify(targetDossierCache.media.map(m => m.url)));
+                        }
+
 
                         if (action === 'delete') {
                             if (confirm('Êtes-vous sûr de vouloir supprimer ce dossier ?')) {
                                 await deleteDossierOnServer(dossierId, currentAgentName);
-                                // No need for client-side update here, Socket.IO will push
                                 showMessage('Dossier supprimé !', 'success');
                             }
                         } else if (action === 'toggle-hide') {
-                            targetDossierCache.isHidden = !targetDossierCache.isHidden; // Update cache
+                            targetDossierCache.isHidden = !targetDossierCache.isHidden;
                             formDataToSave.set('isHidden', targetDossierCache.isHidden ? 'true' : 'false');
                             
                             await saveDossier(formDataToSave);
-                            // No need for client-side update here, Socket.IO will push
                             showMessage(`Dossier ${targetDossierCache.isHidden ? 'masqué' : 'affiché'} !`, 'info');
                             
-                        } else if (action === 'toggle-image') {
-                            targetDossierCache.imageHidden = !targetDossierCache.imageHidden; // Update cache
+                        } else if (action === 'toggle-media-hide') {
+                            targetDossierCache.imageHidden = !targetDossierCache.imageHidden;
                             formDataToSave.set('imageHidden', targetDossierCache.imageHidden ? 'true' : 'false');
 
                             await saveDossier(formDataToSave);
-                            // No need for client-side update here, Socket.IO will push
-                            showMessage(`Image ${targetDossierCache.imageHidden ? 'masquée' : 'affichée'} !`, 'info');
+                            showMessage(`Média ${targetDossierCache.imageHidden ? 'masqué' : 'affiché'} !`, 'info');
 
                         } else if (action === 'edit') {
                             openFolderModal('edit', targetDossierCache);
@@ -2575,6 +3017,17 @@
                     } catch (error) {
                         console.error('Erreur lors de l\'action administrative:', error);
                         showMessage(`Erreur: ${error.message}`, 'error');
+                    }
+                });
+            }
+            
+            // Add contact button listener on author name if applicable
+            const addContactAuthorBtn = card.querySelector('.add-contact-author-btn');
+            if (addContactAuthorBtn) {
+                addContactAuthorBtn.addEventListener('click', (e) => {
+                    const targetAgent = e.target.dataset.targetAgent;
+                    if (targetAgent) {
+                        openAddContactModal(targetAgent);
                     }
                 });
             }
@@ -2598,8 +3051,11 @@
 
                 const modifiedTag = comment.modified && !(isAssaneDiop && comment.author !== ASSANE_DIOP_NAME) ? '<span class="modified-tag">(modifié)</span>' : ''; // Show (modifié) unless Assane Diop edited someone else's post
 
+                const displayCommentAuthor = comment.author === ASSANE_DIOP_NAME ? AGENCY_NAME : comment.author;
+                const commentAuthorCertifiedIcon = comment.author === ASSANE_DIOP_NAME ? `<i class="fas fa-check-circle certification-icon"></i>` : '';
+
                 commentDiv.innerHTML = `
-                    <span class="comment-author">${comment.author} :</span> <span class="comment-text-content">${comment.text}</span>
+                    <span class="comment-author">${displayCommentAuthor} ${commentAuthorCertifiedIcon}:</span> <span class="comment-text-content">${comment.text}</span>
                     <div class="comment-meta">
                         ${new Date(comment.timestamp).toLocaleString()} ${modifiedTag}
                         ${replyInfo}
@@ -2623,7 +3079,6 @@
                 likeCommentBtn.addEventListener('click', async () => {
                     try {
                         await toggleCommentLike(dossierId, comment.id, currentAgentName);
-                        // No need for client-side update here, Socket.IO will push
                     } catch (error) {
                         console.error('Erreur like commentaire:', error);
                         showMessage(`Erreur like commentaire: ${error.message}`, 'error');
@@ -2646,13 +3101,12 @@
                     editCommentBtn.addEventListener('click', () => {
                         const currentText = commentDiv.querySelector('.comment-text-content').textContent.trim();
                         const newText = prompt("Modifier le commentaire :", currentText);
-                        if (newText !== null && newText.trim() !== '') { // Allow empty if user explicitly sets it
-                            const noModifiedTag = isAssaneDiop; // Assane Diop's edits are "official", no tag
+                        if (newText !== null && newText.trim() !== '') {
+                            const noModifiedTag = isAssaneDiop;
                             updateCommentOnServer(dossierId, comment.id, newText.trim(), currentAgentName, noModifiedTag).catch(error => {
                                 console.error('Erreur modif commentaire:', error);
                                 showMessage(`Erreur modif commentaire: ${error.message}`, 'error');
                             });
-                            // No need to re-render, Socket.IO will push the update
                         }
                     });
                 }
@@ -2665,7 +3119,6 @@
                                 console.error('Erreur sup commentaire:', error);
                                 showMessage(`Erreur sup commentaire: ${error.message}`, 'error');
                             });
-                            // No need to re-render, Socket.IO will push the update
                         }
                     });
                 }
@@ -2694,7 +3147,6 @@
             if (confirm('Voulez-vous vraiment supprimer toutes les notifications ?')) {
                 try {
                     await deleteAllNotificationsOnServer(currentAgentName);
-                    // No need to clear local, Socket.IO will handle the push
                     showMessage('Toutes les notifications supprimées !', 'success');
                 } catch (error) {
                     console.error('Erreur suppression notifications:', error);
@@ -2713,7 +3165,6 @@
                     notificationList.innerHTML = '<div class="notification-item">Connectez-vous pour voir les notifications.</div>';
                     return;
                 }
-                // Fetch all relevant notifications (including 'all' ones)
                 const notifications = await fetchNotifications(currentAgentName);
                 
                 if (notifications.length === 0) {
@@ -2724,11 +3175,11 @@
                 let unreadCount = 0;
                 notifications.forEach(n => {
                     const isRead = n.readBy && n.readBy.includes(currentAgentName);
-                    if (!isRead) {
+                    if (!isRead) { // Only count as unread if 'readBy' doesn't contain currentAgentName
                         unreadCount++;
                     }
                     const notificationItem = document.createElement('div');
-                    notificationItem.className = 'notification-item' + (isRead ? '' : ' unread');
+                    notificationItem.className = 'notification-item' + (isRead ? '' : ' unread'); // Add 'unread' class for styling
                     notificationItem.dataset.id = n.id;
                     notificationItem.innerHTML = `
                         <div>${n.message}</div>
@@ -2738,8 +3189,8 @@
                     notificationList.appendChild(notificationItem);
 
                     // Mark as read when displayed in the center
-                    if (!isRead) {
-                        markNotificationAsReadOnServer(n.id, currentAgentName).catch(console.error); // Mark as read without waiting
+                    if (!isRead) { // Only mark if it's currently unread for this agent
+                        markNotificationAsReadOnServer(n.id, currentAgentName).catch(console.error);
                     }
                 });
                 
@@ -2755,7 +3206,6 @@
                         const notifId = e.target.closest('.notification-item').dataset.id;
                         try {
                             await deleteNotificationOnServer(notifId);
-                            // No need to remove from DOM here, Socket.IO will handle the push
                         } catch (error) {
                             console.error('Erreur suppression notif:', error);
                             showMessage(`Erreur suppression: ${error.message}`, 'error');
@@ -2778,21 +3228,20 @@
         }
 
         // --- Private Messaging Logic ---
-        notificationBellBtn.addEventListener('contextmenu', (e) => { // Right click on bell to open messaging
-            e.preventDefault(); // Prevent default context menu
+        messagingToggleBtn.addEventListener('click', () => { // New: Click to open messaging
             messagingContainer.classList.toggle('show');
             if (messagingContainer.classList.contains('show')) {
                 loadContacts();
-                // We'll manage message polling manually for the active chat
+                // message polling starts when contact is selected
             } else {
-                // When closing messaging, clear active chat
                 activeChatContact = null;
                 chatHeader.textContent = "Sélectionnez un contact";
                 chatMessages.innerHTML = "";
                 messageInput.value = "";
-                clearInterval(messagePollingInterval); // Stop polling messages when closed
+                clearInterval(messagePollingInterval);
             }
         });
+
 
         closeMessagingBtn.addEventListener('click', () => {
             messagingContainer.classList.remove('show');
@@ -2831,8 +3280,8 @@
                 addContactModal.style.display = 'none';
                 await loadContacts(); // Refresh contact list
             } catch (error) {
-                console.error("Erreur envoi demande contact:", error);
-                alert(`Erreur: ${error.message}`);
+            console.error("Erreur envoi demande contact:", error);
+            alert(`Erreur: ${error.message}`);
             }
         });
 
@@ -2853,6 +3302,7 @@
 
                     let statusDotClass = '';
                     let statusText = '';
+                    let actionButtonsHtml = ''; // For accept/decline
 
                     if (contact.status === 'pending') {
                         statusDotClass = 'status-dot'; // Red by default
@@ -2860,30 +3310,44 @@
                             statusText = ` (demande envoyée)`;
                         } else {
                             statusText = ` (demande reçue)`;
+                            actionButtonsHtml = `
+                                <div class="contact-actions-btns">
+                                    <button class="accept-request-btn" data-id="${contact.id}" title="Accepter"><i class="fas fa-check"></i></button>
+                                    <button class="decline-request-btn" data-id="${contact.id}" title="Décliner"><i class="fas fa-times"></i></button>
+                                </div>
+                            `;
                         }
                     } else if (contact.status === 'accepted') {
                         statusDotClass = 'status-dot accepted'; // Green
                         statusText = '';
                     }
 
-                    contactItem.innerHTML = `<span class="contact-name">${otherAgent}</span> <span class="${statusDotClass}"></span> ${statusText}`;
+                    contactItem.innerHTML = `<span class="contact-name">${otherAgent}</span> <span class="${statusDotClass}"></span> ${statusText} ${actionButtonsHtml}`;
                     
+                    // Add event listeners for accept/decline buttons if applicable
                     if (contact.status === 'pending' && contact.initiator !== currentAgentName) {
-                         const acceptBtn = document.createElement('button');
-                         acceptBtn.innerHTML = '<i class="fas fa-check"></i>';
-                         acceptBtn.title = 'Accepter la demande';
-                         acceptBtn.onclick = async (e) => {
-                             e.stopPropagation(); // Prevent opening chat
-                             try {
-                                 await acceptContactRequest(contact.id, currentAgentName); // Pass contact ID and acceptor name
-                                 alert(`Demande de ${otherAgent} acceptée !`);
-                                 // No need to reload contacts/messages, Socket.IO will push
-                             } catch (error) {
-                                 console.error("Erreur acceptation demande:", error);
-                                 alert(`Erreur: ${error.message}`);
-                             }
-                         };
-                         contactItem.appendChild(acceptBtn);
+                        contactItem.querySelector('.accept-request-btn').addEventListener('click', async (e) => {
+                            e.stopPropagation(); // Prevent opening chat
+                            try {
+                                await acceptContactRequest(contact.id, currentAgentName); // Pass contact ID and acceptor name
+                                showMessage(`Demande de ${otherAgent} acceptée !`, 'success');
+                                // Socket.IO will handle re-rendering contacts
+                            } catch (error) {
+                                console.error("Erreur acceptation demande:", error);
+                                showMessage(`Erreur: ${error.message}`, 'error');
+                            }
+                        });
+                        contactItem.querySelector('.decline-request-btn').addEventListener('click', async (e) => {
+                            e.stopPropagation(); // Prevent opening chat
+                            try {
+                                await declineContactRequest(contact.id, currentAgentName);
+                                showMessage(`Demande de ${otherAgent} déclinée !`, 'info');
+                                // Socket.IO will handle re-rendering contacts
+                            } catch (error) {
+                                console.error("Erreur déclin demande:", error);
+                                showMessage(`Erreur: ${error.message}`, 'error');
+                            }
+                        });
                     }
                     
                     contactItem.addEventListener('click', () => {
@@ -2949,9 +3413,21 @@
                 `<span class="message-reaction-item" title="${agents.join(', ')}"><span>${emoji}</span><span>${agents.length}</span></span>`
             ).join('');
 
+            // Media in message
+            let mediaContent = '';
+            if (message.media && message.media.url) {
+                const mediaUrl = `${window.location.origin}${message.media.url}`;
+                if (message.media.type === 'image') {
+                    mediaContent = `<div class="message-media"><img src="${mediaUrl}" alt="Média message"></div>`;
+                } else if (message.media.type === 'video') {
+                    mediaContent = `<div class="message-media"><video src="${mediaUrl}" controls preload="metadata"></video></div>`;
+                }
+            }
+
             messageItem.innerHTML = `
                 <div class="message-sender">${message.sender}</div>
-                <div class="message-text">${message.text}</div>
+                <div class="message-text">${message.text || ''}</div>
+                ${mediaContent}
                 <div class="message-timestamp">${new Date(message.timestamp).toLocaleString()}</div>
                 <div class="message-reactions">${reactionsHtml}</div>
                 <div class="message-actions-overlay">
@@ -2961,6 +3437,13 @@
                 </div>
             `;
             chatMessages.appendChild(messageItem);
+
+            // Add event listeners for message actions overlay hover
+            const messageActionsOverlay = messageItem.querySelector('.message-actions-overlay');
+            if (messageActionsOverlay) { // Ensure overlay exists
+                messageItem.addEventListener('mouseenter', () => { messageActionsOverlay.style.display = 'flex'; });
+                messageItem.addEventListener('mouseleave', () => { messageActionsOverlay.style.display = 'none'; });
+            }
 
             // Add reaction listeners
             messageItem.querySelectorAll('.react-btn').forEach(btn => {
@@ -2989,26 +3472,53 @@
 
             // Add transfer message listener
             messageItem.querySelector('.transfer-message-btn').addEventListener('click', () => {
-                messageToTransfer = message; // Store message for transfer
+                messageToTransfer = message; // Stocke l'objet message pour le transfert
                 openTransferModal();
             });
         }
         
         messageInput.addEventListener('keypress', async (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault(); // Prevent new line
-                sendMessageBtn.click(); // Trigger send button click
+                e.preventDefault(); // Empêche le retour à la ligne
+                sendMessageBtn.click(); // Déclenche le clic sur le bouton d'envoi
+            }
+        });
+
+        messageMediaUploadInput.addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                if (!activeChatContact) {
+                    alert("Veuillez sélectionner un contact pour envoyer un média.");
+                    messageMediaUploadInput.value = ''; // Clear file input
+                    return;
+                }
+                try {
+                    await sendMessage(currentAgentName, activeChatContact, null, file); // Envoie le message média
+                    messageMediaUploadInput.value = ''; // Efface l'input fichier
+                    // Socket.IO poussera le message
+                } catch (error) {
+                    console.error('Erreur envoi média:', error);
+                    showMessage(`Erreur envoi média: ${error.message}`, 'error');
+                }
             }
         });
 
         sendMessageBtn.addEventListener('click', async () => {
             const text = messageInput.value.trim();
-            if (!text || !activeChatContact) return;
+            const mediaFile = messageMediaUploadInput.files[0] || null;
+
+            if (!text && !mediaFile) return; // Rien à envoyer
+
+            if (!activeChatContact) {
+                showMessage("Veuillez sélectionner un contact pour envoyer un message.", "info");
+                return;
+            }
 
             try {
-                await sendMessage(currentAgentName, activeChatContact, text);
+                await sendMessage(currentAgentName, activeChatContact, text || null, mediaFile); // Envoie le message (texte ou média)
                 messageInput.value = '';
-                // No need to reload messages, Socket.IO will push
+                messageMediaUploadInput.value = ''; // Efface l'input fichier après l'envoi
+                // Socket.IO poussera le message
             } catch (error) {
                 console.error('Erreur envoi message:', error);
                 showMessage(`Erreur envoi message: ${error.message}`, 'error');
@@ -3016,11 +3526,10 @@
         });
 
         function startMessagePolling() {
-            // Stop existing polling first
             if (messagePollingInterval) {
                 clearInterval(messagePollingInterval);
             }
-            // Start polling only if an active chat contact is selected
+            // Démarre le polling uniquement si un contact de chat actif est sélectionné
             if (activeChatContact) {
                 messagePollingInterval = setInterval(async () => {
                     if (messagingContainer.classList.contains('show') && activeChatContact) {
@@ -3031,16 +3540,16 @@
         }
 
         // Transfer Message Modal Logic
-        window.ContactCache = []; // Ensure ContactCache is initialized
+        window.ContactCache = [];
         function openTransferModal() {
             transferMessageModal.style.display = 'flex';
             transferContactList.innerHTML = '';
             
-            // Populate contacts for transfer
+            // Popule les contacts pour le transfert
             const contactsForTransfer = window.ContactCache.filter(c => 
                 c.status === 'accepted' && 
                 (c.agent1 === currentAgentName || c.agent2 === currentAgentName) &&
-                (c.agent1 !== activeChatContact && c.agent2 !== activeChatContact) // Exclude current chat partner
+                (c.agent1 !== activeChatContact && c.agent2 !== activeChatContact) // Exclut le partenaire de chat actuel
             );
             
             if (contactsForTransfer.length === 0) {
@@ -3057,7 +3566,6 @@
                 contactItem.textContent = otherAgent;
                 contactItem.dataset.contactName = otherAgent;
                 contactItem.addEventListener('click', () => {
-                    // Highlight selected contact
                     transferContactList.querySelectorAll('.contact-item-transfer').forEach(item => item.classList.remove('active'));
                     contactItem.classList.add('active');
                 });
@@ -3073,8 +3581,24 @@
             }
             const recipient = selectedContactItem.dataset.contactName;
             try {
-                const transferredText = `(Transféré de ${messageToTransfer.sender}): ${messageToTransfer.text}`;
-                await sendMessage(currentAgentName, recipient, transferredText, messageToTransfer.id);
+                let textToSend = messageToTransfer.text || null;
+                let mediaFileToSend = null; // We can't directly re-upload a File object from a URL in browser for security.
+
+                // If message has media, and it's a file from our uploads, create a Blob from its URL
+                // This is a more advanced technique to simulate re-uploading the file.
+                if (messageToTransfer.media && messageToTransfer.media.url) {
+                    const mediaResponse = await fetch(`${window.location.origin}${messageToTransfer.media.url}`);
+                    const blob = await mediaResponse.blob();
+                    // Create a File object from the blob, using the original filename and type
+                    mediaFileToSend = new File([blob], `transferred_media_${Date.now()}.${messageToTransfer.media.type.split('/')[1]}`, { type: messageToTransfer.media.type });
+                    
+                    // Add "transferred from" text as well
+                    textToSend = `(Transféré de ${messageToTransfer.sender}): ${textToSend || ''}`;
+                } else {
+                    textToSend = `(Transféré de ${messageToTransfer.sender}): ${messageToTransfer.text}`;
+                }
+                
+                await sendMessage(currentAgentName, recipient, textToSend, mediaFileToSend, messageToTransfer.id);
                 transferMessageModal.style.display = 'none';
                 messageToTransfer = null;
                 showMessage('Message transféré !', 'success');
@@ -3083,6 +3607,60 @@
                 showMessage(`Erreur transfert: ${error.message}`, 'error');
             }
         });
+
+        // Lightbox Functions
+        function openLightbox(mediaArray, startIndex = 0) {
+            currentLightboxMedia = mediaArray;
+            currentLightboxIndex = startIndex;
+            updateLightboxContent();
+            lightbox.classList.add('show');
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('show');
+            lightboxImage.style.display = 'none';
+            lightboxVideo.style.display = 'none';
+            lightboxImage.src = '';
+            lightboxVideo.src = '';
+            lightboxVideo.pause();
+        }
+
+        function updateLightboxContent() {
+            if (currentLightboxMedia.length === 0) return;
+
+            const mediaItem = currentLightboxMedia[currentLightboxIndex];
+            lightboxImage.style.display = 'none';
+            lightboxVideo.style.display = 'none';
+            lightboxVideo.pause();
+
+            const mediaUrl = `${window.location.origin}${mediaItem.url}`;
+
+            if (mediaItem.type === 'image') {
+                lightboxImage.src = mediaUrl;
+                lightboxImage.style.display = 'block';
+            } else if (mediaItem.type === 'video') {
+                lightboxVideo.src = mediaUrl;
+                lightboxVideo.style.display = 'block';
+                lightboxVideo.load();
+                // User will click play
+            }
+
+            lightboxPrev.style.display = currentLightboxMedia.length > 1 ? 'block' : 'none';
+            lightboxNext.style.display = currentLightboxMedia.length > 1 ? 'block' : 'none';
+        }
+
+        lightboxPrev.addEventListener('click', () => {
+            currentLightboxIndex = (currentLightboxIndex - 1 + currentLightboxMedia.length) % currentLightboxMedia.length;
+            updateLightboxContent();
+        });
+
+        lightboxNext.addEventListener('click', () => {
+            currentLightboxIndex = (currentLightboxIndex + 1) % currentLightboxMedia.length;
+            updateLightboxContent();
+        });
+
+        lightboxClose.addEventListener('click', closeLightbox);
+
 
         // --- Initial Load and Session Management ---
         async function initialLoad() {
@@ -3099,7 +3677,7 @@
                 controls.classList.add('active');
                 showMessage('Session restaurée. Veuillez entrer le code.', 'info');
             } else {
-                resetSystem(); // Start from scratch
+                resetSystem(); // Start from scratch if no session
             }
         }
 
