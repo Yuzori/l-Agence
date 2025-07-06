@@ -1,0 +1,3111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Norican&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>l'Agence - Garanted</title>
+    <style>
+        /* Styles Généraux */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0d0d0d;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: #ccc;
+        }
+
+        /* Anti-capture d'écran */
+        .no-screenshot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.1s ease-out;
+        }
+
+        /* Conteneur Principal (digicode) */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            perspective: 1000px; /* Pour les animations 3D */
+            position: relative;
+            z-index: 10;
+            transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            transform: scale(1);
+        }
+
+        .digicode {
+            background: linear-gradient(145deg, #181818, #0b0b0b);
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.7),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateY(0deg) translateY(0);
+            transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            opacity: 1;
+        }
+
+        .digicode.hide {
+            transform: rotateY(15deg) translateY(-50px) scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .digicode::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(145deg, #333, #111);
+            border-radius: 15px;
+            z-index: -1;
+            filter: blur(8px);
+            opacity: 0.3;
+        }
+
+        /* Header du digicode */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .title {
+            color: #777;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Style pour le champ de texte Nom d'Agent */
+        .agent-name-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1px solid #333;
+            background: #050505;
+            color: #4ecdc4; /* Couleur pour le nom d'agent */
+            font-family: 'Fraunces', monospace;
+            font-size: 20px;
+            text-align: center;
+            border-radius: 6px;
+            box-shadow: inset 0 0 10px rgba(78, 205, 196, 0.08);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .agent-name-input::placeholder {
+            color: #777;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .agent-name-input:focus {
+            border-color: #4ecdc4;
+            box-shadow: inset 0 0 15px rgba(78, 205, 196, 0.2), 0 0 8px rgba(78, 205, 196, 0.5);
+        }
+
+        .display-container {
+            background: #050505;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 8px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.05);
+        }
+
+        .display {
+            font-family: 'Fraunces', monospace;
+            font-size: 26px;
+            font-weight: 600;
+            color: #00ff41;
+            text-align: center;
+            letter-spacing: 8px;
+            text-shadow: 0 0 12px rgba(0, 255, 65, 0.6);
+            min-height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            opacity: 0;
+            animation: scanline 0.5s steps(10, end) infinite, displayFadeIn 1s forwards 0.5s;
+        }
+        
+        /* Style pour l'affichage du nom d'agent fixe */
+        .agent-info-display {
+            background: #050505;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin-top: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: #ccc;
+            text-align: center;
+            letter-spacing: 1px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .agent-info-display.show {
+            opacity: 1;
+        }
+
+
+        @keyframes displayFadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes scanline {
+            0% { text-shadow: 0 0 12px rgba(0, 255, 65, 0.6); }
+            50% { text-shadow: 0 0 15px rgba(0, 255, 65, 0.8), 0 1px 0 rgba(0, 255, 65, 0.3); }
+            100% { text-shadow: 0 0 12px rgba(0, 255, 65, 0.6); }
+        }
+
+        .display-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.1) 50%, transparent 50%);
+            background-size: 100% 2px;
+            pointer-events: none;
+            opacity: 0.2;
+        }
+
+        .status-light {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ff4500;
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.8);
+            transition: all 0.5s ease-in-out;
+        }
+
+        .status-light.success {
+            background: #00ff41;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+        }
+
+        /* Clavier */
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+            justify-items: center;
+            /* Flou et opacité par défaut */
+            filter: blur(5px);
+            opacity: 0.5;
+            pointer-events: none; /* Désactive les clics */
+            transition: filter 0.8s ease-out, opacity 0.8s ease-out; /* Animation pour enlever le flou */
+        }
+
+        .keypad.active {
+            filter: blur(0px);
+            opacity: 1;
+            pointer-events: all; /* Active les clics */
+        }
+
+
+        .key {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 22px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 
+                0 5px 10px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            user-select: none;
+            transform: translateZ(0);
+        }
+
+        .key:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 
+                0 8px 15px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        .key:active {
+            background: linear-gradient(145deg, #1e1e1e, #101010);
+            transform: translateY(1px);
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .key::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            opacity: 0.8;
+        }
+
+        /* Contrôles (Boutons Effacer/Valider) */
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            /* Flou et opacité par défaut pour les contrôles aussi */
+            filter: blur(5px);
+            opacity: 0.5;
+            pointer-events: none; /* Désactive les clics */
+            transition: filter 0.8s ease-out, opacity 0.8s ease-out; /* Animation pour enlever le flou */
+        }
+
+        .controls.active {
+            filter: blur(0px);
+            opacity: 1;
+            pointer-events: all; /* Active les clics */
+        }
+
+        .btn {
+            padding: 12px 28px;
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #ccc;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            user-select: none;
+        }
+
+        .btn:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            transform: translateY(-1px);
+            color: #fff;
+        }
+
+        .btn:active {
+            background: linear-gradient(145deg, #1e1e1e, #101010);
+            transform: translateY(1px);
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn.clear {
+            color: #ff6b6b;
+        }
+
+        .btn.enter {
+            color: #4ecdc4;
+        }
+
+        /* Message d'état */
+        .message {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 15px;
+            height: 20px;
+            color: #999;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .message.error {
+            color: #ff6b6b;
+            font-weight: 500;
+            animation: pulseError 0.5s ease-out;
+        }
+
+        .message.success {
+            color: #4ecdc4;
+            font-weight: 500;
+            animation: pulseSuccess 0.5s ease-out;
+        }
+
+        @keyframes pulseError {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes pulseSuccess {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Animations spécifiques */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0) rotateZ(0); }
+            25% { transform: translateX(-5px) rotateZ(-0.5deg); }
+            75% { transform: translateX(5px) rotateZ(0.5deg); }
+        }
+
+        .shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        /* Animation du coffre-fort (Vault) */
+        .vault-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #101010 0%, #000 100%);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            pointer-events: none;
+            backdrop-filter: blur(0px);
+        }
+
+        .vault-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+            backdrop-filter: blur(5px);
+        }
+
+        .vault-door {
+            width: 450px;
+            height: 450px;
+            background: 
+                radial-gradient(circle at 50% 50%, #2a2a2a 40%, #1a1a1a 60%, #0a0a0a 100%);
+            border: 10px solid #3d3d3d;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: 
+                0 0 120px rgba(0, 0, 0, 0.9),
+                inset 0 0 60px rgba(0, 0, 0, 0.6);
+            transition: all 2.5s cubic-bezier(0.7, 0, 0.84, 0);
+            transform-style: preserve-3d;
+            transform: rotateY(0deg) scale(1);
+            opacity: 1;
+            overflow: hidden;
+        }
+
+        .vault-door::before,
+        .vault-door::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            box-sizing: border-box;
+            background: repeating-conic-gradient(from 0deg, #151515 0% 5%, #252525 5% 10%);
+        }
+
+        .vault-door::before {
+            width: 90%;
+            height: 90%;
+            top: 5%;
+            left: 5%;
+            border: 4px solid #4a4a4a;
+            transform: translateZ(5px);
+            animation: rotateGear 60s linear infinite;
+        }
+
+        .vault-door::after {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            border: 3px solid #555;
+            transform: translateZ(10px);
+            animation: rotateGearReverse 80s linear infinite;
+        }
+
+        .vault-door .center-handle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(145deg, #444, #222);
+            border: 5px solid #666;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) translateZ(15px);
+            box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.7), 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: all 1s ease-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            color: #aaa;
+            text-shadow: 0 0 5px #000;
+            overflow: hidden;
+        }
+
+        .vault-door .center-handle::before {
+            content: '⚙️';
+            animation: rotateGearSmall 10s linear infinite;
+        }
+
+        .vault-door.open {
+            transform: rotateY(120deg) translateX(500px) scale(0.7);
+            opacity: 0;
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+        }
+
+        .vault-door.open .center-handle {
+            transform: translate(-50%, -50%) rotateZ(360deg) scale(0);
+            opacity: 0;
+        }
+
+        @keyframes vaultLightPulse {
+            0% { box-shadow: 0 0 0px #fff, 0 0 0px #fff; }
+            50% { box-shadow: 0 0 40px #fff, 0 0 80px rgba(255,255,255,0.8); }
+            100% { box-shadow: 0 0 0px #fff, 0 0 0px #fff; }
+        }
+
+        .vault-overlay.activating .vault-door {
+            animation: vaultLightPulse 1s ease-in-out forwards;
+        }
+
+        @keyframes rotateGear {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotateGearReverse {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+
+        @keyframes rotateGearSmall {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Contenu du coffre-fort */
+        .content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #0a0a0a, #000);
+            z-index: 999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out, transform 0.8s ease-out;
+            transform: translateY(20px);
+            overflow-y: auto;
+            padding-bottom: 80px;
+        }
+
+        .content.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .content h2 {
+            color: #eee;
+            font-size: 3em;
+            margin-top: 50px;
+            margin-bottom: 40px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+            animation: textReveal 1.5s ease-out forwards;
+        }
+
+        @keyframes textReveal {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            transform: translateY(0);
+            position: relative;
+        }
+
+        .card.hidden {
+            display: none;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #555;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 180px;
+            background-color: #0d0d0d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+            color: #666;
+            border-bottom: 1px solid #222;
+            overflow: hidden;
+            /* NOUVEAU: Contour en tirets */
+            border: 2px dashed #444; /* Contour de base */
+            padding: 5px; /* Pour que le tiret ne soit pas collé au bord */
+        }
+        /* Style pour les images cachées */
+        .card-image.hidden-image {
+            filter: grayscale(100%) brightness(50%) blur(5px) !important;
+            opacity: 0.5; /* Rend l'image cachée plus subtile */
+            content: 'ACCÈS RESTREINT'; /* Texte pour image cachée */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff6b6b;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+        }
+
+        .card-image.hidden-image img {
+            opacity: 0; /* Masque l'image si cachée */
+        }
+
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(80%) brightness(80%);
+            transition: filter 0.5s ease-out;
+        }
+
+        .card:hover .card-image img {
+            filter: grayscale(0%) brightness(100%);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-title {
+            color: #e0e0e0;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .card-author {
+            font-size: 0.8em;
+            color: #888;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .card-author.certified {
+            color: #4ecdc4; /* Couleur pour la certification */
+            font-weight: bold;
+        }
+        .certification-icon {
+            margin-left: 5px;
+            color: #4ecdc4; /* Couleur de la coche */
+        }
+
+
+        .card-desc {
+            color: #999;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Bouton Retour */
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #aaa;
+            padding: 12px 20px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 1001;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            transform: translateY(-1px);
+            color: #fff;
+        }
+
+        .back-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Nouveau Dossier et Commentaires */
+        .add-folder-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(145deg, #4ecdc4, #3a9c94);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .add-folder-btn:hover {
+            transform: scale(1.1);
+            background: linear-gradient(145deg, #5eddd3, #43b3a9);
+        }
+
+        .add-folder-btn:active {
+            transform: scale(0.9);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #333;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.7);
+            position: relative;
+        }
+
+        .modal-content h3 {
+            color: #eee;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-content input[type="text"],
+        .modal-content textarea,
+        .modal-content input[type="file"] { /* Style pour input file */
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #444;
+            background-color: #0d0d0d;
+            color: #eee;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Style spécifique pour le bouton parcourir des fichiers */
+        .modal-content input[type="file"] {
+            padding: 8px; /* Moins de padding pour input file */
+            cursor: pointer;
+        }
+        .modal-content input[type="file"]::-webkit-file-upload-button {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            border: 1px solid #555;
+            color: #ccc;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .modal-content input[type="file"]::-webkit-file-upload-button:hover {
+            background: linear-gradient(145deg, #4a4a4a, #343434);
+        }
+
+        .modal-content input::placeholder,
+        .modal-content textarea::placeholder {
+            color: #777;
+        }
+
+        .modal-content button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(145deg, #4ecdc4, #3a9c94);
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .modal-content button:hover {
+            background: linear-gradient(145deg, #5eddd3, #43b3a9);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Section Commentaires */
+        .comments-section {
+            padding: 15px 20px;
+            border-top: 1px solid #2a2a2a;
+            margin-top: 15px;
+        }
+
+        .comments-section h4 {
+            color: #e0e0e0;
+            margin-bottom: 10px;
+        }
+
+        .comments-list {
+            max-height: 100px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .comment {
+            background-color: #151515;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #bbb;
+            position: relative;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: #4ecdc4;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .comment-meta {
+            font-size: 0.75em;
+            color: #888;
+            margin-top: -3px;
+            margin-bottom: 5px;
+        }
+        .comment-meta .modified-tag {
+            font-weight: bold;
+            color: #f7d794; /* Gold-like for modified */
+            margin-left: 5px;
+        }
+
+
+        .comment-reply-info { /* New style for reply indicator */
+            font-size: 0.8em;
+            color: #888;
+            margin-left: 10px;
+            display: block;
+        }
+
+        .comment-actions { /* New style for comment actions */
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+        .comment-actions button {
+            background: none;
+            border: none;
+            color: #bbb;
+            cursor: pointer;
+            padding: 0;
+            font-size: inherit;
+            transition: color 0.2s ease;
+        }
+        .comment-actions button:hover {
+            color: #fff;
+        }
+        .comment-actions .like-btn.liked {
+            color: #4ecdc4; /* Color when liked */
+            font-weight: bold;
+        }
+        .comment-actions .edit-btn {
+            color: #f7d794;
+        }
+        .comment-actions .delete-btn {
+            color: #ff6b6b;
+        }
+
+
+        .comment-form {
+            margin-top: 15px;
+        }
+
+        .comment-form textarea {
+            width: calc(100% - 20px);
+            padding: 8px;
+            border: 1px solid #444;
+            background-color: #0d0d0d;
+            color: #eee;
+            border-radius: 5px;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .comment-form button {
+            padding: 8px 15px;
+            background: linear-gradient(145deg, #4ecdc4, #3a9c94);
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: auto;
+        }
+
+        .comment-form button:hover {
+            background: linear-gradient(145deg, #5eddd3, #43b3a9);
+        }
+
+        /* Boutons d'admin Assane Diop et Créateur */
+        .admin-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+            opacity: 0.7;
+        }
+        .admin-controls.creator-only { /* Pour les boutons du créateur */
+            right: auto;
+            left: 10px;
+        }
+
+        .admin-controls button {
+            background: rgba(50,50,50,0.8);
+            border: 1px solid #666;
+            color: #eee;
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .admin-controls button:hover {
+            background: #555;
+            color: #fff;
+            opacity: 1;
+        }
+
+        .admin-controls button.delete {
+            color: #ff6b6b;
+        }
+        .admin-controls button.edit {
+            color: #f7d794; /* Couleur pour modifier */
+        }
+
+        /* Dossier actions (likes, reposts) */
+        .dossier-actions { /* New style */
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #2a2a2a;
+            margin-top: 15px;
+        }
+        .dossier-actions button {
+            background: none;
+            border: none;
+            color: #bbb;
+            cursor: pointer;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .dossier-actions button:hover {
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .dossier-actions .like-btn.liked {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+        .dossier-actions .dislike-btn.disliked {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        .dossier-actions .repost-btn.reposted {
+            color: #f7d794;
+            font-weight: bold;
+        }
+
+        /* Notification Center */
+        .notification-center {
+            position: fixed;
+            top: 20px; /* Aligné avec la cloche */
+            right: 20px; /* Aligné avec la cloche */
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 80vh;
+            width: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            display: none; /* Hidden by default */
+        }
+        .notification-center.show {
+            display: block;
+        }
+        .notification-center h4 {
+            color: #eee;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .notification-item {
+            background-color: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #bbb;
+            position: relative;
+        }
+        .notification-item.unread {
+            background-color: #2a1a0f; /* Slightly different for unread */
+            border-color: #ff9800;
+            color: #ffe0b2;
+        }
+        .notification-timestamp {
+            font-size: 0.7em;
+            color: #777;
+            text-align: right;
+            margin-top: 5px;
+        }
+        .notification-item .delete-notification-btn { /* Bouton supprimer une notif */
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 0.8em;
+            opacity: 0.5;
+            transition: opacity 0.2s ease;
+        }
+        .notification-item .delete-notification-btn:hover {
+            opacity: 1;
+            color: #fff;
+        }
+        .notification-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .notification-actions button {
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #ccc;
+            padding: 5px 10px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .notification-actions button:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            color: #fff;
+        }
+
+
+        /* Icône de cloche pour notifications */
+        .notification-bell-btn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            border-radius: 50%; /* Rendre rond */
+            width: 45px; /* Ajuster taille */
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 1.2em; /* Taille de l'icône */
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s ease;
+            z-index: 1001; /* Au-dessus de tout */
+        }
+        .notification-bell-btn:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            transform: scale(1.05);
+        }
+        .notification-bell-btn:active {
+            transform: scale(0.95);
+        }
+        .notification-bell-btn .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ff6b6b; /* Rouge pour les nouvelles notifs */
+            color: #fff;
+            font-size: 0.7em;
+            padding: 2px 6px;
+            border-radius: 50%;
+            display: none; /* Caché par défaut, affiché si count > 0 */
+            line-height: 1; /* Pour centrer le texte */
+        }
+        .notification-bell-btn .notification-count.show {
+            display: block;
+        }
+
+        /* --- Styles de la Messagerie Privée (Nouveau) --- */
+        .messaging-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: none;
+            grid-template-columns: 200px 1fr; /* Navbar à gauche, chat à droite */
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+        .messaging-container.show {
+            display: grid;
+        }
+
+        .navbar-vertical {
+            background: linear-gradient(180deg, #181818, #0b0b0b);
+            border-right: 1px solid #2a2a2a;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .navbar-vertical h4 {
+            color: #eee;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+        .navbar-vertical button {
+            background: linear-gradient(145deg, #333, #1e1e1e);
+            border: 1px solid #444;
+            color: #ccc;
+            padding: 8px 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+        }
+        .navbar-vertical button:hover {
+            background: linear-gradient(145deg, #3a3a3a, #282828);
+            color: #fff;
+        }
+        .navbar-vertical .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #0d0d0d;
+            border: 1px solid #333;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .navbar-vertical .contact-item:hover,
+        .navbar-vertical .contact-item.active {
+            background-color: #1e1e1e;
+            border-color: #4ecdc4;
+        }
+        .navbar-vertical .contact-item .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ff6b6b; /* Red for pending */
+        }
+        .navbar-vertical .contact-item .status-dot.accepted {
+            background-color: #00ff41; /* Green for accepted */
+        }
+
+
+        .chat-area {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            position: relative;
+        }
+        .chat-header {
+            color: #eee;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #0a0a0a;
+            border-radius: 8px;
+            border: 1px solid #2a2a2a;
+            margin-bottom: 15px;
+        }
+        .message-item {
+            background-color: #1a1a1a;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            position: relative;
+            max-width: 80%;
+            /* Make space for overlay without affecting flow */
+            padding-right: 40px; /* Space for reactions overlay */
+            padding-left: 40px; /* Space for reactions overlay */
+        }
+        .message-item.sent {
+            margin-left: auto;
+            background-color: #1a2a2a; /* Bleuâtre pour les messages envoyés */
+        }
+        .message-item.received {
+            margin-right: auto;
+            background-color: #1a1a1a; /* Gris-sombre pour les messages reçus */
+        }
+        .message-sender {
+            font-weight: bold;
+            color: #4ecdc4;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        .message-text {
+            color: #eee;
+            line-height: 1.4;
+        }
+        .message-timestamp {
+            font-size: 0.7em;
+            color: #777;
+            text-align: right;
+            margin-top: 5px;
+        }
+        /* Message actions (reactions, copy, transfer) */
+        .message-actions-overlay {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0,0,0,0.8);
+            border-radius: 5px;
+            display: none; /* Hidden by default */
+            padding: 5px;
+            gap: 5px;
+            z-index: 10;
+        }
+        .message-item.sent .message-actions-overlay { /* Position for sent messages */
+            left: -10px;
+        }
+        .message-item.received .message-actions-overlay { /* Position for received messages */
+            right: -10px;
+        }
+
+        .message-item:hover .message-actions-overlay {
+            display: flex; /* Show on hover */
+        }
+        .message-actions-overlay button {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 5px;
+        }
+        .message-actions-overlay button:hover {
+            color: #4ecdc4;
+        }
+        .message-reactions {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+            font-size: 0.8em;
+            flex-wrap: wrap;
+        }
+        .message-reaction-item {
+            background-color: #0d0d0d;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 2px 6px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .message-reaction-item span:first-child { /* Emoji */
+            font-size: 1.2em;
+        }
+        .message-reaction-item span:last-child { /* Count */
+            font-size: 0.9em;
+            color: #ccc;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input-area textarea {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #333;
+            background-color: #0d0d0d;
+            color: #eee;
+            border-radius: 8px;
+            resize: none;
+            outline: none;
+        }
+        .chat-input-area textarea:focus {
+            border-color: #4ecdc4;
+        }
+        .chat-input-area button {
+            background: linear-gradient(145deg, #4ecdc4, #3a9c94);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .chat-input-area button:hover {
+            background: linear-gradient(145deg, #5eddd3, #43b3a9);
+        }
+
+        .messaging-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 2em;
+            cursor: pointer;
+            z-index: 100;
+        }
+        .messaging-close-btn:hover {
+            color: #fff;
+        }
+
+        /* Modale d'ajout de contact */
+        .add-contact-modal .modal-content {
+            max-width: 350px;
+        }
+        .add-contact-modal input[type="text"] {
+            margin-bottom: 15px;
+        }
+        /* Modale de transfert de message */
+        .transfer-modal .modal-content {
+            max-width: 400px;
+        }
+        .transfer-modal .contact-list-transfer {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            padding: 5px;
+        }
+        .transfer-modal .contact-item-transfer {
+            padding: 8px;
+            cursor: pointer;
+            border-bottom: 1px solid #1e1e1e;
+        }
+        .transfer-modal .contact-item-transfer:last-child {
+            border-bottom: none;
+        }
+        .transfer-modal .contact-item-transfer:hover {
+            background-color: #1a1a1a;
+        }
+        /* Message certifié par L'Agence */
+        .card-author .certified-label {
+            background-color: #4ecdc4;
+            color: #0d0d0d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="no-screenshot" id="noScreenshotOverlay"></div>
+
+    <div class="container" id="mainContainer">
+        <div class="digicode">
+            <div class="header">
+                <div class="title" id="digicodeTitle">ENTREZ NOM D'AGENT</div>
+                <input type="text" id="agentNameInput" class="agent-name-input" placeholder="Saisissez votre nom d'agent" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                
+                <div class="display-container">
+                    <div class="display" id="display">_ _ _ _ _ _ _ _</div> <div class="status-light" id="statusLight"></div>
+                </div>
+            </div>
+
+            <div class="keypad" id="keypad">
+                <div class="key" data-key="1">1</div>
+                <div class="key" data-key="2">2</div>
+                <div class="key" data-key="3">3</div>
+                <div class="key" data-key="4">4</div>
+                <div class="key" data-key="5">5</div>
+                <div class="key" data-key="6">6</div>
+                <div class="key" data-key="7">7</div>
+                <div class="key" data-key="8">8</div>
+                <div class="key" data-key="9">9</div>
+                <div class="key" data-key="*">*</div>
+                <div class="key" data-key="0">0</div>
+                <div class="key" data-key="#">#</div>
+            </div>
+
+            <div class="controls" id="controls">
+                <button class="btn clear" id="clearBtn">Effacer</button>
+                <button class="btn enter" id="enterBtn">Valider</button>
+            </div>
+            
+            <div class="agent-info-display" id="loggedInAgentDisplay"></div>
+            
+            <div class="message" id="message"></div>
+        </div>
+    </div>
+
+    <div class="vault-overlay" id="vaultOverlay">
+        <div class="vault-door" id="vaultDoor">
+            <div class="center-handle"></div>
+        </div>
+    </div>
+
+    <div class="content" id="content">
+        <button class="back-btn" id="backBtn">← Déconnexion</button>
+        <button class="notification-bell-btn" id="notificationBellBtn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-count" id="notificationCount">0</span>
+        </button>
+
+        <h2 id="welcomeAgentMessage">BIENVENUE, AGENT.</h2>
+        <div class="gallery" id="gallery">
+            </div>
+        <button class="add-folder-btn" id="addFolderBtn">+</button>
+
+        <div class="notification-center" id="notificationCenter">
+            <button class="close-notifications-btn" id="closeNotificationsBtn">&times;</button>
+            <h4>Centre de Notifications</h4>
+            <div id="notificationList">
+                </div>
+            <div class="notification-actions">
+                <button id="deleteAllNotificationsBtn">Supprimer tout</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="folderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeFolderModalBtn">&times;</span>
+            <h3 id="folderModalTitle">Ajouter un Nouveau Dossier</h3>
+            <input type="hidden" id="folderId"> <input type="text" id="folderTitle" placeholder="Titre du dossier" required>
+            <input type="file" id="folderImageUpload" accept="image/*"> <textarea id="folderDesc" placeholder="Description du dossier" rows="4" required></textarea>
+            <button id="saveFolderBtn">Sauvegarder Dossier</button>
+        </div>
+    </div>
+
+    <div id="messagingContainer" class="messaging-container">
+        <button class="messaging-close-btn" id="closeMessagingBtn">&times;</button>
+        <div class="navbar-vertical">
+            <h4>Contacts</h4>
+            <button id="addContactBtn"><i class="fas fa-user-plus"></i> Ajouter Contact</button>
+            <div id="contactList">
+                </div>
+        </div>
+        <div class="chat-area" id="chatArea">
+            <h3 class="chat-header" id="chatHeader">Sélectionnez un contact</h3>
+            <div class="chat-messages" id="chatMessages">
+                </div>
+            <div class="chat-input-area">
+                <textarea id="messageInput" placeholder="Écrire un message..."></textarea>
+                <button id="sendMessageBtn"><i class="fas fa-paper-plane"></i> Envoyer</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addContactModal" class="modal add-contact-modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeAddContactModalBtn">&times;</span>
+            <h3>Ajouter un Contact</h3>
+            <input type="text" id="newContactNameInput" placeholder="Nom d'agent du contact" required>
+            <button id="sendContactRequestBtn">Envoyer Demande</button>
+        </div>
+    </div>
+
+    <div id="transferMessageModal" class="modal transfer-modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeTransferModalBtn">&times;</span>
+            <h3>Transférer le message à...</h3>
+            <div id="transferContactList" class="contact-list-transfer">
+                </div>
+            <button id="confirmTransferBtn">Transférer</button>
+        </div>
+    </div>
+
+
+    <audio id="keyClickSound" src="sounds/click.mp3" preload="auto"></audio>
+    <audio id="codeEnterSound" src="sounds/chime.mp3" preload="auto"></audio>
+    <audio id="codeErrorSound" src="sounds/error.mp3" preload="auto"></audio>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        // CONFIGURATION
+        const CORRECT_CODE_LENGTH = 8;
+        const ASSANE_DIOP_NAME = 'Assane Diop';
+        const AUTO_VALIDATE_DELAY = 500;
+        const API_BASE_URL = 'http://localhost:3000/api';
+        const SOCKET_IO_URL = 'http://localhost:3000'; // Socket.IO server URL
+
+        const MESSAGE_POLLING_INTERVAL = 3000; // Poll messages every 3 seconds (fallback if WebSocket fails)
+        const NOTIFICATION_POLLING_INTERVAL = 10000; // Poll notifications every 10 seconds
+
+        // Volume des sons (0.0 à 1.0)
+        const KEY_CLICK_VOLUME = 0.3;
+        const CODE_ENTER_VOLUME = 0.5;
+        const CODE_ERROR_VOLUME = 0.3;
+
+        // DOM Elements
+        const display = document.getElementById('display');
+        const digicodeTitle = document.getElementById('digicodeTitle');
+        const agentNameInput = document.getElementById('agentNameInput');
+        const loggedInAgentDisplay = document.getElementById('loggedInAgentDisplay');
+        const statusLight = document.getElementById('statusLight');
+        const message = document.getElementById('message');
+        const vaultOverlay = document.getElementById('vaultOverlay');
+        const vaultDoor = document.getElementById('vaultDoor');
+        const content = document.getElementById('content');
+        const digicode = document.querySelector('.digicode');
+        const keypad = document.getElementById('keypad');
+        const controls = document.getElementById('controls');
+        const mainContainer = document.getElementById('mainContainer');
+        const gallery = document.getElementById('gallery');
+        const addFolderBtn = document.getElementById('addFolderBtn');
+        const folderModal = document.getElementById('folderModal');
+        const closeFolderModalBtn = document.getElementById('closeFolderModalBtn');
+        const saveFolderBtn = document.getElementById('saveFolderBtn');
+        const folderModalTitle = document.getElementById('folderModalTitle');
+        const folderIdInput = document.getElementById('folderId');
+        const folderTitleInput = document.getElementById('folderTitle');
+        const folderImageUploadInput = document.getElementById('folderImageUpload');
+        const folderDescInput = document.getElementById('folderDesc');
+        const welcomeAgentMessage = document.getElementById('welcomeAgentMessage');
+        // Notification elements
+        const notificationBellBtn = document.getElementById('notificationBellBtn');
+        const notificationCount = document.getElementById('notificationCount');
+        const notificationCenter = document.getElementById('notificationCenter');
+        const closeNotificationsBtn = document.getElementById('closeNotificationsBtn');
+        const notificationList = document.getElementById('notificationList');
+        const deleteAllNotificationsBtn = document.getElementById('deleteAllNotificationsBtn');
+        // Messaging elements
+        const messagingContainer = document.getElementById('messagingContainer');
+        const closeMessagingBtn = document.getElementById('closeMessagingBtn');
+        const addContactBtn = document.getElementById('addContactBtn');
+        const contactList = document.getElementById('contactList');
+        const chatArea = document.getElementById('chatArea');
+        const chatHeader = document.getElementById('chatHeader');
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendMessageBtn = document.getElementById('sendMessageBtn');
+        const addContactModal = document.getElementById('addContactModal');
+        const closeAddContactModalBtn = document.getElementById('closeAddContactModalBtn');
+        const newContactNameInput = document.getElementById('newContactNameInput');
+        const sendContactRequestBtn = document.getElementById('sendContactRequestBtn');
+        const transferMessageModal = document.getElementById('transferMessageModal');
+        const closeTransferModalBtn = document.getElementById('closeTransferModalBtn');
+        const transferContactList = document.getElementById('transferContactList');
+        const confirmTransferBtn = document.getElementById('confirmTransferBtn');
+
+        // Audio Elements
+        const keyClickSound = document.getElementById('keyClickSound');
+        const codeEnterSound = document.getElementById('codeEnterSound');
+        const codeErrorSound = document.getElementById('codeErrorSound');
+
+        keyClickSound.volume = KEY_CLICK_VOLUME;
+        codeEnterSound.volume = CODE_ENTER_VOLUME;
+        codeErrorSound.volume = CODE_ERROR_VOLUME;
+
+        let currentCodeInput = '';
+        let currentAgentName = ''; // Agent connecté
+        let isAgentNamePhase = true;
+        let isUnlocked = false;
+
+        let agentNameTimeout;
+        let notificationsPollingInterval; // For polling notifications
+        let messagePollingInterval; // For polling private messages
+        let activeChatContact = null; // Stores the name of the currently active chat contact
+
+        // Emojis for message reactions
+        const reactionEmojis = ['👍', '👎', '❤️', '😂', '😮', '😢', '😡'];
+        let messageToTransfer = null; // Stores message object when transfer button is clicked
+
+        // Socket.IO client instance
+        let socket;
+
+        // --- Backend Interaction Functions ---
+        async function fetchAPI(endpoint, options = {}) {
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    let errorMessage = `Erreur réseau ou du serveur: ${response.status}`;
+                    try {
+                        const errorData = JSON.parse(errorText);
+                        errorMessage = errorData.message || errorMessage;
+                    } catch (e) {
+                        errorMessage = `Erreur serveur: ${response.status} - ${errorText.substring(0, 100)}...`;
+                    }
+                    throw new Error(errorMessage);
+                }
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json();
+                }
+                return {};
+            } catch (error) {
+                console.error(`Erreur lors du fetch API ${endpoint}:`, error);
+                throw error;
+            }
+        }
+
+        async function fetchAgents() { return fetchAPI('/agents'); }
+        async function fetchDossiers() { return fetchAPI('/dossiers'); }
+
+        async function saveDossier(formData) {
+            const id = formData.get('id');
+            const isEditing = id && id !== 'null' && id !== '';
+            const method = isEditing ? 'PUT' : 'POST';
+            const endpoint = isEditing ? `/dossiers/${id}` : '/dossiers';
+            return fetchAPI(endpoint, { method, body: formData });
+        }
+
+        async function deleteDossierOnServer(id, actionPerformer) {
+            return fetchAPI(`/dossiers/${id}`, { 
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ actionPerformer })
+            });
+        }
+
+        async function toggleDossierLike(dossierId, agentName, isLike) {
+            return fetchAPI(`/dossiers/${dossierId}/like`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ agentName, isLike })
+            });
+        }
+
+        async function toggleDossierRepost(dossierId, agentName) {
+            return fetchAPI(`/dossiers/${dossierId}/repost`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ agentName })
+            });
+        }
+
+        async function addCommentToServer(dossierId, commentText, author, parentId = null) {
+            return fetchAPI(`/dossiers/${dossierId}/comments`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: commentText, author, parentId })
+            });
+        }
+        
+        async function updateCommentOnServer(dossierId, commentId, newText, actionPerformer, noModifiedTag) {
+            return fetchAPI(`/dossiers/${dossierId}/comments/${commentId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: newText, actionPerformer, noModifiedTag })
+            });
+        }
+
+        async function deleteCommentOnServer(dossierId, commentId, actionPerformer) {
+            return fetchAPI(`/dossiers/${dossierId}/comments/${commentId}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ actionPerformer })
+            });
+        }
+
+        async function toggleCommentLike(dossierId, commentId, agentName) {
+            return fetchAPI(`/dossiers/${dossierId}/comments/${commentId}/like`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ agentName })
+            });
+        }
+
+        async function fetchNotifications(agentName) {
+            return fetchAPI(`/notifications/${agentName}`);
+        }
+
+        async function markNotificationAsReadOnServer(notificationId, agentName) { // New API call
+            return fetchAPI(`/notifications/mark-read/${notificationId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ agentName })
+            });
+        }
+
+        async function deleteNotificationOnServer(notificationId) {
+            return fetchAPI(`/notifications/${notificationId}`, { method: 'DELETE' });
+        }
+
+        async function deleteAllNotificationsOnServer(agentName) {
+            return fetchAPI(`/notifications/all/${agentName}`, { method: 'DELETE' });
+        }
+
+        // Messaging API Calls
+        async function sendContactRequest(sender, recipient) {
+            return fetchAPI('/contacts/request', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sender, recipient })
+            });
+        }
+
+        async function acceptContactRequest(contactId, acceptorAgentName) {
+            return fetchAPI('/contacts/accept', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contactId, acceptorAgentName })
+            });
+        }
+
+        async function fetchContacts(agentName) {
+            return fetchAPI(`/contacts/${agentName}`);
+        }
+
+        async function fetchMessages(agent1, agent2) {
+            return fetchAPI(`/messages/${agent1}/${agent2}`);
+        }
+
+        async function sendMessage(sender, recipient, text, transferFromMessageId = null) {
+            return fetchAPI('/messages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sender, recipient, text, transferFromMessageId })
+            });
+        }
+
+        async function reactToMessage(messageId, agentName, emoji) {
+            return fetchAPI(`/messages/${messageId}/react`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ agentName, emoji })
+            });
+        }
+
+        // --- End Backend Interaction Functions ---
+
+        // Anti-screenshot protection
+        const noScreenshotOverlay = document.getElementById('noScreenshotOverlay');
+        function toggleScreenshotProtection(enable) {
+            if (enable) {
+                document.addEventListener('visibilitychange', handleVisibilityChange);
+                document.addEventListener('blur', handleBlur);
+                window.addEventListener('keyup', handleKeyUp);
+                window.addEventListener('keydown', handleKeyDown);
+            } else {
+                document.removeEventListener('visibilitychange', handleVisibilityChange);
+                document.removeEventListener('blur', handleBlur);
+                window.removeEventListener('keyup', handleKeyUp);
+                window.removeEventListener('keydown', handleKeyDown);
+                noScreenshotOverlay.style.opacity = 0;
+            }
+        }
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                noScreenshotOverlay.style.opacity = 1;
+            } else {
+                noScreenshotOverlay.style.opacity = 0;
+            }
+        }
+        function handleBlur() {
+            noScreenshotOverlay.style.opacity = 1;
+        }
+        function handleKeyUp(e) {
+            if (e.key === "PrintScreen" || e.keyCode === 44) {
+                noScreenshotOverlay.style.opacity = 1;
+                setTimeout(() => noScreenshotOverlay.style.opacity = 0, 200);
+            }
+        }
+        function handleKeyDown(e) {
+            if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === '3' || e.key === '4')) {
+                noScreenshotOverlay.style.opacity = 1;
+                setTimeout(() => noScreenshotOverlay.style.opacity = 0, 200);
+            }
+        }
+
+        // Event Listeners for Digicode
+        document.querySelectorAll('.key').forEach(key => {
+            key.addEventListener('click', function() {
+                if (isUnlocked || isAgentNamePhase) return;
+                keyClickSound.currentTime = 0; keyClickSound.play();
+                const keyValue = this.getAttribute('data-key');
+                this.style.transition = 'none'; this.style.transform = 'translateY(1px)';
+                setTimeout(() => { this.style.transition = 'all 0.2s ease-out'; this.style.transform = 'translateY(0)'; }, 50);
+                if (currentCodeInput.length < CORRECT_CODE_LENGTH) {
+                    currentCodeInput += keyValue; updateDisplayCode(); clearMessage();
+                }
+            });
+        });
+
+        // Écouteur pour la saisie automatique du nom d'agent
+        agentNameInput.addEventListener('input', () => {
+            clearTimeout(agentNameTimeout);
+            clearMessage();
+            
+            if (agentNameInput.value.trim() === '') {
+                digicodeTitle.textContent = 'ENTREZ NOM D\'AGENT';
+                loggedInAgentDisplay.classList.remove('show');
+                loggedInAgentDisplay.textContent = '';
+                return;
+            }
+
+            agentNameTimeout = setTimeout(checkAgentNameAuto, AUTO_VALIDATE_DELAY);
+        });
+        
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            if (isUnlocked) return; clearMessage(); statusLight.classList.remove('success');
+            statusLight.style.background = '#ff4500'; statusLight.style.boxShadow = '0 0 10px rgba(255, 69, 0, 0.8)';
+            if (isAgentNamePhase) {
+                agentNameInput.value = ''; digicodeTitle.textContent = 'ENTREZ NOM D\'AGENT';
+                loggedInAgentDisplay.classList.remove('show'); loggedInAgentDisplay.textContent = '';
+            } else {
+                currentCodeInput = ''; updateDisplayCode();
+            }
+        });
+
+        document.getElementById('enterBtn').addEventListener('click', function() {
+            if (isUnlocked) return;
+            if (isAgentNamePhase) {
+                showMessage('Saisie du nom d\'agent automatique. Tapez votre nom.', 'info');
+                digicode.classList.add('shake'); setTimeout(() => digicode.classList.remove('shake'), 300);
+            } else { validateCode(); }
+        });
+
+        // "Déconnexion" button
+        document.getElementById('backBtn').addEventListener('click', function() { resetSystem(); });
+
+        // Modale d'ajout/modification de dossier
+        addFolderBtn.addEventListener('click', () => { openFolderModal('add'); });
+        closeFolderModalBtn.addEventListener('click', () => { folderModal.style.display = 'none'; });
+        window.addEventListener('click', (event) => {
+            if (event.target == folderModal) { folderModal.style.display = 'none'; }
+            if (event.target == addContactModal) { addContactModal.style.display = 'none'; }
+            if (event.target == transferMessageModal) { transferMessageModal.style.display = 'none'; messageToTransfer = null; }
+        });
+
+        saveFolderBtn.addEventListener('click', async () => {
+            const id = folderIdInput.value;
+            const title = folderTitleInput.value.trim();
+            const imageFile = folderImageUploadInput.files[0];
+            const desc = folderDescInput.value.trim();
+
+            if (!title || !desc) { alert('Veuillez remplir le titre et la description.'); return; }
+            if (!id && !imageFile) { alert('Veuillez sélectionner une image pour le nouveau dossier.'); return; }
+            
+            const formData = new FormData();
+            if (id) formData.append('id', id);
+            formData.append('title', title);
+            formData.append('desc', desc);
+            formData.append('author', currentAgentName);
+            
+            formData.append('isHidden', 'false');
+            formData.append('imageHidden', 'false');
+
+            if (id) {
+                const existingDossier = window.DossierCache.find(d => String(d.id) === String(id));
+                if (existingDossier) {
+                    formData.set('isHidden', existingDossier.isHidden ? 'true' : 'false');
+                    formData.set('imageHidden', existingDossier.imageHidden ? 'true' : 'false');
+                }
+            }
+
+            if (imageFile) { formData.append('image', imageFile); }
+
+            try {
+                const savedDossier = await saveDossier(formData);
+                console.log('Dossier sauvegardé:', savedDossier);
+                // No need to loadDossiers() here, Socket.IO will push the update
+                folderModal.style.display = 'none';
+                showMessage(`Dossier ${id ? 'mis à jour' : 'créé'} !`, 'success');
+            } catch (error) {
+                console.error('Erreur lors de la sauvegarde du dossier:', error);
+                showMessage(`Erreur: ${error.message}`, 'error');
+            }
+        });
+
+        function openFolderModal(mode, dossier = {}) {
+            folderModal.style.display = 'flex';
+            folderIdInput.value = dossier.id || '';
+            folderTitleInput.value = dossier.title || '';
+            folderDescInput.value = dossier.desc || '';
+            folderImageUploadInput.value = '';
+
+            if (mode === 'add') {
+                folderModalTitle.textContent = 'Ajouter un Nouveau Dossier';
+                saveFolderBtn.textContent = 'Créer Dossier';
+                folderImageUploadInput.style.display = 'block';
+            } else if (mode === 'edit') {
+                folderModalTitle.textContent = 'Modifier Dossier';
+                saveFolderBtn.textContent = 'Sauvegarder Modifications';
+                folderImageUploadInput.style.display = 'block';
+            }
+        }
+
+        // --- Digicode Display & Validation Functions ---
+        function updateDisplayCode() {
+            const masked = currentCodeInput.replace(/./g, '●');
+            const display_text = (masked + '________').substring(0, CORRECT_CODE_LENGTH).split('').join(' ');
+            display.textContent = display_text;
+            digicodeTitle.textContent = 'ENTREZ CODE D\'ACCÈS';
+        }
+
+        async function checkAgentNameAuto() {
+            const enteredName = agentNameInput.value.trim();
+            if (enteredName.length < 2) {
+                return;
+            }
+
+            const agents = await fetchAgents();
+            const foundAgent = agents.find(agent => agent.name.toLowerCase() === enteredName.toLowerCase());
+
+            if (foundAgent) {
+                currentAgentName = foundAgent.name;
+                loggedInAgentDisplay.textContent = `AGENT : ${currentAgentName.toUpperCase()}`;
+                loggedInAgentDisplay.classList.add('show');
+
+                showMessage(`Nom d'agent validé. Veuillez entrer le code.`, 'success');
+                isAgentNamePhase = false;
+
+                agentNameInput.style.display = 'none'; 
+                display.style.opacity = 1;
+
+                keypad.classList.add('active');
+                controls.classList.add('active');
+
+                currentCodeInput = '';
+                updateDisplayCode();
+                agentNameInput.blur();
+            } else {
+                digicodeTitle.textContent = 'NOM D\'AGENT INCONNU?';
+                showMessage('Nom d\'agent non reconnu', 'error');
+            }
+        }
+
+        async function validateCode() {
+            if (currentCodeInput.length !== CORRECT_CODE_LENGTH) {
+                showMessage('Code incomplet', 'error');
+                digicode.classList.add('shake');
+                setTimeout(() => {
+                    digicode.classList.remove('shake');
+                }, 300);
+                return;
+            }
+
+            const agents = await fetchAgents();
+            const authenticatedAgent = agents.find(agent => agent.name === currentAgentName && agent.code === currentCodeInput);
+
+            if (authenticatedAgent) {
+                unlock();
+            } else {
+                showMessage('Code incorrect - Intrusion détectée !', 'error');
+                codeErrorSound.currentTime = 0;
+                codeErrorSound.play();
+                digicode.classList.add('shake');
+                statusLight.style.background = '#ff0000';
+                statusLight.style.boxShadow = '0 0 15px rgba(255, 0, 0, 1)';
+                setTimeout(() => {
+                    digicode.classList.remove('shake');
+                    currentCodeInput = '';
+                    updateDisplayCode();
+                }, 1200);
+            }
+        }
+        
+        async function unlock() {
+            isUnlocked = true;
+            statusLight.classList.add('success');
+            showMessage(`Accès autorisé - Bienvenue, Agent ${currentAgentName}.`, 'success');
+            codeEnterSound.currentTime = 0; codeEnterSound.play();
+            
+            toggleScreenshotProtection(true);
+            welcomeAgentMessage.textContent = `BIENVENUE, AGENT ${currentAgentName.toUpperCase()}.`;
+
+            // Save agent name to localStorage for session persistence
+            localStorage.setItem('loggedInAgentName', currentAgentName);
+
+            digicode.classList.add('hide');
+            
+            setTimeout(() => {
+                vaultOverlay.style.display = 'flex';
+                vaultOverlay.classList.add('activating'); 
+                setTimeout(() => {
+                    vaultOverlay.classList.add('show');
+
+                    setTimeout(() => {
+                        vaultDoor.classList.add('open');
+
+                        setTimeout(async () => {
+                            content.style.display = 'flex';
+                            await loadDossiers();
+                            addFolderBtn.style.display = 'flex';
+                            
+                            notificationBellBtn.style.display = 'flex';
+                            startNotificationPolling(); // Use polling for initial load and fallback
+                            
+                            // Initialize Socket.IO connection
+                            socket = io(SOCKET_IO_URL);
+                            socket.on('connect', () => {
+                                console.log('Connecté à Socket.IO:', socket.id);
+                                socket.emit('agent_identify', currentAgentName); // Let server know who this client is
+                            });
+                            socket.on('disconnect', () => {
+                                console.log('Déconnecté de Socket.IO');
+                            });
+
+                            // Real-time event listeners
+                            setupSocketListeners();
+
+
+                            setTimeout(() => {
+                                content.classList.add('show');
+                                vaultOverlay.style.display = 'none';
+                            }, 100);
+                        }, 1000);
+                    }, 1000);
+                }, 100);
+            }, 1800);
+        }
+
+        function resetSystem() {
+            isUnlocked = false; isAgentNamePhase = true; currentCodeInput = ''; currentAgentName = '';
+            clearMessage(); statusLight.classList.remove('success');
+            
+            keypad.classList.remove('active'); controls.classList.remove('active');
+
+            agentNameInput.value = ''; agentNameInput.style.display = 'block'; agentNameInput.focus();
+            
+            display.style.opacity = 0; digicodeTitle.textContent = 'ENTREZ NOM D\'AGENT';
+
+            loggedInAgentDisplay.classList.remove('show'); loggedInAgentDisplay.textContent = '';
+
+            content.classList.remove('show');
+            addFolderBtn.style.display = 'none';
+            notificationBellBtn.style.display = 'none';
+            notificationCenter.classList.remove('show');
+            clearInterval(notificationsPollingInterval);
+            notificationCount.textContent = '0';
+            notificationCount.classList.remove('show');
+            
+            messagingContainer.classList.remove('show');
+            clearInterval(messagePollingInterval);
+            activeChatContact = null;
+            localStorage.removeItem('loggedInAgentName'); // Clear session on logout
+
+            // Disconnect Socket.IO
+            if (socket) {
+                socket.disconnect();
+            }
+
+            setTimeout(() => {
+                vaultDoor.classList.remove('open'); vaultOverlay.classList.remove('show'); vaultOverlay.classList.remove('activating');
+                setTimeout(() => {
+                    vaultOverlay.style.display = 'none'; digicode.classList.remove('hide');
+                    toggleScreenshotProtection(false); 
+                }, 500);
+            }, 800);
+        }
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = `message ${type}`;
+        }
+        function clearMessage() {
+            message.textContent = '';
+            message.className = 'message';
+        }
+
+        // --- Real-time Socket.IO Event Handlers ---
+        function setupSocketListeners() {
+            if (!socket) return;
+
+            socket.on('new_dossier', (dossier) => {
+                console.log('Real-time: Nouveau dossier reçu', dossier);
+                // Prepend new dossier to cache and re-render
+                window.DossierCache.unshift(dossier);
+                loadDossiers(); // Re-render all to maintain order
+                showMessage(`Nouveau dossier de ${dossier.author}: "${dossier.title}"`, 'info');
+            });
+
+            socket.on('update_dossier', (updatedDossier) => {
+                console.log('Real-time: Dossier mis à jour', updatedDossier);
+                const index = window.DossierCache.findIndex(d => d.id === updatedDossier.id);
+                if (index !== -1) {
+                    window.DossierCache[index] = updatedDossier;
+                    loadDossiers(); // Re-render to reflect changes
+                }
+            });
+
+            socket.on('delete_dossier', (data) => {
+                console.log('Real-time: Dossier supprimé', data.id);
+                window.DossierCache = window.DossierCache.filter(d => d.id !== data.id);
+                document.querySelector(`.card[data-id="${data.id}"]`)?.remove(); // Remove from DOM directly
+                showMessage('Un dossier a été supprimé.', 'info');
+            });
+
+            socket.on('update_dossier_likes', (data) => {
+                console.log('Real-time: Likes dossier mis à jour', data);
+                const dossier = window.DossierCache.find(d => d.id === data.dossierId);
+                if (dossier) {
+                    dossier.likes = data.likes;
+                    dossier.dislikes = data.dislikes;
+                    // Update the specific card's like/dislike counts and styles
+                    const cardElement = document.querySelector(`.card[data-id="${data.dossierId}"]`);
+                    if (cardElement) {
+                        const likeBtn = cardElement.querySelector('.dossier-actions .like-btn');
+                        const dislikeBtn = cardElement.querySelector('.dossier-actions .dislike-btn');
+                        likeBtn.querySelector('.like-count').textContent = data.likes.length;
+                        dislikeBtn.querySelector('.dislike-count').textContent = data.dislikes.length;
+                        // Re-evaluate liked/disliked status for current user if needed
+                        const likedByCurrentUser = data.likes.includes(currentAgentName);
+                        const dislikedByCurrentUser = data.dislikes.includes(currentAgentName);
+                        likeBtn.classList.toggle('liked', likedByCurrentUser);
+                        dislikeBtn.classList.toggle('disliked', dislikedByCurrentUser);
+                    }
+                }
+            });
+
+            socket.on('update_dossier_reposts', (data) => {
+                console.log('Real-time: Reposts dossier mis à jour', data);
+                const dossier = window.DossierCache.find(d => d.id === data.dossierId);
+                if (dossier) {
+                    dossier.reposts = data.reposts;
+                    const cardElement = document.querySelector(`.card[data-id="${data.dossierId}"]`);
+                    if (cardElement) {
+                        const repostBtn = cardElement.querySelector('.dossier-actions .repost-btn');
+                        repostBtn.querySelector('.repost-count').textContent = data.reposts.length;
+                        repostBtn.classList.toggle('reposted', data.reposts.includes(currentAgentName));
+                    }
+                }
+            });
+
+            socket.on('new_comment', (data) => {
+                console.log('Real-time: Nouveau commentaire', data);
+                const dossier = window.DossierCache.find(d => d.id === data.dossierId);
+                if (dossier) {
+                    dossier.comments.push(data.comment);
+                    // Re-render comments list for that specific card
+                    const commentsListElement = document.querySelector(`.card[data-id="${data.dossierId}"] .comments-list`);
+                    if (commentsListElement) {
+                        commentsListElement.innerHTML = ''; // Clear and re-render
+                        const topLevelComments = (dossier.comments || []).filter(c => !c.parentId);
+                        renderCommentsRecursive(commentsListElement, topLevelComments, (dossier.comments || []), dossier.id, currentAgentName === ASSANE_DIOP_NAME);
+                        commentsListElement.scrollTop = commentsListElement.scrollHeight; // Scroll to new comment
+                    }
+                }
+            });
+
+            socket.on('update_comment', (data) => {
+                console.log('Real-time: Commentaire mis à jour', data);
+                const dossier = window.DossierCache.find(d => d.id === data.dossierId);
+                if (dossier) {
+                    const commentIndex = dossier.comments.findIndex(c => c.id === data.comment.id);
+                    if (commentIndex !== -1) {
+                        dossier.comments[commentIndex] = data.comment;
+                        // Re-render comments list for that specific card
+                        const commentsListElement = document.querySelector(`.card[data-id="${data.dossierId}"] .comments-list`);
+                        if (commentsListElement) {
+                            commentsListElement.innerHTML = '';
+                            const topLevelComments = (dossier.comments || []).filter(c => !c.parentId);
+                            renderCommentsRecursive(commentsListElement, topLevelComments, (dossier.comments || []), dossier.id, currentAgentName === ASSANE_DIOP_NAME);
+                        }
+                    }
+                }
+            });
+
+            socket.on('delete_comment', (data) => {
+                console.log('Real-time: Commentaire supprimé', data);
+                const dossier = window.DossierCache.find(d => d.id === data.dossierId);
+                if (dossier) {
+                    // Remove comment and its replies from cache
+                    const commentsToDelete = [data.commentId];
+                    let i = 0;
+                    while(i < commentsToDelete.length) {
+                        const currentId = commentsToDelete[i];
+                        const directReplies = dossier.comments.filter(c => c.parentId === currentId);
+                        directReplies.forEach(reply => commentsToDelete.push(reply.id));
+                        i++;
+                    }
+                    dossier.comments = dossier.comments.filter(c => !commentsToDelete.includes(c.id));
+                    
+                    // Re-render comments list for that specific card
+                    const commentsListElement = document.querySelector(`.card[data-id="${data.dossierId}"] .comments-list`);
+                    if (commentsListElement) {
+                        commentsListElement.innerHTML = '';
+                        const topLevelComments = (dossier.comments || []).filter(c => !c.parentId);
+                        renderCommentsRecursive(commentsListElement, topLevelComments, (dossier.comments || []), dossier.id, currentAgentName === ASSANE_DIOP_NAME);
+                    }
+                }
+            });
+
+            socket.on('update_comment_likes', (data) => {
+                console.log('Real-time: Likes commentaire mis à jour', data);
+                const dossier = window.DossierCache.find(d => d.id === data.dossierId);
+                if (dossier) {
+                    const comment = dossier.comments.find(c => c.id === data.commentId);
+                    if (comment) {
+                        comment.likes = data.likes;
+                        // Find the specific comment element and update its like count/style
+                        const commentElement = document.querySelector(`.comment[data-comment-id="${data.commentId}"]`);
+                        if(commentElement) {
+                            const likeBtn = commentElement.querySelector('.like-btn');
+                            likeBtn.querySelector('.like-count').textContent = data.likes.length;
+                            likeBtn.classList.toggle('liked', data.likes.includes(currentAgentName));
+                        }
+                    }
+                }
+            });
+
+            socket.on('new_notification', (notification) => {
+                console.log('Real-time: Nouvelle notification', notification);
+                // Only show if it's for current agent or for "all" and not read by current agent
+                const isForCurrentUser = notification.recipient === currentAgentName || notification.recipient === "all";
+                const isReadByCurrentUser = notification.recipient === "all" && notification.readBy && notification.readBy.includes(currentAgentName);
+
+                if (isForCurrentUser && !isReadByCurrentUser) {
+                    loadNotifications(); // Reload all notifications to update count and list
+                    showMessage('Nouvelle notification !', 'info');
+                }
+            });
+
+            socket.on('contact_request_sent', (data) => {
+                if (data.recipient === currentAgentName) {
+                    console.log('Real-time: Demande de contact reçue', data);
+                    showMessage(`Nouvelle demande de contact de ${data.sender}`, 'info');
+                    loadNotifications(); // Update notifications
+                    loadContacts(); // Update contact list
+                }
+            });
+
+            socket.on('contact_accepted_event', (data) => {
+                if (data.agent1 === currentAgentName || data.agent2 === currentAgentName) {
+                    console.log('Real-time: Demande de contact acceptée', data);
+                    showMessage(`Demande de contact acceptée avec ${data.agent1 === currentAgentName ? data.agent2 : data.agent1}`, 'success');
+                    loadNotifications();
+                    loadContacts();
+                }
+            });
+
+            socket.on('new_private_message', (data) => {
+                console.log('Real-time: Nouveau message privé', data);
+                // If the message is for me, and I'm currently chatting with this person
+                let sender = data.sender || data.message.sender; // Adjust based on emit structure
+                let recipient = data.recipient || null;
+
+                if (recipient && recipient === currentAgentName && activeChatContact === sender) {
+                    renderMessage(data.message, sender); // Render the message directly
+                    chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+                } else if (sender && sender === currentAgentName && activeChatContact === recipient) {
+                     // If I sent the message, and I'm in the chat, render it too
+                     renderMessage(data.message, recipient);
+                     chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+                 loadNotifications(); // Update bell count for potential new message notification
+            });
+
+            socket.on('message_reaction_update', (data) => {
+                console.log('Real-time: Réaction de message mise à jour', data);
+                if (activeChatContact && data.conversationParticipants.includes(currentAgentName) && 
+                    (activeChatContact === data.conversationParticipants[0] || activeChatContact === data.conversationParticipants[1])) {
+                    
+                    const messageElement = document.querySelector(`.message-item[data-message-id="${data.messageId}"]`);
+                    if (messageElement) {
+                        const reactionsContainer = messageElement.querySelector('.message-reactions');
+                        reactionsContainer.innerHTML = ''; // Clear existing reactions
+                        const groupedReactions = {};
+                        data.reactions.forEach(r => {
+                            if (!groupedReactions[r.emoji]) {
+                                groupedReactions[r.emoji] = [];
+                            }
+                            groupedReactions[r.emoji].push(r.agent);
+                        });
+
+                        Object.entries(groupedReactions).forEach(([emoji, agents]) => {
+                            const reactionItem = document.createElement('span');
+                            reactionItem.className = 'message-reaction-item';
+                            reactionItem.title = agents.join(', '); // Show who reacted
+                            reactionItem.innerHTML = `<span>${emoji}</span><span>${agents.length}</span>`;
+                            reactionsContainer.appendChild(reactionItem);
+                        });
+                    }
+                }
+                loadNotifications(); // For reaction notifications
+            });
+        }
+
+
+        // --- Dossier (Article) & Comment Management ---
+        window.DossierCache = []; // Global cache for dossiers, needed for permission checks
+
+        async function loadDossiers() {
+            gallery.innerHTML = '';
+            try {
+                const dossiers = await fetchDossiers();
+                window.DossierCache = dossiers;
+
+                dossiers.sort((a, b) => b.id - a.id); 
+
+                dossiers.forEach(dossier => renderDossier(dossier));
+            } catch (error) {
+                console.error("Erreur lors du chargement des dossiers:", error);
+                showMessage(`Impossible de charger les dossiers: ${error.message}`, 'error');
+            }
+        }
+
+        function renderDossier(dossier) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.dataset.id = dossier.id;
+            
+            const isAssaneDiop = currentAgentName === ASSANE_DIOP_NAME;
+            const isAuthor = currentAgentName === dossier.author;
+
+            if (dossier.isHidden && !isAssaneDiop) {
+                card.style.display = 'none';
+            } else {
+                card.style.display = '';
+            }
+
+            let imageHtml = '';
+            if (dossier.imageHidden && !isAssaneDiop) {
+                imageHtml = '<div class="card-image hidden-image">ACCÈS RESTREINT</div>';
+            } else {
+                const imageUrl = dossier.image ? `${window.location.origin}${dossier.image}` : '';
+                imageHtml = `<div class="card-image"><img src="${imageUrl}" alt="${dossier.title}"></div>`;
+            }
+
+            const liked = dossier.likes && dossier.likes.includes(currentAgentName);
+            const disliked = dossier.dislikes && dossier.dislikes.includes(currentAgentName);
+            const reposted = dossier.reposts && dossier.reposts.includes(currentAgentName);
+
+            const authorLabel = dossier.author === ASSANE_DIOP_NAME 
+                ? `<span class="card-author certified">${dossier.author} <i class="fas fa-check-circle certification-icon"></i> <span class="certified-label">L'Agence</span></span>`
+                : `<span class="card-author">${dossier.author}</span>`;
+
+
+            card.innerHTML = `
+                ${imageHtml}
+                <div class="card-content">
+                    <div class="card-title">${dossier.title}</div>
+                    ${authorLabel}
+                    <div class="card-desc">${dossier.desc}</div>
+                    
+                    <div class="dossier-actions">
+                        <button class="like-btn ${liked ? 'liked' : ''}" data-action="like-dossier" data-is-like="true">
+                            👍 <span class="like-count">${(dossier.likes || []).length}</span>
+                        </button>
+                        <button class="dislike-btn ${disliked ? 'disliked' : ''}" data-action="like-dossier" data-is-like="false">
+                            👎 <span class="dislike-count">${(dossier.dislikes || []).length}</span>
+                        </button>
+                        <button class="repost-btn ${reposted ? 'reposted' : ''}" data-action="repost-dossier">
+                            🔁 <span class="repost-count">${(dossier.reposts || []).length}</span>
+                        </button>
+                    </div>
+
+                    <div class="comments-section" data-dossier-id="${dossier.id}">
+                        <h4>Commentaires :</h4>
+                        <div class="comments-list"></div>
+                        <form class="comment-form">
+                            <textarea placeholder="Ajouter un commentaire..." required></textarea>
+                            <button type="submit">Poster</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            let adminControlsHtml = '';
+            if (isAssaneDiop) {
+                adminControlsHtml += `
+                    <div class="admin-controls">
+                        <button class="toggle-hide" data-action="toggle-hide">${dossier.isHidden ? 'Afficher' : 'Masquer'}</button>
+                        <button class="toggle-image" data-action="toggle-image">${dossier.imageHidden ? 'Afficher Image' : 'Masquer Image'}</button>
+                        <button class="edit" data-action="edit">Modifier</button>
+                        <button class="delete" data-action="delete">Supprimer</button>
+                    </div>
+                `;
+            } else if (isAuthor) {
+                adminControlsHtml += `
+                    <div class="admin-controls creator-only">
+                        <button class="edit" data-action="edit">Modifier</button>
+                        <button class="delete" data-action="delete">Supprimer</button>
+                    </div>
+                `;
+            }
+            card.insertAdjacentHTML('beforeend', adminControlsHtml);
+
+            gallery.prepend(card);
+
+            const commentsList = card.querySelector('.comments-list');
+            const topLevelComments = (dossier.comments || []).filter(c => !c.parentId);
+            renderCommentsRecursive(commentsList, topLevelComments, (dossier.comments || []), dossier.id, isAssaneDiop);
+
+            const commentForm = card.querySelector('.comment-form');
+            commentForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const textarea = commentForm.querySelector('textarea');
+                const commentText = textarea.value.trim();
+                const parentId = textarea.dataset.replyToId ? parseInt(textarea.dataset.replyToId) : null;
+
+                if (commentText) {
+                    try {
+                        const newCommentData = await addCommentToServer(dossier.id, commentText, currentAgentName, parentId);
+                        // No need to reloadDossiers, Socket.IO will handle the push
+                        // Update cache manually for immediate consistency
+                        const dossierIndex = window.DossierCache.findIndex(d => d.id === dossier.id);
+                        if (dossierIndex !== -1) {
+                            if (!window.DossierCache[dossierIndex].comments) {
+                                window.DossierCache[dossierIndex].comments = [];
+                            }
+                            window.DossierCache[dossierIndex].comments.push(newCommentData);
+                        }
+                        
+                        textarea.value = '';
+                        textarea.removeAttribute('data-reply-to-id');
+                        textarea.placeholder = "Ajouter un commentaire...";
+                        showMessage('Commentaire ajouté !', 'success');
+                    } catch (error) {
+                        console.error("Erreur lors de l'ajout du commentaire:", error);
+                        showMessage(`Erreur commentaire: ${error.message}`, 'error');
+                    }
+                }
+            });
+
+            const dossierActionsDiv = card.querySelector('.dossier-actions');
+            if (dossierActionsDiv) {
+                dossierActionsDiv.addEventListener('click', async (e) => {
+                    const btn = e.target.closest('button');
+                    if (!btn || !currentAgentName) return;
+
+                    const action = btn.dataset.action;
+                    
+                    try {
+                        if (action === 'like-dossier') {
+                            const isLike = btn.dataset.isLike === 'true';
+                            await toggleDossierLike(dossier.id, currentAgentName, isLike);
+                            // No need for client-side update here, Socket.IO will push
+                        } else if (action === 'repost-dossier') {
+                            await toggleDossierRepost(dossier.id, currentAgentName);
+                            // No need for client-side update here, Socket.IO will push
+                        }
+                    } catch (error) {
+                        console.error('Erreur action dossier:', error);
+                        showMessage(`Erreur action dossier: ${error.message}`, 'error');
+                    }
+                });
+            }
+
+            const cardAdminControls = card.querySelector('.admin-controls');
+            if (cardAdminControls) {
+                cardAdminControls.addEventListener('click', async (e) => {
+                    const btn = e.target.closest('button');
+                    if (!btn) return;
+                    const action = btn.dataset.action;
+
+                    const dossierId = parseInt(card.dataset.id);
+                    const targetDossierCache = window.DossierCache.find(d => d.id === dossierId);
+
+                    if (!targetDossierCache) {
+                        showMessage('Dossier non trouvé pour cette action.', 'error');
+                        return;
+                    }
+
+                    try {
+                        let formDataToSave = new FormData();
+                        formDataToSave.append('id', targetDossierCache.id);
+                        formDataToSave.append('title', targetDossierCache.title);
+                        formDataToSave.append('desc', targetDossierCache.desc);
+                        formDataToSave.append('author', targetDossierCache.author);
+                        formDataToSave.append('isHidden', targetDossierCache.isHidden ? 'true' : 'false');
+                        formDataToSave.append('imageHidden', targetDossierCache.imageHidden ? 'true' : 'false');
+                        formDataToSave.append('actionPerformer', currentAgentName); // Pass who performs action
+
+                        if (action === 'delete') {
+                            if (confirm('Êtes-vous sûr de vouloir supprimer ce dossier ?')) {
+                                await deleteDossierOnServer(dossierId, currentAgentName);
+                                // No need for client-side update here, Socket.IO will push
+                                showMessage('Dossier supprimé !', 'success');
+                            }
+                        } else if (action === 'toggle-hide') {
+                            targetDossierCache.isHidden = !targetDossierCache.isHidden; // Update cache
+                            formDataToSave.set('isHidden', targetDossierCache.isHidden ? 'true' : 'false');
+                            
+                            await saveDossier(formDataToSave);
+                            // No need for client-side update here, Socket.IO will push
+                            showMessage(`Dossier ${targetDossierCache.isHidden ? 'masqué' : 'affiché'} !`, 'info');
+                            
+                        } else if (action === 'toggle-image') {
+                            targetDossierCache.imageHidden = !targetDossierCache.imageHidden; // Update cache
+                            formDataToSave.set('imageHidden', targetDossierCache.imageHidden ? 'true' : 'false');
+
+                            await saveDossier(formDataToSave);
+                            // No need for client-side update here, Socket.IO will push
+                            showMessage(`Image ${targetDossierCache.imageHidden ? 'masquée' : 'affichée'} !`, 'info');
+
+                        } else if (action === 'edit') {
+                            openFolderModal('edit', targetDossierCache);
+                        }
+                    } catch (error) {
+                        console.error('Erreur lors de l\'action administrative:', error);
+                        showMessage(`Erreur: ${error.message}`, 'error');
+                    }
+                });
+            }
+        }
+
+        // Recursive function to render comments and their replies
+        function renderCommentsRecursive(parentContainer, comments, allComments, dossierId, isAssaneDiop, depth = 0) {
+            comments.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+
+            comments.forEach(comment => {
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'comment';
+                commentDiv.dataset.commentId = comment.id;
+                commentDiv.style.marginLeft = `${depth * 20}px`;
+
+                const replyInfo = comment.parentId ? 
+                    `<span class="comment-reply-info">en réponse à un commentaire</span>` : '';
+
+                const likedByCurrentUser = comment.likes && comment.likes.includes(currentAgentName);
+                const isCommentAuthor = currentAgentName === comment.author;
+
+                const modifiedTag = comment.modified && !(isAssaneDiop && comment.author !== ASSANE_DIOP_NAME) ? '<span class="modified-tag">(modifié)</span>' : ''; // Show (modifié) unless Assane Diop edited someone else's post
+
+                commentDiv.innerHTML = `
+                    <span class="comment-author">${comment.author} :</span> <span class="comment-text-content">${comment.text}</span>
+                    <div class="comment-meta">
+                        ${new Date(comment.timestamp).toLocaleString()} ${modifiedTag}
+                        ${replyInfo}
+                    </div>
+                    <div class="comment-actions">
+                        <button class="like-btn ${likedByCurrentUser ? 'liked' : ''}" data-action="like-comment">
+                            👍 <span class="like-count">${(comment.likes || []).length}</span>
+                        </button>
+                        <button class="reply-btn" data-action="reply-comment">Répondre</button>
+                        ${(isCommentAuthor && !isAssaneDiop) || isAssaneDiop ? // Show edit/delete if author or Assane Diop
+                            `<button class="edit-btn" data-action="edit-comment">Modifier</button>
+                             <button class="delete-btn" data-action="delete-comment">Supprimer</button>` 
+                            : ''
+                        }
+                    </div>
+                `;
+                parentContainer.appendChild(commentDiv);
+
+                // Add event listeners for comment actions
+                const likeCommentBtn = commentDiv.querySelector('.like-btn');
+                likeCommentBtn.addEventListener('click', async () => {
+                    try {
+                        await toggleCommentLike(dossierId, comment.id, currentAgentName);
+                        // No need for client-side update here, Socket.IO will push
+                    } catch (error) {
+                        console.error('Erreur like commentaire:', error);
+                        showMessage(`Erreur like commentaire: ${error.message}`, 'error');
+                    }
+                });
+
+                const replyCommentBtn = commentDiv.querySelector('.reply-btn');
+                replyCommentBtn.addEventListener('click', () => {
+                    const commentFormTextarea = parentContainer.closest('.comments-section').querySelector('.comment-form textarea');
+                    commentFormTextarea.value = `@${comment.author} `;
+                    commentFormTextarea.dataset.replyToId = comment.id;
+                    commentFormTextarea.placeholder = `Répondre à ${comment.author}...`;
+                    commentFormTextarea.focus();
+                    showMessage(`Prêt à répondre à ${comment.author}`, 'info');
+                });
+                
+                // Edit/Delete comment buttons
+                const editCommentBtn = commentDiv.querySelector('.edit-btn');
+                if (editCommentBtn) {
+                    editCommentBtn.addEventListener('click', () => {
+                        const currentText = commentDiv.querySelector('.comment-text-content').textContent.trim();
+                        const newText = prompt("Modifier le commentaire :", currentText);
+                        if (newText !== null && newText.trim() !== '') { // Allow empty if user explicitly sets it
+                            const noModifiedTag = isAssaneDiop; // Assane Diop's edits are "official", no tag
+                            updateCommentOnServer(dossierId, comment.id, newText.trim(), currentAgentName, noModifiedTag).catch(error => {
+                                console.error('Erreur modif commentaire:', error);
+                                showMessage(`Erreur modif commentaire: ${error.message}`, 'error');
+                            });
+                            // No need to re-render, Socket.IO will push the update
+                        }
+                    });
+                }
+
+                const deleteCommentBtn = commentDiv.querySelector('.delete-btn');
+                if (deleteCommentBtn) {
+                    deleteCommentBtn.addEventListener('click', () => {
+                        if (confirm("Voulez-vous vraiment supprimer ce commentaire et ses réponses ?")) {
+                            deleteCommentOnServer(dossierId, comment.id, currentAgentName).catch(error => {
+                                console.error('Erreur sup commentaire:', error);
+                                showMessage(`Erreur sup commentaire: ${error.message}`, 'error');
+                            });
+                            // No need to re-render, Socket.IO will push the update
+                        }
+                    });
+                }
+
+                // Render replies to this comment
+                const replies = allComments.filter(c => c.parentId === comment.id);
+                if (replies.length > 0) {
+                    renderCommentsRecursive(parentContainer, replies, allComments, dossierId, isAssaneDiop, depth + 1);
+                }
+            });
+        }
+
+        // --- Notification Center Logic ---
+        notificationBellBtn.addEventListener('click', () => {
+            notificationCenter.classList.toggle('show');
+            if (notificationCenter.classList.contains('show')) {
+                loadNotifications(); // Load notifications when opened
+            }
+        });
+
+        closeNotificationsBtn.addEventListener('click', () => {
+            notificationCenter.classList.remove('show');
+        });
+
+        deleteAllNotificationsBtn.addEventListener('click', async () => {
+            if (confirm('Voulez-vous vraiment supprimer toutes les notifications ?')) {
+                try {
+                    await deleteAllNotificationsOnServer(currentAgentName);
+                    // No need to clear local, Socket.IO will handle the push
+                    showMessage('Toutes les notifications supprimées !', 'success');
+                } catch (error) {
+                    console.error('Erreur suppression notifications:', error);
+                    showMessage(`Erreur suppression: ${error.message}`, 'error');
+                }
+            }
+        });
+
+        async function loadNotifications() {
+            notificationList.innerHTML = '';
+            notificationCount.textContent = '0'; // Reset count before loading
+            notificationCount.classList.remove('show');
+
+            try {
+                if (!currentAgentName) {
+                    notificationList.innerHTML = '<div class="notification-item">Connectez-vous pour voir les notifications.</div>';
+                    return;
+                }
+                // Fetch all relevant notifications (including 'all' ones)
+                const notifications = await fetchNotifications(currentAgentName);
+                
+                if (notifications.length === 0) {
+                    notificationList.innerHTML = '<div class="notification-item">Aucune notification.</div>';
+                    return;
+                }
+                
+                let unreadCount = 0;
+                notifications.forEach(n => {
+                    const isRead = n.readBy && n.readBy.includes(currentAgentName);
+                    if (!isRead) {
+                        unreadCount++;
+                    }
+                    const notificationItem = document.createElement('div');
+                    notificationItem.className = 'notification-item' + (isRead ? '' : ' unread');
+                    notificationItem.dataset.id = n.id;
+                    notificationItem.innerHTML = `
+                        <div>${n.message}</div>
+                        <div class="notification-timestamp">${new Date(n.timestamp).toLocaleString()}</div>
+                        <button class="delete-notification-btn" data-id="${n.id}"><i class="fas fa-times"></i></button>
+                    `;
+                    notificationList.appendChild(notificationItem);
+
+                    // Mark as read when displayed in the center
+                    if (!isRead) {
+                        markNotificationAsReadOnServer(n.id, currentAgentName).catch(console.error); // Mark as read without waiting
+                    }
+                });
+                
+                notificationCount.textContent = unreadCount;
+                if (unreadCount > 0) {
+                    notificationCount.classList.add('show');
+                } else {
+                    notificationCount.classList.remove('show');
+                }
+
+                document.querySelectorAll('.delete-notification-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const notifId = e.target.closest('.notification-item').dataset.id;
+                        try {
+                            await deleteNotificationOnServer(notifId);
+                            // No need to remove from DOM here, Socket.IO will handle the push
+                        } catch (error) {
+                            console.error('Erreur suppression notif:', error);
+                            showMessage(`Erreur suppression: ${error.message}`, 'error');
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error("Erreur chargement notifications:", error);
+                notificationList.innerHTML = `<div class="notification-item error">Erreur chargement: ${error.message}</div>`;
+            }
+        }
+
+        function startNotificationPolling() {
+            if (notificationsPollingInterval) {
+                clearInterval(notificationsPollingInterval);
+            }
+            // Poll for notifications periodically as a fallback/sync mechanism
+            notificationsPollingInterval = setInterval(loadNotifications, NOTIFICATION_POLLING_INTERVAL); 
+        }
+
+        // --- Private Messaging Logic ---
+        notificationBellBtn.addEventListener('contextmenu', (e) => { // Right click on bell to open messaging
+            e.preventDefault(); // Prevent default context menu
+            messagingContainer.classList.toggle('show');
+            if (messagingContainer.classList.contains('show')) {
+                loadContacts();
+                // We'll manage message polling manually for the active chat
+            } else {
+                // When closing messaging, clear active chat
+                activeChatContact = null;
+                chatHeader.textContent = "Sélectionnez un contact";
+                chatMessages.innerHTML = "";
+                messageInput.value = "";
+                clearInterval(messagePollingInterval); // Stop polling messages when closed
+            }
+        });
+
+        closeMessagingBtn.addEventListener('click', () => {
+            messagingContainer.classList.remove('show');
+            clearInterval(messagePollingInterval);
+            activeChatContact = null;
+            chatHeader.textContent = "Sélectionnez un contact";
+            chatMessages.innerHTML = "";
+            messageInput.value = "";
+        });
+
+        addContactBtn.addEventListener('click', () => {
+            addContactModal.style.display = 'flex';
+            newContactNameInput.value = '';
+        });
+
+        closeAddContactModalBtn.addEventListener('click', () => {
+            addContactModal.style.display = 'none';
+        });
+
+        sendContactRequestBtn.addEventListener('click', async () => {
+            const recipient = newContactNameInput.value.trim();
+            if (!recipient || recipient.toLowerCase() === currentAgentName.toLowerCase()) {
+                alert("Veuillez entrer un nom d'agent valide et différent de vous-même.");
+                return;
+            }
+            try {
+                const agents = await fetchAgents();
+                const recipientExists = agents.some(agent => agent.name.toLowerCase() === recipient.toLowerCase());
+                if (!recipientExists) {
+                    alert("Cet agent n'existe pas.");
+                    return;
+                }
+
+                await sendContactRequest(currentAgentName, recipient);
+                alert(`Demande de contact envoyée à ${recipient}.`);
+                addContactModal.style.display = 'none';
+                await loadContacts(); // Refresh contact list
+            } catch (error) {
+                console.error("Erreur envoi demande contact:", error);
+                alert(`Erreur: ${error.message}`);
+            }
+        });
+
+        window.ContactCache = []; // Cache for contacts
+        async function loadContacts() {
+            if (!currentAgentName) return;
+            contactList.innerHTML = '';
+            try {
+                const contacts = await fetchContacts(currentAgentName);
+                window.ContactCache = contacts; // Update cache
+                
+                contacts.forEach(contact => {
+                    const otherAgent = contact.agent1 === currentAgentName ? contact.agent2 : contact.agent1;
+                    const contactItem = document.createElement('div');
+                    contactItem.className = 'contact-item';
+                    contactItem.dataset.contactName = otherAgent;
+                    contactItem.dataset.contactId = contact.id; // Store contact ID
+
+                    let statusDotClass = '';
+                    let statusText = '';
+
+                    if (contact.status === 'pending') {
+                        statusDotClass = 'status-dot'; // Red by default
+                        if (contact.initiator === currentAgentName) {
+                            statusText = ` (demande envoyée)`;
+                        } else {
+                            statusText = ` (demande reçue)`;
+                        }
+                    } else if (contact.status === 'accepted') {
+                        statusDotClass = 'status-dot accepted'; // Green
+                        statusText = '';
+                    }
+
+                    contactItem.innerHTML = `<span class="contact-name">${otherAgent}</span> <span class="${statusDotClass}"></span> ${statusText}`;
+                    
+                    if (contact.status === 'pending' && contact.initiator !== currentAgentName) {
+                         const acceptBtn = document.createElement('button');
+                         acceptBtn.innerHTML = '<i class="fas fa-check"></i>';
+                         acceptBtn.title = 'Accepter la demande';
+                         acceptBtn.onclick = async (e) => {
+                             e.stopPropagation(); // Prevent opening chat
+                             try {
+                                 await acceptContactRequest(contact.id, currentAgentName); // Pass contact ID and acceptor name
+                                 alert(`Demande de ${otherAgent} acceptée !`);
+                                 // No need to reload contacts/messages, Socket.IO will push
+                             } catch (error) {
+                                 console.error("Erreur acceptation demande:", error);
+                                 alert(`Erreur: ${error.message}`);
+                             }
+                         };
+                         contactItem.appendChild(acceptBtn);
+                    }
+                    
+                    contactItem.addEventListener('click', () => {
+                        if (contact.status === 'accepted') {
+                            selectContact(otherAgent);
+                        } else {
+                            showMessage(`Contact non accepté. Statut : ${contact.status}`, 'info');
+                        }
+                    });
+                    contactList.appendChild(contactItem);
+                });
+            } catch (error) {
+                console.error("Erreur chargement contacts:", error);
+                contactList.innerHTML = `<div class="notification-item error">Erreur chargement: ${error.message}</div>`;
+            }
+        }
+
+        async function selectContact(contactName) {
+            if (activeChatContact) {
+                const prevActive = document.querySelector(`.contact-item[data-contact-name="${activeChatContact}"]`);
+                if (prevActive) prevActive.classList.remove('active');
+            }
+            const newActive = document.querySelector(`.contact-item[data-contact-name="${contactName}"]`);
+            if (newActive) newActive.classList.add('active');
+
+            activeChatContact = contactName;
+            chatHeader.textContent = `Conversation avec ${contactName}`;
+            await loadMessages(contactName);
+            startMessagePolling(); // Start polling for this specific chat
+        }
+
+        async function loadMessages(contactName) {
+            if (!currentAgentName || !contactName) return;
+            chatMessages.innerHTML = '';
+            try {
+                const messages = await fetchMessages(currentAgentName, contactName);
+                if (messages.length === 0) {
+                    chatMessages.innerHTML = '<div class="message-item">Aucun message pour l\'instant.</div>';
+                } else {
+                    messages.forEach(msg => renderMessage(msg, contactName));
+                }
+                chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+            } catch (error) {
+                console.error("Erreur chargement messages:", error);
+                chatMessages.innerHTML = `<div class="message-item error">Erreur chargement: ${error.message}</div>`;
+            }
+        }
+
+        function renderMessage(message, chatPartner) {
+            const messageItem = document.createElement('div');
+            messageItem.className = 'message-item ' + (message.sender === currentAgentName ? 'sent' : 'received');
+            messageItem.dataset.messageId = message.id; // Store message ID for reactions
+
+            const reactionsMap = new Map(); // Map to group reactions: emoji -> [agent1, agent2, ...]
+            (message.reactions || []).forEach(r => {
+                if (!reactionsMap.has(r.emoji)) {
+                    reactionsMap.set(r.emoji, []);
+                }
+                reactionsMap.get(r.emoji).push(r.agent);
+            });
+
+            const reactionsHtml = Array.from(reactionsMap.entries()).map(([emoji, agents]) => 
+                `<span class="message-reaction-item" title="${agents.join(', ')}"><span>${emoji}</span><span>${agents.length}</span></span>`
+            ).join('');
+
+            messageItem.innerHTML = `
+                <div class="message-sender">${message.sender}</div>
+                <div class="message-text">${message.text}</div>
+                <div class="message-timestamp">${new Date(message.timestamp).toLocaleString()}</div>
+                <div class="message-reactions">${reactionsHtml}</div>
+                <div class="message-actions-overlay">
+                    ${reactionEmojis.map(emoji => `<button class="react-btn" data-emoji="${emoji}">${emoji}</button>`).join('')}
+                    <button class="copy-message-btn" title="Copier"><i class="fas fa-copy"></i></button>
+                    <button class="transfer-message-btn" title="Transférer"><i class="fas fa-share"></i></button>
+                </div>
+            `;
+            chatMessages.appendChild(messageItem);
+
+            // Add reaction listeners
+            messageItem.querySelectorAll('.react-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const emoji = btn.dataset.emoji;
+                    try {
+                        await reactToMessage(message.id, currentAgentName, emoji);
+                        // No need to reload messages, Socket.IO will push update
+                    } catch (error) {
+                        console.error('Erreur réaction message:', error);
+                        showMessage(`Erreur réaction: ${error.message}`, 'error');
+                    }
+                });
+            });
+
+            // Add copy message listener
+            messageItem.querySelector('.copy-message-btn').addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(message.text);
+                    showMessage('Message copié !', 'success');
+                } catch (err) {
+                    console.error('Erreur copie message:', err);
+                    showMessage('Erreur lors de la copie du message.', 'error');
+                }
+            });
+
+            // Add transfer message listener
+            messageItem.querySelector('.transfer-message-btn').addEventListener('click', () => {
+                messageToTransfer = message; // Store message for transfer
+                openTransferModal();
+            });
+        }
+        
+        messageInput.addEventListener('keypress', async (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault(); // Prevent new line
+                sendMessageBtn.click(); // Trigger send button click
+            }
+        });
+
+        sendMessageBtn.addEventListener('click', async () => {
+            const text = messageInput.value.trim();
+            if (!text || !activeChatContact) return;
+
+            try {
+                await sendMessage(currentAgentName, activeChatContact, text);
+                messageInput.value = '';
+                // No need to reload messages, Socket.IO will push
+            } catch (error) {
+                console.error('Erreur envoi message:', error);
+                showMessage(`Erreur envoi message: ${error.message}`, 'error');
+            }
+        });
+
+        function startMessagePolling() {
+            // Stop existing polling first
+            if (messagePollingInterval) {
+                clearInterval(messagePollingInterval);
+            }
+            // Start polling only if an active chat contact is selected
+            if (activeChatContact) {
+                messagePollingInterval = setInterval(async () => {
+                    if (messagingContainer.classList.contains('show') && activeChatContact) {
+                        await loadMessages(activeChatContact);
+                    }
+                }, MESSAGE_POLLING_INTERVAL);
+            }
+        }
+
+        // Transfer Message Modal Logic
+        window.ContactCache = []; // Ensure ContactCache is initialized
+        function openTransferModal() {
+            transferMessageModal.style.display = 'flex';
+            transferContactList.innerHTML = '';
+            
+            // Populate contacts for transfer
+            const contactsForTransfer = window.ContactCache.filter(c => 
+                c.status === 'accepted' && 
+                (c.agent1 === currentAgentName || c.agent2 === currentAgentName) &&
+                (c.agent1 !== activeChatContact && c.agent2 !== activeChatContact) // Exclude current chat partner
+            );
+            
+            if (contactsForTransfer.length === 0) {
+                transferContactList.innerHTML = '<div style="padding: 10px; color: #777;">Aucun contact disponible pour le transfert.</div>';
+                confirmTransferBtn.disabled = true;
+                return;
+            }
+            confirmTransferBtn.disabled = false;
+
+            contactsForTransfer.forEach(contact => {
+                const otherAgent = contact.agent1 === currentAgentName ? contact.agent2 : contact.agent1;
+                const contactItem = document.createElement('div');
+                contactItem.className = 'contact-item-transfer';
+                contactItem.textContent = otherAgent;
+                contactItem.dataset.contactName = otherAgent;
+                contactItem.addEventListener('click', () => {
+                    // Highlight selected contact
+                    transferContactList.querySelectorAll('.contact-item-transfer').forEach(item => item.classList.remove('active'));
+                    contactItem.classList.add('active');
+                });
+                transferContactList.appendChild(contactItem);
+            });
+        }
+        
+        confirmTransferBtn.addEventListener('click', async () => {
+            const selectedContactItem = transferContactList.querySelector('.contact-item-transfer.active');
+            if (!selectedContactItem || !messageToTransfer) {
+                alert('Veuillez sélectionner un contact et un message à transférer.');
+                return;
+            }
+            const recipient = selectedContactItem.dataset.contactName;
+            try {
+                const transferredText = `(Transféré de ${messageToTransfer.sender}): ${messageToTransfer.text}`;
+                await sendMessage(currentAgentName, recipient, transferredText, messageToTransfer.id);
+                transferMessageModal.style.display = 'none';
+                messageToTransfer = null;
+                showMessage('Message transféré !', 'success');
+            } catch (error) {
+                console.error('Erreur transfert message:', error);
+                showMessage(`Erreur transfert: ${error.message}`, 'error');
+            }
+        });
+
+        // --- Initial Load and Session Management ---
+        async function initialLoad() {
+            const storedAgentName = localStorage.getItem('loggedInAgentName');
+            if (storedAgentName) {
+                currentAgentName = storedAgentName;
+                isAgentNamePhase = false; // Skip name phase
+                loggedInAgentDisplay.textContent = `AGENT : ${currentAgentName.toUpperCase()}`;
+                loggedInAgentDisplay.classList.add('show');
+                digicodeTitle.textContent = 'ENTREZ CODE D\'ACCÈS';
+                agentNameInput.style.display = 'none';
+                display.style.opacity = 1;
+                keypad.classList.add('active');
+                controls.classList.add('active');
+                showMessage('Session restaurée. Veuillez entrer le code.', 'info');
+            } else {
+                resetSystem(); // Start from scratch
+            }
+        }
+
+        // Call initialLoad on page load
+        document.addEventListener('DOMContentLoaded', initialLoad);
+
+    </script>
+</body>
+</html>
